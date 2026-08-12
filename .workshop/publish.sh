@@ -131,7 +131,7 @@ done < <(git -C "$REPO_ROOT" ls-tree -z HEAD)
 
 ((${#CONTENT_PATHS[@]} > 0)) || die "HEAD contains no publishable top-level directories or Lua files"
 
-WORK_DIR="$(mktemp -d "${TMPDIR:-/tmp}/glassicapi-workshop.XXXXXX")"
+WORK_DIR="$(mktemp -d "${TMPDIR:-/tmp}/dst-fixed-workshop.XXXXXX")"
 trap cleanup EXIT HUP INT TERM
 readonly CONTENT_DIR="$WORK_DIR/content"
 readonly VDF_FILE="$WORK_DIR/item.vdf"
