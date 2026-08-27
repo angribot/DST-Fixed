@@ -59,7 +59,9 @@ function Unwrappable:Unwrap(doer, ...)
 				item:SetPersistData(v.data)
 				-- Changed Part
 				if item.components.inventoryitem then
-					if item.components.inventoryitem.canbepickedup == false then
+					if item.components.inventoryitem.canbepickedup == false
+						and not item.components.inventoryitem.canbepickedupalive
+					then
 						item.components.inventoryitem:OnDropped(true, .5)
 					elseif not (grandowner_container and grandowner_container:GiveItem(item, nil, owner_pos)) then
 						doer_container:GiveItem(item, nil, owner_pos)
