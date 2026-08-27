@@ -59,15 +59,19 @@ function Unwrappable:Unwrap(doer, ...)
 				item:SetPersistData(v.data)
 				-- Changed Part
 				if item.components.inventoryitem then
-					if not (grandowner_container and grandowner_container:GiveItem(item, nil, owner_pos)) then
+					if item.components.inventoryitem.canbepickedup == false then
+						item.components.inventoryitem:OnDropped(true, .5)
+					elseif not (grandowner_container and grandowner_container:GiveItem(item, nil, owner_pos)) then
 						doer_container:GiveItem(item, nil, owner_pos)
 					end
 				end
+				item:PushEvent("unwrappeditem", { bundle = self.inst, doer = doer })
 				-- Changed Part
 			end
 		end
 		self.itemdata = nil
 	end
+	self.inst:PushEvent("unwrapped", { doer = doer })
 	if self.onunwrappedfn then
 		self.onunwrappedfn(self.inst, pos, doer, true, grandowner_container) -- Added two new params: should_give, grandowner_container
 	end
