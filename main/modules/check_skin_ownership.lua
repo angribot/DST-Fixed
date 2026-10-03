@@ -87,33 +87,18 @@ if TheNet:GetIsServer() then
 
 		if skintype == "ghost_skin" then
 			--DST characters should all be using self.skin_data, ghostbuild is legacy for mod characters
-			base_skin = self.skin_data[skintype]
-				or self.skin_data["normal_skin"]
-				or self.inst.ghostbuild
-				or default_build
-				or "ghost_" .. self.inst.prefab
-				.. "_build" -- Changed Part
+			base_skin = self.skin_data[skintype] or self.skin_data["normal_skin"] or self.inst.ghostbuild or default_build or "ghost_" .. self.inst.prefab .. "_build" -- Changed Part
 		else
 			base_skin = self.skin_data[skintype] or self.skin_data["normal_skin"] or default_build or self.inst.prefab -- Changed Part
 		end
 
-		SetSkinsOnAnim(
-			self.inst.AnimState,
-			self.inst.prefab,
-			base_skin,
-			self.clothing,
-			self.monkey_curse,
-			skintype,
-			default_build
-		)
+		SetSkinsOnAnim(self.inst.AnimState, self.inst.prefab, base_skin, self.clothing, self.monkey_curse, skintype, default_build)
 
-		self.inst.Network:SetPlayerSkin(
-			self.skin_name or "",
-			self.clothing["body"] or "",
-			self.clothing["hand"] or "",
-			self.clothing["legs"] or "",
-			self.clothing["feet"] or ""
-		)
+		if self.base_change_cb ~= nil then
+			self.base_change_cb()
+		end
+
+		self.inst.Network:SetPlayerSkin(self.skin_name or "", self.clothing["body"] or "", self.clothing["hand"] or "", self.clothing["legs"] or "", self.clothing["feet"] or "")
 	end
 end
 
