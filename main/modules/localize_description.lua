@@ -71,14 +71,19 @@ local function getcharacterstring(base_str, tab, item, modifier)
 	end
 end
 
-function GetStringCode(inst, stringtype, modifier, stringformat, params)
+local function GetSpeechCharacter(inst)
 	local character = type(inst) == "string" and inst or (inst ~= nil and inst.prefab or nil)
+	local talker = type(inst) == "table" and inst.components and inst.components.talker
+	if talker and talker.speechproxy then
+		character = talker.speechproxy
+	end
+	return character ~= nil and string.upper(character) or nil
+end
 
-	character = character ~= nil and string.upper(character) or nil
+function GetStringCode(inst, stringtype, modifier, stringformat, params)
+	local character = GetSpeechCharacter(inst)
 
-	local specialcharacter = type(inst) == "table"
-			and ((inst:HasTag("mime") and "mime") or (inst:HasTag("playerghost") and "ghost"))
-		or character
+	local specialcharacter = type(inst) == "table" and ((inst:HasTag("mime") and "mime") or (inst:HasTag("playerghost") and "ghost")) or character
 
 	if GetSpecialCharacterString(specialcharacter) then
 		return
@@ -97,8 +102,7 @@ function GetStringCode(inst, stringtype, modifier, stringformat, params)
 		end
 	end
 
-	local str = character
-			and getcharacterstring("CHARACTERS." .. character, STRINGS.CHARACTERS[character], stringtype, modifier)
+	local str = character and getcharacterstring("CHARACTERS." .. character, STRINGS.CHARACTERS[character], stringtype, modifier)
 		or getcharacterstring("CHARACTERS.GENERIC", STRINGS.CHARACTERS.GENERIC, stringtype, modifier)
 	if str then
 		local ret = {
@@ -114,10 +118,44 @@ function GetString(inst, stringtype, modifier, ...)
 	return GetStringCode(inst, stringtype, modifier) or get_string(inst, stringtype, modifier, ...)
 end
 
-function GetDescriptionCode(inst, item, modifier, strtype, params)
-	local character = type(inst) == "string" and inst or (inst ~= nil and inst.prefab or nil)
+local function GetDescriptionCodes(character, inst, item, itemname, modifier)
+	local speech = character and STRINGS.CHARACTERS[character]
+	local content = {}
+	if not speech then
+		return content
+	end
 
-	character = character ~= nil and string.upper(character) or nil
+	local base = "CHARACTERS." .. character
+	local description = getcharacterstring(base .. ".DESCRIBE", speech.DESCRIBE, itemname, modifier)
+	if description then
+		table.insert(content, description)
+	end
+
+	local function AddAnnouncement(name)
+		local str = getcharacterstring(base, speech, name, modifier)
+		if str then
+			table.insert(content, str)
+		end
+	end
+
+	-- Keep the conditions and ordering in sync with GetDescription_AddSpecialCases.
+	if type(inst) == "table" then
+		if item.components.shadowlevel ~= nil and inst:HasTag("shadowmagic") then
+			AddAnnouncement("ANNOUNCE_SHADOWLEVEL_ITEM")
+		end
+		if inst.components.foodmemory ~= nil and inst.components.foodmemory:GetMemoryCount(item.prefab) > 0 then
+			AddAnnouncement("ANNOUNCE_FOODMEMORY")
+		end
+	end
+	if item.components.repairable and not item.components.repairable.noannounce and item.components.repairable:NeedsRepairs() then
+		AddAnnouncement("ANNOUNCE_CANFIX")
+	end
+
+	return content
+end
+
+function GetDescriptionCode(inst, item, modifier, strtype, params)
+	local character = GetSpeechCharacter(inst)
 	local itemname = item.nameoverride or item.components.inspectable.nameoverride or item.prefab or nil
 	itemname = itemname ~= nil and string.upper(itemname) or nil
 	if modifier then
@@ -130,48 +168,22 @@ function GetDescriptionCode(inst, item, modifier, strtype, params)
 		end
 	end
 
-	local specialcharacter = type(inst) == "table"
-			and ((inst:HasTag("mime") and "mime") or (inst:HasTag("playerghost") and "ghost"))
-		or character
+	local specialcharacter = type(inst) == "table" and ((inst:HasTag("mime") and "mime") or (inst:HasTag("playerghost") and "ghost")) or character
 
 	if GetSpecialCharacterString(specialcharacter) then
 		return
 	end
 
-	local ret = {
+	local content = GetDescriptionCodes(character, inst, item, itemname, modifier)
+	if #content == 0 then
+		content = GetDescriptionCodes("GENERIC", inst, item, itemname, modifier)
+	end
+
+	return #content > 0 and EncodeStrCode({
 		strtype = strtype,
-		content = {},
+		content = content,
 		params = params,
-	}
-
-	local character_speech = character and STRINGS.CHARACTERS[character]
-	local str = character_speech
-			and getcharacterstring(
-				"CHARACTERS." .. character .. ".DESCRIBE",
-				character_speech.DESCRIBE,
-				itemname,
-				modifier
-			)
-		or getcharacterstring("CHARACTERS.GENERIC.DESCRIBE", STRINGS.CHARACTERS.GENERIC.DESCRIBE, itemname, modifier)
-
-	if str then
-		table.insert(ret.content, str)
-	end
-	if
-		item
-		and item.components.repairable
-		and not item.components.repairable.noannounce
-		and item.components.repairable:NeedsRepairs()
-	then
-		str = character
-				and getcharacterstring("CHARACTERS." .. character, character_speech, "ANNOUNCE_CANFIX", modifier)
-			or getcharacterstring("CHARACTERS.GENERIC", STRINGS.CHARACTERS.GENERIC, "ANNOUNCE_CANFIX", modifier)
-		if str then
-			table.insert(ret.content, str)
-		end
-	end
-
-	return #ret.content > 0 and EncodeStrCode(ret) or nil
+	}) or nil
 end
 local get_description = GetDescription
 function GetDescription(inst, item, modifier, ...)
@@ -183,9 +195,7 @@ function GetActionFailStringCode(inst, action, reason, strtype, params)
 
 	character = character ~= nil and string.upper(character) or nil
 
-	local specialcharacter = type(inst) == "table"
-			and ((inst:HasTag("mime") and "mime") or (inst:HasTag("playerghost") and "ghost"))
-		or character
+	local specialcharacter = type(inst) == "table" and ((inst:HasTag("mime") and "mime") or (inst:HasTag("playerghost") and "ghost")) or character
 
 	if GetSpecialCharacterString(specialcharacter) then
 		return
@@ -204,18 +214,9 @@ function GetActionFailStringCode(inst, action, reason, strtype, params)
 		end
 	end
 	local character_speech = character and STRINGS.CHARACTERS[character]
-	local str = character_speech
-			and getcharacterstring(
-				"CHARACTERS." .. character .. ".ACTIONFAIL",
-				character_speech.ACTIONFAIL,
-				action,
-				reason
-			)
+	local str = character_speech and getcharacterstring("CHARACTERS." .. character .. ".ACTIONFAIL", character_speech.ACTIONFAIL, action, reason)
 		or getcharacterstring("CHARACTERS.GENERIC.ACTIONFAIL", STRINGS.CHARACTERS.GENERIC.ACTIONFAIL, action, reason)
-		or (
-			CUSTOMFAILSTR and character_speech and "CHARACTERS." .. character .. ".ACTIONFAIL_GENERIC"
-			or "CHARACTERS.GENERIC.ACTIONFAIL_GENERIC"
-		)
+		or (CUSTOMFAILSTR and character_speech and "CHARACTERS." .. character .. ".ACTIONFAIL_GENERIC" or "CHARACTERS.GENERIC.ACTIONFAIL_GENERIC")
 
 	local ret = {
 		strtype = strtype,
@@ -419,8 +420,7 @@ end
 AddClassPostConstruct("components/named_replica", function(self, inst)
 	local function OnNameDirty(inst)
 		local name = inst.replica.named._name:value()
-		inst.name = name ~= "" and (IsStrCode(name) and ResolveStrCode(SubStrCode(name)) or name)
-			or STRINGS.NAMES[string.upper(inst.prefab)]
+		inst.name = name ~= "" and (IsStrCode(name) and ResolveStrCode(SubStrCode(name)) or name) or STRINGS.NAMES[string.upper(inst.prefab)]
 	end
 
 	if not TheWorld.ismastersim then
