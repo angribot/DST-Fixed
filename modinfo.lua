@@ -6,7 +6,7 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.24.10.1"
+version = "2.24.11"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -17,9 +17,13 @@ local new_modules = {
 -- stylua: ignore
 changelog = zheng(
 [[
-- 修复上传错误导致无法启动的问题
+- 修复换肤后的外观刷新
+- 修复特殊礼物的延迟拆包
+- 修复本地化台词及检查附加文本
+- 移除过时的整组丢弃补丁
 
 近期更新：
+- 修复上传错误导致无法启动的问题
 - 修复拆包裹时月熠掉在地上而不是进入物品栏
 - 修复拆包裹时活的蝴蝶等生物掉在地上而不是进入物品栏
 - 修复冬季盛宴惊喜礼物被拆进物品栏后无法生成猎犬
@@ -30,9 +34,13 @@ changelog = zheng(
 - 新模块：阴郁双回旋镖
 ]],
 [[
-- Fixed issue on booting
+- Fixed appearance refresh after skin changes.
+- Fixed delayed unwrapping for special gifts.
+- Fixed localized speech and inspection suffixes.
+- Removed the obsolete stack dropping patch.
 
 Recent changes:
+- Fixed issue on booting
 - Fixed Moongleam dropping on the ground instead of entering the inventory when unwrapping bundles.
 - Fixed living creatures such as butterflies dropping on the ground instead of entering the inventory when unwrapping bundles.
 - Fixed Winter's Feast surprise gifts entering the inventory instead of spawning hounds.
