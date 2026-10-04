@@ -34,6 +34,7 @@ Modules follow the categories in `modinfo.lua`. Show Bundle is enabled by defaul
 - **Enhanced Lunar Grimoire** — Reading it during a full moon changes the phase to a new moon.
 - **Enhanced Sand Stone** — Use a Desert Stone from the inventory to create a temporary, single-use Lazy Deserter.
 - **Nameable Backtrek Watch** — Name Backtrek and Rift Watches with a Feather Pencil.
+- **Short Backtrek Watch Cooldown** — Reduce subsequent Backtrek Watch cooldowns to 1 minute, including watches produced by Rift Watches. Existing cooldowns are unchanged.
 - **No Blow Dart Waste** — Drop darts instead of consuming them when they hit an invalid target.
 - **Reskin From Inventory** — Use the Clean Sweeper on inventory items, except Walking Canes.
 - **No Bowing for Bee Queen Crown** — Stop players from bowing to other players wearing the crown.
