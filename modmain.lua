@@ -80,7 +80,6 @@ end
 -- Some temp fixes, since klei is too down bad
 local asscleaner = {
 	"abandon_ship_board",
-	"active_item_stack",
 	"dummytarget_dps",
 	"fix_staff_lunarplant",
 	-- "getmapaction_pos", -- Cancel for debugging.
