@@ -26,6 +26,7 @@ local config_table = {
 	BOOKMOON = "enhanced_book_moon",
 	SANDSTONE = "enhanced_sandstone",
 	NAMEABLE_WATCHES = "nameable_watches",
+	SHORT_BACKTREK_WATCH_COOLDOWN = "short_backtrek_watch_cooldown",
 	NODARTWASTE = "no_lost_blowdart",
 	POCKETRESKIN = "pocket_reskin",
 	BEEQUEENHAT = "facking_hivehat",
