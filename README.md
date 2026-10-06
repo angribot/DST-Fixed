@@ -43,6 +43,8 @@ Modules follow the categories in `modinfo.lua`. Show Bundle is enabled by defaul
 
 ### Buildings
 
+- **Enhanced Icker Preserve** — Upgrade once with an Elastispacer for unlimited stacking of one compatible food type, retaining its preservation and display. Take one ordinary stack or a single item at a time. Destruction recovers a Shard of Enlightenment and retains large excesses in collapsed storage for bounded retrieval or reconstruction (5 Dreadstone, 4 Nightmare Fuel, and 1 shard). Collapsed storage remains available with the option disabled; saving an ordinary preserve while disabled may discard its upgrade. Sinking follows vanilla bounded drops and can lose excess contents.
+
 - **Better Fossil Repairing** — Make fossil skeleton repairs always succeed.
 - **Fireflies in Lamps** — Put Fireflies into Mushlights and Glowcaps for permanent light.
 - **Enhanced Sisturn** — Allow Bone Shards and Mourning Glory in Sisturns.

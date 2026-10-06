@@ -1,5 +1,11 @@
 Assets = {}
-PrefabFiles = {}
+-- Retained collapsed preserves must remain loadable even when their upgrade option is off.
+PrefabFiles = { "collapsed_icker_preserve" }
+GLOBAL.CONSTRUCTION_PLANS.collapsed_icker_preserve = {
+	GLOBAL.Ingredient("dreadstone", 5),
+	GLOBAL.Ingredient("nightmarefuel", 4),
+	GLOBAL.Ingredient("alterguardianhatshard", 1),
+}
 
 local config_table = {
 	-- Default On --
@@ -34,6 +40,7 @@ local config_table = {
 	DOUBLE_VBOOMERANG_PROJECTILES = "double_vboomerang_projectiles",
 
 	-- The Builder --
+	ICKER_PRESERVE = "enhanced_icker_preserve",
 	BETTERFOSSIL = "easy_fossil_stalker",
 	FIREFLIES = "fireflies_into_lamp",
 	SISTURN = "enhanced_sisturn",

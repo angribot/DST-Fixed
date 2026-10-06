@@ -6,21 +6,24 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.25"
+version = "2.26"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
 local new_modules = {
+	ICKER_PRESERVE = true,
 	SHORT_BACKTREK_WATCH_COOLDOWN = true,
 }
 
 -- stylua: ignore
 changelog = zheng(
 [[
+- 新模块：强化恶液储存箱，使用弹性空间制造器无限堆叠同种食物；拆毁后可从残骸取回余量或重建
 - 新模块：溯源表冷却缩短至1分钟
 - 强化嚎弹炮：装备使用弹性空间制造器升级后的嚎弹炮时，禁用“设置弹药”动作
 ]],
 [[
+- New module: Enhanced Icker Preserve. Upgrade with an Elastispacer for unlimited same-food stacking; retrieve excess from collapsed storage or rebuild after destruction.
 - New module: Short Backtrek Watch Cooldown (1 minute).
 - Enhanced Howlitzer: Disable the "Set Ammo" action for an equipped Howlitzer upgraded with an Elastispacer.
 ]]
@@ -267,6 +270,16 @@ configuration_options = {
 		default = false,
 	},
 	AddTitle(zheng("建筑相关", "The Builder")),
+	{
+		name = "ICKER_PRESERVE",
+		label = zheng("强化恶液储存箱", "Enhanced Icker Preserve"),
+		hover = zheng(
+			"消耗一个弹性空间制造器升级，同种食物无限堆叠，每次取出不超过一组；拆毁后可取回残骸内余量或重建",
+			"Upgrade once with an Elastispacer for unlimited same-food stacking. Take one ordinary stack at a time; retrieve excess from collapsed storage or rebuild."
+		),
+		options = boolean,
+		default = false,
+	},
 	{
 		name = "BETTERFOSSIL",
 		label = zheng("修骨架必定成功", "Better Fossil Repairing"),
