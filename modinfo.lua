@@ -18,9 +18,11 @@ local new_modules = {
 changelog = zheng(
 [[
 - 新模块：溯源表冷却缩短至1分钟
+- 强化嚎弹炮：装备使用弹性空间制造器升级后的嚎弹炮时，禁用“设置弹药”动作
 ]],
 [[
 - New module: Short Backtrek Watch Cooldown (1 minute).
+- Enhanced Howlitzer: Disable the "Set Ammo" action for an equipped Howlitzer upgraded with an Elastispacer.
 ]]
 )
 description = zheng("版本: ", "Version: ") .. version .. zheng("\n\n本次更新:\n", "\n\nChange:\n") .. changelog

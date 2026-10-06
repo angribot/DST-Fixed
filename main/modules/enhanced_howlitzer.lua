@@ -1,10 +1,26 @@
 table.insert(PrefabFiles, "moonglass_blow_proj")
 
 local AddPrefabPostInit = AddPrefabPostInit
+local AddComponentAction = AddComponentAction
 GLOBAL.setfenv(1, GLOBAL)
 
 local params = require("containers").params
 params.houndstooth_blowpipe.widget.slotbg = nil
+
+AddComponentAction("INVENTORY", "reloaditem", function(inst, doer, actions)
+	local inventory = doer.replica.inventory
+	local equipped = inventory and inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+	local container = equipped and equipped.replica.container
+	if equipped and equipped.prefab == "houndstooth_blowpipe"
+		and container and container:IsInfiniteStackSize()
+		and not container:IsHolding(inst) then
+		for i = #actions, 1, -1 do
+			if actions[i] == ACTIONS.CHANGE_TACKLE then
+				table.remove(actions, i)
+			end
+		end
+	end
+end)
 
 AddPrefabPostInit("moonglass", function(inst)
 	inst:AddTag("blowpipeammo")
