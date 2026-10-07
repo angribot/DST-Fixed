@@ -74,6 +74,16 @@ configuration_options = {
 		options = boolean,
 		default = true,
 	},
+	{
+		name = "HIGHLIGHT_CONTAINERS",
+		label = zheng("高亮匹配容器", "Highlight Containers"),
+		hover = zheng(
+			"高亮附近装有鼠标所持物品的容器，包括未打开的容器。",
+			"Highlight nearby containers holding the cursor item, including unopened containers."
+		),
+		options = boolean,
+		default = true,
+	},
 	AddTitle(zheng("玩家相关", "The Player")),
 	{
 		name = "ATKSPEED",
