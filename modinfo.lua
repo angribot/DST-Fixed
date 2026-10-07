@@ -6,23 +6,30 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.25"
+version = "2.26"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
 local new_modules = {
+	ICKER_PRESERVE = true,
 	SHORT_BACKTREK_WATCH_COOLDOWN = true,
 }
 
 -- stylua: ignore
 changelog = zheng(
 [[
-- 新模块：溯源表冷却缩短至1分钟
-- 强化嚎弹炮：装备使用弹性空间制造器升级后的嚎弹炮时，禁用“设置弹药”动作
+- 新模块【强化恶液储存箱】：恶液存储箱可以使用弹性空间制造器升级
+- 【强化嚎弹炮】：装备使用弹性空间制造器升级后的嚎弹炮时，禁用“设置弹药”动作
+
+近期更新：
+- 新模块【溯源表冷却缩短至1分钟】
 ]],
 [[
-- New module: Short Backtrek Watch Cooldown (1 minute).
-- Enhanced Howlitzer: Disable the "Set Ammo" action for an equipped Howlitzer upgraded with an Elastispacer.
+- New module: Enhanced Icker Preserve. Icker Preserve can be upgraded with an Elastispacer
+- Enhanced Howlitzer: Disable the "Set Ammo" action for an equipped Howlitzer upgraded with an Elastispacer
+
+Recent Changes:
+- New module: Short Backtrek Watch Cooldown (1 minute)
 ]]
 )
 description = zheng("版本: ", "Version: ") .. version .. zheng("\n\n本次更新:\n", "\n\nChange:\n") .. changelog
@@ -267,6 +274,16 @@ configuration_options = {
 		default = false,
 	},
 	AddTitle(zheng("建筑相关", "The Builder")),
+	{
+		name = "ICKER_PRESERVE",
+		label = zheng("强化恶液储存箱", "Enhanced Icker Preserve"),
+		hover = zheng(
+			"恶液储存箱可用弹性空间制造器升级",
+			"Allow the Icker Preserve to be upgraded with an Elastispacer."
+		),
+		options = boolean,
+		default = false,
+	},
 	{
 		name = "BETTERFOSSIL",
 		label = zheng("修骨架必定成功", "Better Fossil Repairing"),

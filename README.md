@@ -43,6 +43,7 @@ Modules follow the categories in `modinfo.lua`. Show Bundle is enabled by defaul
 
 ### Buildings
 
+- **Enhanced Icker Preserve** — Allow the Icker Preserve to be upgraded with an Elastispacer.
 - **Better Fossil Repairing** — Make fossil skeleton repairs always succeed.
 - **Fireflies in Lamps** — Put Fireflies into Mushlights and Glowcaps for permanent light.
 - **Enhanced Sisturn** — Allow Bone Shards and Mourning Glory in Sisturns.
