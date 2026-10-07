@@ -3,6 +3,9 @@ local AddSimPostInit = AddSimPostInit
 local AddComponentPostInit = AddComponentPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
+-- Both RPC directions reserve two of the engine's 50 arguments for metadata.
+local CONTAINERS_PER_RPC = 48
+
 local highlighted = {}
 local active_item
 local generation = 0
@@ -66,7 +69,7 @@ end
 -- Entity RPC arguments let the engine resolve network IDs. Return only match flags.
 AddModRPCHandler(modname, "HighlightContainers", function(player, request, prefab, ...)
 	local count = select("#", ...)
-	if type(request) ~= "number" or type(prefab) ~= "string" or count > 50 then
+	if type(request) ~= "number" or type(prefab) ~= "string" or count > CONTAINERS_PER_RPC then
 		return
 	end
 	local inventory = player.components.inventory
@@ -142,8 +145,8 @@ AddSimPostInit(function()
 				ClearHighlight(inst)
 			end
 		end
-		for i = 1, #containers, 50 do
-			SendModRPCToServer(MOD_RPC[modname].HighlightContainers, generation, item.prefab, unpack(containers, i, math.min(i + 49, #containers)))
+		for i = 1, #containers, CONTAINERS_PER_RPC do
+			SendModRPCToServer(MOD_RPC[modname].HighlightContainers, generation, item.prefab, unpack(containers, i, math.min(i + CONTAINERS_PER_RPC - 1, #containers)))
 		end
 	end
 	OnActiveItemChanged = function(inst)
