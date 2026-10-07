@@ -10,6 +10,7 @@ GLOBAL.CONSTRUCTION_PLANS.collapsed_icker_preserve = {
 local config_table = {
 	-- Default On --
 	BUNDLE = "show_bundle",
+	HIGHLIGHT_CONTAINERS = "highlight_containers",
 	-- The Player --
 	ATKSPEED = "attack_speed",
 	SMARTUNWRAP = "smart_unwrap",

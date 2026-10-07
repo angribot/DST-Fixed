@@ -4,11 +4,12 @@ A collection of tweaks to vanilla Don't Starve Together. Each tweak can be enabl
 
 ## Modules
 
-Modules follow the categories in `modinfo.lua`. Show Bundle is enabled by default; all other modules are disabled by default.
+Modules follow the categories in `modinfo.lua`. Show Bundle and Highlight Containers are enabled by default; all other modules are disabled by default.
 
 ### Default On
 
 - **Show Bundle** — Show bundle and gift contents on mouse hover.
+- **Highlight Containers** — Highlight nearby containers containing the held item.
 
 ### Player
 
