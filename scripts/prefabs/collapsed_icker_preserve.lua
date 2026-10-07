@@ -1,4 +1,4 @@
-local preserve = require("ickerpreserve")
+local preserve = require("dst_fixed/ickerpreserve")
 
 -- Temporary vanilla collapsed-chest artwork; storage remains an inventoryitemholder, not a container.
 local assets = { Asset("ANIM", "anim/treasure_chest_upgraded.zip") }

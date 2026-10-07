@@ -19,7 +19,7 @@ ACTIONS.TAKEITEM.stroverridefn = function(act)
 	return TakeItemString(act)
 end
 
-local preserve = require("ickerpreserve")
+local preserve = require("dst_fixed/ickerpreserve")
 AddPrefabPostInit("gelblob_storage", function(inst)
 	if TheWorld.ismastersim then
 		preserve.Install(inst)
