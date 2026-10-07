@@ -18,14 +18,18 @@ local new_modules = {
 -- stylua: ignore
 changelog = zheng(
 [[
-- 新模块：强化恶液储存箱，使用弹性空间制造器无限堆叠同种食物；拆毁后可从残骸取回余量或重建
-- 新模块：溯源表冷却缩短至1分钟
-- 强化嚎弹炮：装备使用弹性空间制造器升级后的嚎弹炮时，禁用“设置弹药”动作
+- 新模块【强化恶液储存箱】：恶液存储箱可以使用弹性空间制造器升级
+- 【强化嚎弹炮】：装备使用弹性空间制造器升级后的嚎弹炮时，禁用“设置弹药”动作
+
+近期更新：
+- 新模块【溯源表冷却缩短至1分钟】
 ]],
 [[
-- New module: Enhanced Icker Preserve. Upgrade with an Elastispacer for unlimited same-food stacking; retrieve excess from collapsed storage or rebuild after destruction.
-- New module: Short Backtrek Watch Cooldown (1 minute).
-- Enhanced Howlitzer: Disable the "Set Ammo" action for an equipped Howlitzer upgraded with an Elastispacer.
+- New module: Enhanced Icker Preserve. Icker Preserve can be upgraded with an Elastispacer
+- Enhanced Howlitzer: Disable the "Set Ammo" action for an equipped Howlitzer upgraded with an Elastispacer
+
+Recent Changes:
+- New module: Short Backtrek Watch Cooldown (1 minute)
 ]]
 )
 description = zheng("版本: ", "Version: ") .. version .. zheng("\n\n本次更新:\n", "\n\nChange:\n") .. changelog
@@ -274,8 +278,8 @@ configuration_options = {
 		name = "ICKER_PRESERVE",
 		label = zheng("强化恶液储存箱", "Enhanced Icker Preserve"),
 		hover = zheng(
-			"消耗一个弹性空间制造器升级，同种食物无限堆叠，每次取出不超过一组；拆毁后可取回残骸内余量或重建",
-			"Upgrade once with an Elastispacer for unlimited same-food stacking. Take one ordinary stack at a time; retrieve excess from collapsed storage or rebuild."
+			"恶液储存箱可用弹性空间制造器升级",
+			"Allow the Icker Preserve to be upgraded with an Elastispacer."
 		),
 		options = boolean,
 		default = false,
