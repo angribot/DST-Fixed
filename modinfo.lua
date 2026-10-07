@@ -6,11 +6,12 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.25.1"
+version = "2.25.2"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
 local new_modules = {
+	HIGHLIGHT_CONTAINERS = true,
 	ICKER_PRESERVE = true,
 	SHORT_BACKTREK_WATCH_COOLDOWN = true,
 }
@@ -18,17 +19,19 @@ local new_modules = {
 -- stylua: ignore
 changelog = zheng(
 [[
-- 新模块【强化恶液储存箱】：恶液存储箱可以使用弹性空间制造器升级
-- 【强化嚎弹炮】：装备使用弹性空间制造器升级后的嚎弹炮时，禁用“设置弹药”动作
+- 新模块【高亮匹配容器】：高亮手持物品附近的容器
 
 近期更新：
+- 新模块【强化恶液储存箱】：恶液存储箱可以使用弹性空间制造器升级
+- 【强化嚎弹炮】：装备使用弹性空间制造器升级后的嚎弹炮时，禁用“设置弹药”动作
 - 新模块【溯源表冷却缩短至1分钟】
 ]],
 [[
-- New module: Enhanced Icker Preserve. Icker Preserve can be upgraded with an Elastispacer
-- Enhanced Howlitzer: Disable the "Set Ammo" action for an equipped Howlitzer upgraded with an Elastispacer
+- New module: Highlight Containers. Highlight nearby containers containing the held item.
 
 Recent Changes:
+- New module: Enhanced Icker Preserve. Icker Preserve can be upgraded with an Elastispacer
+- Enhanced Howlitzer: Disable the "Set Ammo" action for an equipped Howlitzer upgraded with an Elastispacer
 - New module: Short Backtrek Watch Cooldown (1 minute)
 ]]
 )
@@ -78,8 +81,8 @@ configuration_options = {
 		name = "HIGHLIGHT_CONTAINERS",
 		label = zheng("高亮匹配容器", "Highlight Containers"),
 		hover = zheng(
-			"高亮附近装有鼠标所持物品的容器，包括未打开的容器。",
-			"Highlight nearby containers holding the cursor item, including unopened containers."
+			"高亮手持物品附近的容器",
+			"Highlight nearby containers containing the held item."
 		),
 		options = boolean,
 		default = true,

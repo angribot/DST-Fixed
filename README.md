@@ -9,7 +9,7 @@ Modules follow the categories in `modinfo.lua`. Show Bundle and Highlight Contai
 ### Default On
 
 - **Show Bundle** — Show bundle and gift contents on mouse hover.
-- **Highlight Containers** — Tint nearby awake containers green when they directly contain the cursor-held item type, including unopened containers. Refreshes every half-second; ignores names, condition, and wrapped contents. Visible only to the searching player.
+- **Highlight Containers** — Highlight nearby containers containing the held item.
 
 ### Player
 
