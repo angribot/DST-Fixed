@@ -106,18 +106,19 @@ AddSimPostInit(function()
 		return
 	end
 	local player
+	local OnActiveItemChanged
 	local function Update()
 		local current = ThePlayer
 		local inventory = current ~= nil and current.replica.inventory or nil
 		local item = inventory ~= nil and inventory:GetActiveItem() or nil
 		if current ~= player then
 			if player ~= nil and player:IsValid() then
-				player:RemoveEventCallback("newactiveitem", Update)
+				player:RemoveEventCallback("newactiveitem", OnActiveItemChanged)
 			end
 			generation = generation + 1
 			player = current
 			if player ~= nil then
-				player:ListenForEvent("newactiveitem", Update)
+				player:ListenForEvent("newactiveitem", OnActiveItemChanged)
 			end
 			ClearHighlights()
 		end
@@ -144,6 +145,12 @@ AddSimPostInit(function()
 		for i = 1, #containers, 50 do
 			SendModRPCToServer(MOD_RPC[modname].HighlightContainers, generation, item.prefab, unpack(containers, i, math.min(i + 49, #containers)))
 		end
+	end
+	OnActiveItemChanged = function(inst)
+		generation = generation + 1
+		ClearHighlights()
+		-- Inventory prediction raises this event before sending the pickup RPC.
+		inst:DoTaskInTime(0, Update)
 	end
 	TheWorld:DoPeriodicTask(.5, Update, 0)
 end)
