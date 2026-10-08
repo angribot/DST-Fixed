@@ -41,6 +41,7 @@ local config_table = {
 	DOUBLE_VBOOMERANG_PROJECTILES = "double_vboomerang_projectiles",
 
 	-- The Builder --
+	SHADOW_STORAGE = "expanded_shadow_storage",
 	ICKER_PRESERVE = "enhanced_icker_preserve",
 	BETTERFOSSIL = "easy_fossil_stalker",
 	FIREFLIES = "fireflies_into_lamp",

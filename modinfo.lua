@@ -6,11 +6,12 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.25.3"
+version = "2.25.4"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
 local new_modules = {
+	SHADOW_STORAGE = true,
 	HIGHLIGHT_CONTAINERS = true,
 	ICKER_PRESERVE = true,
 	SHORT_BACKTREK_WATCH_COOLDOWN = true,
@@ -19,17 +20,19 @@ local new_modules = {
 -- stylua: ignore
 changelog = zheng(
 [[
-- 新模块【高亮匹配容器】：高亮手持物品附近的容器
+- 新模块【暗影空间扩容】：暗影空间扩容至20格
 
 近期更新：
+- 新模块【高亮匹配容器】：高亮手持物品附近的容器
 - 新模块【强化恶液储存箱】：恶液存储箱可以使用弹性空间制造器升级
 - 【强化嚎弹炮】：装备使用弹性空间制造器升级后的嚎弹炮时，禁用“设置弹药”动作
 - 新模块【溯源表冷却缩短至1分钟】
 ]],
 [[
-- New module: Highlight Containers. Highlight nearby containers containing the held item.
+- New module: Expanded Shadow Storage. Expand shadow storage to 20 slots.
 
 Recent Changes:
+- New module: Highlight Containers. Highlight nearby containers containing the held item.
 - New module: Enhanced Icker Preserve. Icker Preserve can be upgraded with an Elastispacer
 - Enhanced Howlitzer: Disable the "Set Ammo" action for an equipped Howlitzer upgraded with an Elastispacer
 - New module: Short Backtrek Watch Cooldown (1 minute)
@@ -287,6 +290,13 @@ configuration_options = {
 		default = false,
 	},
 	AddTitle(zheng("建筑相关", "The Builder")),
+	{
+		name = "SHADOW_STORAGE",
+		label = zheng("暗影空间扩容", "Expanded Shadow Storage"),
+		hover = zheng("暗影空间扩容至20格", "Expand shadow storage to 20 slots."),
+		options = boolean,
+		default = false,
+	},
 	{
 		name = "ICKER_PRESERVE",
 		label = zheng("强化恶液储存箱", "Enhanced Icker Preserve"),
