@@ -11,7 +11,7 @@ local active_item
 local generation = 0
 
 local function IsCandidate(inst)
-	return inst:IsValid() and not inst:IsAsleep() and not inst:HasTag("INLIMBO")
+	return EntityScript.is_instance(inst) and inst:IsValid() and not inst:IsAsleep() and not inst:HasTag("INLIMBO")
 		and inst.AnimState ~= nil and (inst.replica.container ~= nil or inst.components.container_proxy ~= nil)
 end
 
