@@ -10,8 +10,13 @@ local highlighted = {}
 local active_item
 local generation = 0
 
+local function IsValidEntity(inst)
+	-- Instance identity alone does not guarantee a native entity for IsValid().
+	return EntityScript.is_instance(inst) and inst.entity ~= nil and inst:IsValid()
+end
+
 local function IsCandidate(inst)
-	return EntityScript.is_instance(inst) and inst:IsValid() and not inst:IsAsleep() and not inst:HasTag("INLIMBO")
+	return IsValidEntity(inst) and not inst:IsAsleep() and not inst:HasTag("INLIMBO")
 		and inst.AnimState ~= nil and (inst.replica.container ~= nil or inst.components.container_proxy ~= nil)
 end
 
@@ -37,7 +42,7 @@ AddComponentPostInit("highlight", function(self)
 	local OnRemoveFromEntity = self.OnRemoveFromEntity
 	self.OnRemoveFromEntity = function(self)
 		OnRemoveFromEntity(self)
-		if highlighted[self.inst] and self.inst:IsValid() then
+		if highlighted[self.inst] and IsValidEntity(self.inst) then
 			ApplyHighlightColour(self.inst)
 		end
 	end
@@ -54,7 +59,7 @@ end
 local function ClearHighlight(inst)
 	if highlighted[inst] then
 		highlighted[inst] = nil
-		if inst:IsValid() then
+		if IsValidEntity(inst) then
 			RefreshHighlight(inst)
 		end
 	end
@@ -78,7 +83,7 @@ AddModRPCHandler(modname, "HighlightContainers", function(player, request, prefa
 	for i = 1, count do
 		local inst = select(i, ...)
 		local container
-		if item ~= nil and item.prefab == prefab and EntityScript.is_instance(inst) and inst:IsValid() and not inst:HasTag("INLIMBO") then
+		if item ~= nil and item.prefab == prefab and IsValidEntity(inst) and not inst:HasTag("INLIMBO") then
 			local proxy = inst.components.container_proxy
 			local master = proxy ~= nil and proxy:GetMaster() or inst
 			container = master ~= nil and master.components.container or nil
