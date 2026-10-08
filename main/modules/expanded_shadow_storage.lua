@@ -1,11 +1,12 @@
-table.insert(Assets, Asset("ANIM", "anim/ui_fish_box_5x4.zip"))
+table.insert(Assets, Asset("ANIM", "anim/ui_portal_shadow_5x4.zip"))
 
 GLOBAL.setfenv(1, GLOBAL)
 
 local widget = {
 	slotpos = {},
-	animbank = "ui_fish_box_5x4",
-	animbuild = "ui_fish_box_5x4",
+	animbank = "ui_portal_shadow_5x4",
+	animbuild = "ui_portal_shadow_5x4",
+	animloop = true,
 	pos = Vector3(0, 220, 0),
 	side_align_tip = 160,
 }
