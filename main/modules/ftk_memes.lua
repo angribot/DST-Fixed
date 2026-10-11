@@ -65,7 +65,7 @@ AddStategraphPostInit("wilson", function(self)
 	end
 end)
 
-AddStategraphPostInit("SGklaus", function(self)
+AddStategraphPostInit("klaus", function(self)
 	local onenter_resurrect = self.states["resurrect"].onenter
 	self.states["resurrect"].onenter = function(inst)
 		onenter_resurrect(inst)

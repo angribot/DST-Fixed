@@ -1,8 +1,9 @@
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
+local sisturn_itemtestfn = require("containers").params.sisturn.itemtestfn
 local function sisturn_test_fn(container, item, slot)
-	return item:HasTag("sisturnbattery")
+	return item:HasTag("sisturnbattery") or sisturn_itemtestfn(container, item, slot)
 end
 
 AddPrefabPostInit("sisturn", function(inst)

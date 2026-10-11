@@ -314,14 +314,23 @@ local Talker = require("components/talker")
 local enable_say_parse = true
 local TalkerSay = Talker.Say
 function Talker:Say(script, time, noanim, ...)
+	if self.str_code_speaker == nil then
+		if IsStrCode(script) then
+			script = ResolveStrCode(SubStrCode(script))
+		end
+		return TalkerSay(self, script, time, noanim, ...)
+	end
+
+	-- sgparam is the tenth argument of Talker:Say.
+	local sgparam = select(7, ...)
 	if enable_say_parse then
 		if IsStrCode(script) then
-			self:SpeakStrCode(SubStrCode(script), time, noanim)
+			self:SpeakStrCode(SubStrCode(script), time, noanim, sgparam)
 			return
 		elseif TheWorld.ismastersim then
 			local strcode = STRCODE_TALKER[script]
 			if strcode then
-				self:SpeakStrCode(json.encode({ content = strcode }), time, noanim)
+				self:SpeakStrCode(json.encode({ content = strcode }), time, noanim, sgparam)
 				return
 			end
 		end
@@ -329,7 +338,7 @@ function Talker:Say(script, time, noanim, ...)
 	return TalkerSay(self, script, time, noanim, ...)
 end
 
-local function OnSpeakerDirty(inst)
+local function OnSpeakerDirty(inst, sgparam)
 	local self = inst.components.talker
 
 	local strcode = self.str_code_speaker.strcode:value()
@@ -340,7 +349,7 @@ local function OnSpeakerDirty(inst)
 			local time = self.str_code_speaker.strtime:value()
 			local forcetext = self.str_code_speaker.forcetext:value()
 			enable_say_parse = false
-			self:Say(str, time > 0 and time or nil, forcetext, forcetext, true)
+			self:Say(str, time > 0 and time or nil, forcetext, forcetext, true, nil, nil, nil, nil, sgparam)
 			enable_say_parse = true
 			return
 		end
@@ -369,7 +378,7 @@ end
 
 -- TODO: Make a net event for repeat speech
 --NOTE: forcetext translates to noanim + force say
-function Talker:SpeakStrCode(strcode, time, forcetext)
+function Talker:SpeakStrCode(strcode, time, forcetext, sgparam)
 	-- print("SpeakStrCode", strcode)
 	if self.str_code_speaker ~= nil and TheWorld.ismastersim then
 		self.str_code_speaker.strcode:set(strcode)
@@ -379,7 +388,8 @@ function Talker:SpeakStrCode(strcode, time, forcetext)
 			self.str_code_speaker.task:Cancel()
 		end
 		self.str_code_speaker.task = self.inst:DoTaskInTime(1, OnCancelSpeaker, self)
-		OnSpeakerDirty(self.inst)
+		-- The server stategraph handles sgparam; its resulting animation is replicated.
+		OnSpeakerDirty(self.inst, sgparam)
 	end
 end
 

@@ -30,7 +30,17 @@ function Unwrappable:Unwrap(doer, nodelay, ...)
 	local pos = self.inst:GetPosition()
 	pos.y = 0
 	if self.itemdata then
-		if owner == doer or delay then
+		local position_owner = owner
+		if owner ~= doer and owner:HasTag("pocketdimension_container") then
+			position_owner = doer.components.inventory and doer.components.inventory:GetOpenContainerProxyFor(owner) or nil
+			if position_owner then
+				pos.x, pos.y, pos.z = position_owner.Transform:GetWorldPosition()
+				pos.y = 0
+			else
+				position_owner = doer
+			end
+		end
+		if position_owner == doer or delay then
 			local doerpos = doer:GetPosition()
 			local offset = FindWalkableOffset(doerpos, doer.Transform:GetRotation() * DEGREES, 1, 8, false, true, NoHoles)
 			if offset then
@@ -49,7 +59,7 @@ function Unwrappable:Unwrap(doer, nodelay, ...)
 		end
 
 		-- Changed Part
-		local owner_pos = owner:GetPosition()
+		local owner_pos = position_owner ~= owner and pos or owner:GetPosition()
 		removed_from_inv = self.inst.components.inventoryitem:RemoveFromOwner(true) ~= nil
 		-- Changed Part
 
@@ -67,7 +77,7 @@ function Unwrappable:Unwrap(doer, nodelay, ...)
 				if item.components.inventoryitem then
 					if item.prefab == "giftsurprise" then
 						item.components.inventoryitem:OnDropped(true, 0.5)
-					elseif not (grandowner_container and grandowner_container:GiveItem(item, nil, owner_pos)) then
+					elseif not (grandowner_container and grandowner_container:GiveItem(item, nil, owner_pos, false)) then
 						doer_container:GiveItem(item, nil, owner_pos)
 					end
 				end
@@ -105,7 +115,10 @@ AddPrefabPostInit("bundle", function(inst)
 			local iswet = inst.components.inventoryitem:IsWet()
 			local item = SpawnPrefab("waxpaper")
 			if item then
-				if not (grandowner_container and grandowner_container:GiveItem(item, nil, pos)) then
+				if item.components.inventoryitem then
+					item.components.inventoryitem:InheritMoisture(moisture, iswet)
+				end
+				if not (grandowner_container and grandowner_container:GiveItem(item, nil, pos, false)) then
 					local doer_container = doer and (doer.components.container or doer.components.inventory)
 					if doer_container then
 						doer_container:GiveItem(item, nil, pos)
@@ -114,15 +127,12 @@ AddPrefabPostInit("bundle", function(inst)
 					else
 						item.Transform:SetPosition(pos:Get())
 					end
-					if item.components.inventoryitem then
-						item.components.inventoryitem:InheritMoisture(moisture, iswet)
-					end
 				end
 			end
 			SpawnPrefab("bundle_unwrap").Transform:SetPosition(pos:Get())
 		end
 		if doer and doer.SoundEmitter then
-			doer.SoundEmitter:PlaySound("dontstarve/common/together/packaged")
+			doer.SoundEmitter:PlaySound(inst.skin_wrap_sound or "dontstarve/common/together/packaged")
 		end
 		inst:Remove()
 	end)

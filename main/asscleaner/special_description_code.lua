@@ -171,6 +171,7 @@ function GetNewDeathAnnouncementString(theDead, source, pkname, sourceispet)
 				}
 				msg_tab.params = {
 					theDead:GetDisplayName(),
+					pkname,
 					STRCODE_HEADER .. "NAMES." .. string.upper(source),
 				}
 				-- theDead:GetDisplayName().." "..STRINGS.UI.HUD.DEATH_ANNOUNCEMENT_1.." "..string.format(STRINGS.UI.HUD.DEATH_PET_NAME, pkname, petname)

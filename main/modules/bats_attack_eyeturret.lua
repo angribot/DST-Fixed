@@ -1,64 +1,41 @@
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
-AddPrefabPostInit("bat", function(inst)
-	local function MakeTeam(inst, attacker)
-		local leader = SpawnPrefab("teamleader")
-		leader.components.teamleader:SetUp(attacker, inst)
-		leader.components.teamleader:BroadcastDistress(inst)
-	end
-
-	local RETARGET_CANT_TAGS = { "bat" }
-	local RETARGET_ONEOF_TAGS = { "character", "monster" }
-	local function NewRetarget(inst)
-		local ta = inst.components.teamattacker
-
-		local newtarget = FindEntity(inst, TUNING.BAT_TARGET_DIST, function(guy)
-			return inst.components.combat:CanTarget(guy) or guy:HasTag("eyeturret")
-		end, nil, RETARGET_CANT_TAGS, RETARGET_ONEOF_TAGS)
-
-		if newtarget and not ta.inteam and not ta:SearchForTeam() then
-			MakeTeam(inst, newtarget)
-		end
-
-		if ta.inteam and not ta.teamleader:CanAttack() then
-			return newtarget
-		end
-	end
-
-	if inst.components.combat then
-		inst.components.combat:SetRetargetFunction(3, NewRetarget)
-	end
-end)
-
 AddPrefabPostInit("eyeturret", function(inst)
 	local RETARGET_MUST_TAGS = { "_combat" }
-	local RETARGET_CANT_TAGS = { "INLIMBO", "player" }
+	local RETARGET_CANT_TAGS = { "INLIMBO", "player", "eyeturret", "engineering" }
 
 	local function NewRetargetfn(inst)
+		local target = inst.components.combat.target
+		if target ~= nil and target:IsValid() and inst:IsNear(target, TUNING.EYETURRET_RANGE + 3) then
+			return
+		end
+
 		local playertargets = {}
-		local AllPlayers = AllPlayers
-		for i = 1, #AllPlayers do
-			local v = AllPlayers[i]
-			if v.components.combat.target then
+		for _, v in ipairs(AllPlayers) do
+			if v.components.combat.target ~= nil then
 				playertargets[v.components.combat.target] = true
 			end
 		end
 
-		return FindEntity(
-			inst,
-			TUNING.EYETURRET_RANGE + 3,
-			function(guy)
-				return (
-					playertargets[guy]
-					or (guy.components.combat.target and guy.components.combat.target:HasTag("player"))
+		local x, y, z = inst.Transform:GetWorldPosition()
+		local ents = TheSim:FindEntities(x, y, z, TUNING.EYETURRET_RANGE + 3, RETARGET_MUST_TAGS, RETARGET_CANT_TAGS)
+		for _, v in ipairs(ents) do
+			if v ~= inst
+				and v ~= target
+				and v.entity:IsVisible()
+				and inst.components.combat:CanTarget(v)
+				and (
+					playertargets[v]
+					or v.components.combat:TargetIs(inst)
+					or (v.components.combat.target ~= nil and v.components.combat.target:HasTag("player"))
+					or v:HasTag("bat")
 				)
-						and inst.components.combat:CanTarget(guy)
-					or guy:HasTag("bat")
-			end,
-			RETARGET_MUST_TAGS, --see entityreplica.lua
-			RETARGET_CANT_TAGS
-		)
+			then
+				return v
+			end
+		end
+		return nil
 	end
 
 	if inst.components.combat then

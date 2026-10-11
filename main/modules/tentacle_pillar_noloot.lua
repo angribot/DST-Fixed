@@ -1,3 +1,6 @@
+local AddSimPostInit = AddSimPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
-SetSharedLootTable("tentacle_pillar", {})
+AddSimPostInit(function()
+	SetSharedLootTable("tentacle_pillar", {})
+end)
