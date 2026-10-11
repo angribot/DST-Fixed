@@ -6,7 +6,7 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.25.6"
+version = "2.25.7"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -20,9 +20,11 @@ local new_modules = {
 -- stylua: ignore
 changelog = zheng(
 [[
-- 修复一处崩溃
+- 多处兼容性修复
+- 弃用三项模块
 
 近期更新：
+- 修复一处崩溃
 - 【高亮匹配容器】：修复接收到异常容器数据时可能导致崩溃的问题
 - 新模块【暗影空间扩容】：暗影空间扩容至20格
 - 新模块【高亮匹配容器】：高亮手持物品附近的容器
@@ -31,9 +33,11 @@ changelog = zheng(
 - 新模块【溯源表冷却缩短至1分钟】
 ]],
 [[
-- Fix a crash on client side.
+- Fix some compatibility issue
+- Deprecate 3 modules
 
 Recent Changes:
+- Fix a crash on client side.
 - Highlight Containers: Fix a possible crash when receiving invalid container data.
 - New module: Expanded Shadow Storage. Expand shadow storage to 20 slots.
 - New module: Highlight Containers. Highlight nearby containers containing the held item.
@@ -502,7 +506,7 @@ configuration_options = {
 		options = boolean,
 		default = false,
 	},
-	AddTitle("Deprecated", "These options are retained for compatibility and no longer have any effect."),
+	AddTitle(zheng("已弃用", "Deprecated")),
 	{
 		name = "CUSTOMFAILSTR",
 		label = zheng("个性化动作失败台词", "Custom Action Fail String"),
