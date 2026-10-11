@@ -18,7 +18,6 @@ Modules follow the categories in `modinfo.lua`. Show Bundle and Highlight Contai
 - **Extended Player Skins** — Allow players to use other characters' skins.
 - **Static Sit Emote** — Always use the sitting animation for `/sit`.
 - **Scratch Emote**
-- **Custom Action Fail String** — Use each character's own action-failure dialogue.
 - **Disable Ghost Hounded** — Exclude ghost players from the player count when hound attacks start.
 - **Enhanced Localized Description** — Make most inspection text follow the client's language. Experimental.
 - **Wortox the Time Traveler**
@@ -46,7 +45,6 @@ Modules follow the categories in `modinfo.lua`. Show Bundle and Highlight Contai
 
 - **Expanded Shadow Storage** — Expand shared shadow storage to 20 slots.
 - **Enhanced Icker Preserve** — Allow the Icker Preserve to be upgraded with an Elastispacer.
-- **Better Fossil Repairing** — Make fossil skeleton repairs always succeed.
 - **Fireflies in Lamps** — Put Fireflies into Mushlights and Glowcaps for permanent light.
 - **Enhanced Sisturn** — Allow Bone Shards and Mourning Glory in Sisturns.
 - **Glommer Statue Repairing** — Repair Glommer's Statue with Marble.
@@ -72,7 +70,6 @@ Modules follow the categories in `modinfo.lua`. Show Bundle and Highlight Contai
 - **Mourning Glory into Dug Grave** — Restore dug graves with Mourning Glory.
 - **Enhanced Eyeturrets** — Make Eyeturrets target bats.
 - **Gather Moon Dial's Glass** — Move glass dropped by Moon Dials at the end of the storm event to the Celestial Portal.
-- **Disable Forest Resources Regen** — Disable regeneration of resources such as grass, twigs, and berry bushes.
 - **No Halloween Candies** — Stop Pig King trades from giving Halloween candies.
 - **Less Loots in Winter's Feast** — Disable trinket and snack drops while preserving boss ornaments.
 
@@ -82,3 +79,11 @@ Modules follow the categories in `modinfo.lua`. Show Bundle and Highlight Contai
 - **Enlightened Crown Shard** — Add an Enlightened Crown Shard recipe.
 - **Prop Sign** — Add a Prop Sign recipe in the magic category.
 - **Classic Applied Horticulture** — Restore classic Applied Horticulture with an updated recipe.
+
+### Deprecated
+
+These options remain listed for compatibility, but their values are no longer read and their modules have been removed.
+
+- **Custom Action Fail String** — Character-specific action-failure dialogue is now provided by the game.
+- **Disable Forest Resources Regen** — Use the world's Basic Resource Regrowth setting instead.
+- **Better Fossil Repairing** — The game guarantees the correct fossil form when a Shadow Heart is nearby, including in a player's inventory; unconditional success is no longer provided.

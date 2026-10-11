@@ -17,7 +17,6 @@ local config_table = {
 	CHECKSKINOWNERSHIP = "check_skin_ownership",
 	SITEMOTE = "static_sit_emote",
 	SCRATCHEMOTE = "scratch_emote",
-	CUSTOMFAILSTR = "custom_actionfail_strings",
 	NOGHOSTHOUNDED = "no_ghost_hounded",
 	LOCALIZEDESC = "localize_description",
 	WORTOXTIMETRAVEL = "jump_into_watch",
@@ -43,7 +42,6 @@ local config_table = {
 	-- The Builder --
 	SHADOW_STORAGE = "expanded_shadow_storage",
 	ICKER_PRESERVE = "enhanced_icker_preserve",
-	BETTERFOSSIL = "easy_fossil_stalker",
 	FIREFLIES = "fireflies_into_lamp",
 	SISTURN = "enhanced_sisturn",
 	GLOMMER = "repairable_statueglommer",
@@ -67,7 +65,6 @@ local config_table = {
 	HONORMOUND = "honor_mound",
 	BAT = "bats_attack_eyeturret",
 	GATHERMOONGLASS = "gather_moonglass",
-	NOFORESTRESOURCEREGEN = "disable_forestresouce_regen",
 	HALLOWEEN = "disable_halloween_candies",
 	WINTERSFEASTLOOTS = "disable_wintersfeast_trash",
 

@@ -130,16 +130,6 @@ configuration_options = {
 	},
 
 	{
-		name = "CUSTOMFAILSTR",
-		label = zheng("个性化动作失败台词", "Custom Action Fail String"),
-		hover = zheng(
-			'每个角色都会使用自己的动作失败台词而不是威尔逊的 "我做不到。"',
-			'Characters use theis own actionfail strings instead of "I can\'t do that."'
-		),
-		options = boolean,
-		default = false,
-	},
-	{
 		name = "NOGHOSTHOUNDED",
 		label = zheng("禁用灵魂来狗", "Disable Ghost Hounded"),
 		hover = zheng(
@@ -312,12 +302,6 @@ configuration_options = {
 		default = false,
 	},
 	{
-		name = "BETTERFOSSIL",
-		label = zheng("修骨架必定成功", "Better Fossil Repairing"),
-		options = boolean,
-		default = false,
-	},
-	{
 		name = "FIREFLIES",
 		label = zheng("萤火虫放进蘑菇灯", "Fireflies in lamps"),
 		hover = zheng("萤火虫可以放进萤菇灯与炽菇灯实现永亮", "Enable fireflies into lamps"),
@@ -467,13 +451,6 @@ configuration_options = {
 		default = false,
 	},
 	{
-		name = "NOFORESTRESOURCEREGEN",
-		label = zheng("禁用森林资源再生", "Disable Forest Resouces Regen"),
-		hover = zheng("使草、树枝、浆果丛等不会再生"),
-		options = boolean,
-		default = false,
-	},
-	{
 		name = "HALLOWEEN",
 		label = zheng("禁用万圣节猪王糖果", "No Halloween Candies"),
 		hover = zheng(
@@ -522,6 +499,30 @@ configuration_options = {
 		name = "CLASSICBOOKGARDENING",
 		label = zheng("经典园艺学", "Classic Applied Horticulture"),
 		hover = zheng("经典园艺学，但是新版配方", "Classic Applied Horticulture, butt new recipe"),
+		options = boolean,
+		default = false,
+	},
+	AddTitle("Deprecated", "These options are retained for compatibility and no longer have any effect."),
+	{
+		name = "CUSTOMFAILSTR",
+		label = zheng("个性化动作失败台词", "Custom Action Fail String"),
+		hover = zheng(
+			'每个角色都会使用自己的动作失败台词而不是威尔逊的 "我做不到。"',
+			'Characters use theis own actionfail strings instead of "I can\'t do that."'
+		),
+		options = boolean,
+		default = false,
+	},
+	{
+		name = "NOFORESTRESOURCEREGEN",
+		label = zheng("禁用森林资源再生", "Disable Forest Resouces Regen"),
+		hover = zheng("使草、树枝、浆果丛等不会再生"),
+		options = boolean,
+		default = false,
+	},
+	{
+		name = "BETTERFOSSIL",
+		label = zheng("修骨架必定成功", "Better Fossil Repairing"),
 		options = boolean,
 		default = false,
 	},
