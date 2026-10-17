@@ -6,13 +6,13 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.25.7"
+version = "2.25.8"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
 local new_modules = {
 	SHADOW_STORAGE = true,
-	HIGHLIGHT_CONTAINERS = true,
+	-- HIGHLIGHT_CONTAINERS = true,
 	ICKER_PRESERVE = true,
 	SHORT_BACKTREK_WATCH_COOLDOWN = true,
 }
@@ -20,10 +20,11 @@ local new_modules = {
 -- stylua: ignore
 changelog = zheng(
 [[
-- 多处兼容性修复
-- 弃用三项模块
+- 暂时禁用【高亮匹配容器】
 
 近期更新：
+- 多处兼容性修复
+- 弃用三项模块
 - 修复一处崩溃
 - 【高亮匹配容器】：修复接收到异常容器数据时可能导致崩溃的问题
 - 新模块【暗影空间扩容】：暗影空间扩容至20格
@@ -33,10 +34,11 @@ changelog = zheng(
 - 新模块【溯源表冷却缩短至1分钟】
 ]],
 [[
-- Fix some compatibility issue
-- Deprecate 3 modules
+- Disable module "Highlight Containers" temporarily.
 
 Recent Changes:
+- Fix some compatibility issue
+- Deprecate 3 modules
 - Fix a crash on client side.
 - Highlight Containers: Fix a possible crash when receiving invalid container data.
 - New module: Expanded Shadow Storage. Expand shadow storage to 20 slots.
@@ -88,16 +90,16 @@ configuration_options = {
 		options = boolean,
 		default = true,
 	},
-	{
-		name = "HIGHLIGHT_CONTAINERS",
-		label = zheng("高亮匹配容器", "Highlight Containers"),
-		hover = zheng(
-			"高亮手持物品附近的容器",
-			"Highlight nearby containers containing the held item."
-		),
-		options = boolean,
-		default = true,
-	},
+	-- {
+	-- 	name = "HIGHLIGHT_CONTAINERS",
+	-- 	label = zheng("高亮匹配容器", "Highlight Containers"),
+	-- 	hover = zheng(
+	-- 		"高亮手持物品附近的容器",
+	-- 		"Highlight nearby containers containing the held item."
+	-- 	),
+	-- 	options = boolean,
+	-- 	default = true,
+	-- },
 	AddTitle(zheng("玩家相关", "The Player")),
 	{
 		name = "ATKSPEED",
