@@ -6,7 +6,7 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.25.8"
+version = "2.25.9"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -17,12 +17,12 @@ local new_modules = {
 	SHORT_BACKTREK_WATCH_COOLDOWN = true,
 }
 
--- stylua: ignore
 changelog = zheng(
-[[
-- 暂时禁用【高亮匹配容器】
+	[[
+- 优化动画包
 
 近期更新：
+- 暂时禁用【高亮匹配容器】
 - 多处兼容性修复
 - 弃用三项模块
 - 修复一处崩溃
@@ -33,10 +33,11 @@ changelog = zheng(
 - 【强化嚎弹炮】：装备使用弹性空间制造器升级后的嚎弹炮时，禁用“设置弹药”动作
 - 新模块【溯源表冷却缩短至1分钟】
 ]],
-[[
-- Disable module "Highlight Containers" temporarily.
+	[[
+- Optimize anim packs
 
 Recent Changes:
+- Disable module "Highlight Containers" temporarily.
 - Fix some compatibility issue
 - Deprecate 3 modules
 - Fix a crash on client side.
@@ -83,10 +84,7 @@ configuration_options = {
 	{
 		name = "BUNDLE",
 		label = zheng("显示包裹内容", "Show Bundle"),
-		hover = zheng(
-			"鼠标放在包裹上时显示里面的内容",
-			"Show bundles and gifts' content on mouse hover."
-		),
+		hover = zheng("鼠标放在包裹上时显示里面的内容", "Show bundles and gifts' content on mouse hover."),
 		options = boolean,
 		default = true,
 	},
@@ -138,10 +136,7 @@ configuration_options = {
 	{
 		name = "NOGHOSTHOUNDED",
 		label = zheng("禁用灵魂来狗", "Disable Ghost Hounded"),
-		hover = zheng(
-			"灵魂状态的玩家在猎犬袭击开始时不会被统计进去",
-			"Ghost players won't be stat on hounds-attack start."
-		),
+		hover = zheng("灵魂状态的玩家在猎犬袭击开始时不会被统计进去", "Ghost players won't be stat on hounds-attack start."),
 		options = boolean,
 		default = false,
 	},
@@ -219,20 +214,14 @@ configuration_options = {
 	{
 		name = "BOOKMOON",
 		label = zheng("强化月之魔典", "Enhanced Lunar Grimoire"),
-		hover = zheng(
-			"月之魔典在月圆的时候读会月黑",
-			"Read Lunar Grimoire on full moon will change it to new moon"
-		),
+		hover = zheng("月之魔典在月圆的时候读会月黑", "Read Lunar Grimoire on full moon will change it to new moon"),
 		options = boolean,
 		default = false,
 	},
 	{
 		name = "SANDSTONE",
 		label = zheng("强化沙之石", "Enhanced Sand Stone"),
-		hover = zheng(
-			"右键使用沙之石生成一次性临时沙塔",
-			"Use Sand stone in inventory to generate a temp Lazy Deserter."
-		),
+		hover = zheng("右键使用沙之石生成一次性临时沙塔", "Use Sand stone in inventory to generate a temp Lazy Deserter."),
 		options = boolean,
 		default = false,
 	},
@@ -253,20 +242,14 @@ configuration_options = {
 	{
 		name = "NODARTWASTE",
 		label = zheng("吹箭不浪费", "No Blow Dart Waste"),
-		hover = zheng(
-			"吹箭打在无效目标上面时会掉落而不是消失",
-			"No blow dart waste when hitting a dead target"
-		),
+		hover = zheng("吹箭打在无效目标上面时会掉落而不是消失", "No blow dart waste when hitting a dead target"),
 		options = boolean,
 		default = false,
 	},
 	{
 		name = "POCKETRESKIN",
 		label = zheng("物品栏换皮肤", "Reskin From Inventory"),
-		hover = zheng(
-			"扫把可以对物品栏内的物品使用（手杖除外）",
-			"Clean Sweeper can sweep inventory items (Cane not included)"
-		),
+		hover = zheng("扫把可以对物品栏内的物品使用（手杖除外）", "Clean Sweeper can sweep inventory items (Cane not included)"),
 		options = boolean,
 		default = false,
 	},
@@ -300,10 +283,7 @@ configuration_options = {
 	{
 		name = "ICKER_PRESERVE",
 		label = zheng("强化恶液储存箱", "Enhanced Icker Preserve"),
-		hover = zheng(
-			"恶液储存箱可用弹性空间制造器升级",
-			"Allow the Icker Preserve to be upgraded with an Elastispacer."
-		),
+		hover = zheng("恶液储存箱可用弹性空间制造器升级", "Allow the Icker Preserve to be upgraded with an Elastispacer."),
 		options = boolean,
 		default = false,
 	},
@@ -317,10 +297,7 @@ configuration_options = {
 	{
 		name = "SISTURN",
 		label = zheng("魔改姐妹骨灰盒", "Enhanced Sisturn"),
-		hover = zheng(
-			"姐妹骨灰盒可以放骨片或哀悼荣耀",
-			"Allows bone shards and Mourning glory into Sisturn."
-		),
+		hover = zheng("姐妹骨灰盒可以放骨片或哀悼荣耀", "Allows bone shards and Mourning glory into Sisturn."),
 		options = boolean,
 		default = false,
 	},
@@ -376,10 +353,7 @@ configuration_options = {
 	{
 		name = "TENTACLE",
 		label = zheng("大触手无掉落物", "Tentacle Pillars no Looting"),
-		hover = zheng(
-			"大触手不再掉落任何东西（减少垃圾产生）",
-			"Removes Tentacle pillar's loottable"
-		),
+		hover = zheng("大触手不再掉落任何东西（减少垃圾产生）", "Removes Tentacle pillar's loottable"),
 		options = boolean,
 		default = false,
 	},
@@ -401,10 +375,7 @@ configuration_options = {
 	{
 		name = "SEED",
 		label = zheng("普通种子腐烂后消失", "Seeds Disappear on Perished"),
-		hover = zheng(
-			"【仅】普通种子在腐烂的时候消失而不是生成腐烂食物",
-			"Normal seeds disappear on perished."
-		),
+		hover = zheng("【仅】普通种子在腐烂的时候消失而不是生成腐烂食物", "Normal seeds disappear on perished."),
 		options = boolean,
 		default = false,
 	},
@@ -418,10 +389,7 @@ configuration_options = {
 	{
 		name = "NOOCEANTREESTRIKEDROP",
 		label = zheng("巨树被劈无掉落", "No Ocean Tree Strike Drops"),
-		hover = zheng(
-			"人工种植的巨树被雷劈后不会掉落草和树枝",
-			"Ocean Tress won't drop cutgrass, twigs on thunder strike."
-		),
+		hover = zheng("人工种植的巨树被雷劈后不会掉落草和树枝", "Ocean Tress won't drop cutgrass, twigs on thunder strike."),
 		options = boolean,
 		default = false,
 	},
@@ -449,20 +417,14 @@ configuration_options = {
 	{
 		name = "GATHERMOONGLASS",
 		label = zheng("月相盘在出生门掉落", "Gather Moon Dial's Glass"),
-		hover = zheng(
-			"风暴事件结束时月相盘在出生门处掉落玻璃碎片",
-			"Moon Shard dropped from Moon Dials will be teleported to Celestial Portal."
-		),
+		hover = zheng("风暴事件结束时月相盘在出生门处掉落玻璃碎片", "Moon Shard dropped from Moon Dials will be teleported to Celestial Portal."),
 		options = boolean,
 		default = false,
 	},
 	{
 		name = "HALLOWEEN",
 		label = zheng("禁用万圣节猪王糖果", "No Halloween Candies"),
-		hover = zheng(
-			"万圣节期间猪王不会给糖果（减少垃圾产生）",
-			"Disable halloween candies on trading with Pig King."
-		),
+		hover = zheng("万圣节期间猪王不会给糖果（减少垃圾产生）", "Disable halloween candies on trading with Pig King."),
 		options = boolean,
 		default = false,
 	},
@@ -480,10 +442,7 @@ configuration_options = {
 	{
 		name = "RANDOMLIGHTS",
 		label = zheng("随机彩灯合成", "Random Winter Lights"),
-		hover = zheng(
-			"【照明栏解锁】新增彩灯配方, 合成时会随机给一种款式的彩灯",
-			"Enable recipe for RANDOM winter lights"
-		),
+		hover = zheng("【照明栏解锁】新增彩灯配方, 合成时会随机给一种款式的彩灯", "Enable recipe for RANDOM winter lights"),
 		options = boolean,
 		default = false,
 	},
@@ -544,11 +503,7 @@ configuration_options = {
 
 local NEWSTR = zheng("（新）", " (New)")
 for i = 1, #configuration_options do
-	if
-		configuration_options[i].name
-		and new_modules[configuration_options[i].name]
-		and configuration_options[i].label
-	then
+	if configuration_options[i].name and new_modules[configuration_options[i].name] and configuration_options[i].label then
 		configuration_options[i].label = configuration_options[i].label .. NEWSTR
 	end
 end
