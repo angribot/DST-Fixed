@@ -73,7 +73,7 @@ local function skeleton_getdesc(inst, viewer)
 		end
 
 		--viewer based temp translations for death cause
-		local cause = inst.cause == "nil" and (viewer == "waxwell" and "charlie" or "darkness") or inst.cause
+		local cause = inst.cause == "nil" and (CHARACTER_KNOWS_CHARLIE[viewer.prefab] and "charlie" or "darkness") or inst.cause
 
 		local caus = string.upper(cause)
 		params = { name, STRCODE_HEADER .. "NAMES." .. (STRINGS.NAMES[caus] and caus or "SHENANIGANS") }
@@ -201,7 +201,7 @@ function GetNewDeathAnnouncementString(theDead, source, pkname, sourceispet)
 		else
 			source = string.upper(source)
 			if source == "NIL" then
-				if theDead == "WAXWELL" then
+				if CHARACTER_KNOWS_CHARLIE[theDead.prefab] and not TheWorld.components.charlie_tracker:IsCharlieDefeated() then
 					source = "CHARLIE"
 				else
 					source = "DARKNESS"

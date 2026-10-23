@@ -18,39 +18,34 @@ local function get_attacker_mult(attacker)
 	return damagemult * electricmult
 end
 
+local PUNCHINGBAGS = {
+	punchingbag = true,
+	punchingbag_lunar = true,
+	punchingbag_shadow = true,
+}
+
 local function target_testfn(target, owner)
 	return target
 		and target ~= owner
 		and target:IsValid()
-		and (
-			target.components.health == nil
-			or not target.components.health:IsDead()
-				and not target:HasTag("structure")
-				and not target:HasTag("wall")
-		)
+		and (PUNCHINGBAGS[target.prefab] or not target:HasTag("structure"))
+		and not target:HasAnyTag("wall", "balloon", "smashable", "deck_of_cards")
+		and (target.components.health == nil or not target.components.health:IsDead())
 end
 
 local function owner_testfn(owner)
 	return owner and (owner.components.health == nil or not owner.components.health:IsDead())
 end
 
-local function launching_projectile_testfn(data)
-	return data.weapon
-		and data.projectile == nil
-		and (
-			data.weapon.components.projectile
-			or data.weapon.components.complexprojectile
-			or data.weapon.components.weapon:CanRangedAttack()
-		)
-end
-
 local function glash_fn(inst, owner, data)
+	if not (data and data.from_doattack) or data.weapon == inst then
+		return
+	end
+
 	if owner.components.debuffable:HasDebuff("buff_glash") then
 		return
 	elseif not inst.components.container:Has("moonglass", 1) then
 		return inst.alterguardian_spawngestalt_fn(owner, data)
-	elseif data and data.weapon == inst then
-		return
 	elseif not inst._is_active then
 		return
 	end
@@ -58,10 +53,6 @@ local function glash_fn(inst, owner, data)
 	if owner_testfn(owner) then
 		local target = data.target
 		if target_testfn(target, owner) then
-			if launching_projectile_testfn(data) then
-				return
-			end
-
 			do_glash_attack(inst, owner, target)
 
 			if owner.components.sanity and math.random() < (0.25 * get_attacker_mult(owner)) then
@@ -85,12 +76,12 @@ local function onequip(inst, owner, ...)
 
 	inst.onequip_prefns["dst-fixed"](inst, owner, ...)
 
-	inst:RemoveEventCallback("onattackother", inst.alterguardian_spawngestalt_fn, owner)
+	inst:RemoveEventCallback("onhitother", inst.alterguardian_spawngestalt_fn, owner)
 
 	inst.glash_fn = function(_owner, _data)
 		glash_fn(inst, _owner, _data)
 	end
-	inst:ListenForEvent("onattackother", inst.glash_fn, owner)
+	inst:ListenForEvent("onhitother", inst.glash_fn, owner)
 
 	-- if open_fn and inst.components.container then
 	--     inst.components.container.Open = open_fn
@@ -99,7 +90,7 @@ end
 
 local function onunequip(inst, owner, ...)
 	inst.onunequip_prefns["dst-fixed"](inst, owner, ...)
-	inst:RemoveEventCallback("onattackother", inst.glash_fn, owner)
+	inst:RemoveEventCallback("onhitother", inst.glash_fn, owner)
 end
 
 local function OnEntityReplicated(inst)
@@ -155,6 +146,8 @@ AddPrefabPostInit("alterguardianhat", function(inst)
 	inst.components.weapon:SetOnAttack(on_attack)
 
 	inst:AddComponent("projectile")
+	-- The equipped crown represents a ranged hit, not a disposable projectile.
+	inst.components.projectile:SetKeepOnDeflect(true)
 end)
 
 AddPrefabPostInit("moonglass", function(inst)
