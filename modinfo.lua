@@ -6,7 +6,7 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.25.9"
+version = "2.25.10"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -19,9 +19,11 @@ local new_modules = {
 
 changelog = zheng(
 	[[
-- 优化动画包
+- 【强化启迪之冠】：修复新版兼容问题
+- 【检查文本跟随客户端语言】：修复死因显示
 
 近期更新：
+- 优化动画包
 - 暂时禁用【高亮匹配容器】
 - 多处兼容性修复
 - 弃用三项模块
@@ -34,9 +36,11 @@ changelog = zheng(
 - 新模块【溯源表冷却缩短至1分钟】
 ]],
 	[[
-- Optimize anim packs
+- Enhanced Enlightened Crown: Fix compatibility with the latest game update.
+- Enhanced Localized Description: Fix death cause text.
 
 Recent Changes:
+- Optimize anim packs
 - Disable module "Highlight Containers" temporarily.
 - Fix some compatibility issue
 - Deprecate 3 modules
