@@ -6,53 +6,20 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.25.11"
+version = "2.26.0"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
 local new_modules = {
-	SHADOW_STORAGE = true,
-	-- HIGHLIGHT_CONTAINERS = true,
-	ICKER_PRESERVE = true,
-	SHORT_BACKTREK_WATCH_COOLDOWN = true,
+	HORSESHOE_STACKS = true,
 }
 
 changelog = zheng(
 	[[
-- 【强化启迪之冠】：修复一处多余代码
-
-近期更新：
-- 【强化启迪之冠】：修复新版兼容问题
-- 【检查文本跟随客户端语言】：修复死因显示
-- 优化动画包
-- 暂时禁用【高亮匹配容器】
-- 多处兼容性修复
-- 弃用三项模块
-- 修复一处崩溃
-- 【高亮匹配容器】：修复接收到异常容器数据时可能导致崩溃的问题
-- 新模块【暗影空间扩容】：暗影空间扩容至20格
-- 新模块【高亮匹配容器】：高亮手持物品附近的容器
-- 新模块【强化恶液储存箱】：恶液存储箱可以使用弹性空间制造器升级
-- 【强化嚎弹炮】：装备使用弹性空间制造器升级后的嚎弹炮时，禁用“设置弹药”动作
-- 新模块【溯源表冷却缩短至1分钟】
+- 新模块【幸运马蹄铁更大堆叠】：幸运马蹄铁的堆叠上限提高至40
 ]],
 	[[
-- Enhanced Enlightened Crown: Fix a redundant piece of code.
-
-Recent Changes:
-- Enhanced Enlightened Crown: Fix compatibility with the latest game update.
-- Enhanced Localized Description: Fix death cause text.
-- Optimize anim packs
-- Disable module "Highlight Containers" temporarily.
-- Fix some compatibility issue
-- Deprecate 3 modules
-- Fix a crash on client side.
-- Highlight Containers: Fix a possible crash when receiving invalid container data.
-- New module: Expanded Shadow Storage. Expand shadow storage to 20 slots.
-- New module: Highlight Containers. Highlight nearby containers containing the held item.
-- New module: Enhanced Icker Preserve. Icker Preserve can be upgraded with an Elastispacer
-- Enhanced Howlitzer: Disable the "Set Ammo" action for an equipped Howlitzer upgraded with an Elastispacer
-- New module: Short Backtrek Watch Cooldown (1 minute)
+- New module: Horseshoe More Stacks. Increase the Horseshoe stack limit to 40.
 ]]
 )
 description = zheng("版本: ", "Version: ") .. version .. zheng("\n\n本次更新:\n", "\n\nChange:\n") .. changelog
@@ -275,6 +242,13 @@ configuration_options = {
 	{
 		name = "DOUBLE_VBOOMERANG_PROJECTILES",
 		label = zheng("阴郁双回旋镖", "Double Gloomerang Projectiles"),
+		options = boolean,
+		default = false,
+	},
+	{
+		name = "HORSESHOE_STACKS",
+		label = zheng("幸运马蹄铁更大堆叠", "Horseshoe More Stacks"),
+		hover = zheng("幸运马蹄铁的堆叠上限提高至40", "Increase the Horseshoe stack limit to 40."),
 		options = boolean,
 		default = false,
 	},

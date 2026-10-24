@@ -38,6 +38,7 @@ local config_table = {
 	BEEQUEENHAT = "facking_hivehat",
 	MHATS = "glowing_mushroom_hats",
 	DOUBLE_VBOOMERANG_PROJECTILES = "double_vboomerang_projectiles",
+	HORSESHOE_STACKS = "horseshoe_stacks",
 
 	-- The Builder --
 	SHADOW_STORAGE = "expanded_shadow_storage",
