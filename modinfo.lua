@@ -12,10 +12,6 @@ author = zheng("鸭子乐园", "Ducklantis")
 
 local new_modules = {
 	HORSESHOE_STACKS = true,
-	SHADOW_STORAGE = true,
-	-- HIGHLIGHT_CONTAINERS = true,
-	ICKER_PRESERVE = true,
-	SHORT_BACKTREK_WATCH_COOLDOWN = true,
 }
 
 changelog = zheng(
