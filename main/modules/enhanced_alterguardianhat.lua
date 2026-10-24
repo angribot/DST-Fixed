@@ -144,10 +144,6 @@ AddPrefabPostInit("alterguardianhat", function(inst)
 	inst.components.weapon:SetDamage(34)
 	inst.components.weapon:SetRange(40)
 	inst.components.weapon:SetOnAttack(on_attack)
-
-	inst:AddComponent("projectile")
-	-- The equipped crown represents a ranged hit, not a disposable projectile.
-	inst.components.projectile:SetKeepOnDeflect(true)
 end)
 
 AddPrefabPostInit("moonglass", function(inst)
