@@ -45,6 +45,7 @@ These modules are kept in the repository but their options are hidden, so they d
 - **No Bowing for Bee Queen Crown** — Stop players from bowing to other players wearing the crown.
 - **Glowing Mushroom Hats**
 - **Double Gloomerang Projectiles**
+- **Horseshoe More Stacks** — Increase the Horseshoe stack limit to 40.
 
 ### Buildings
 
