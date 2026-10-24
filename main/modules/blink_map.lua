@@ -13,7 +13,14 @@ local function IsMioBoosted(doer)
 	return doer and doer:HasTag("mio_boosted_task")
 end
 
+local function IsOrangeKingCane(staff)
+	return staff and staff.prefab == "king_cane" and staff._gem:value() == "orangegem"
+end
+
 local function ValidateUses(act)
+	if IsOrangeKingCane(act.invobject) then
+		return not act.invobject:HasTag("nomagiccast") and act.invobject.components.rechargeable:IsCharged()
+	end
 	if act.invobject and act.invobject.components.blinkstaff then
 		local num = act.distancecount
 		local staffuses = act.invobject.components.finiteuses:GetUses()
@@ -27,11 +34,12 @@ local function ValidateUses(act)
 end
 
 local function ClientValidateUses(act)
+	if IsOrangeKingCane(act.invobject) then
+		return not act.invobject:HasTag("nomagiccast")
+	end
 	if act.invobject and act.invobject.prefab == "orangestaff" then
 		local num = act.distancecount
-		local staffuses = (act.invobject.replica.inventoryitem.classified.percentused:value() or 0)
-			* TUNING.ORANGESTAFF_USES
-			/ 100
+		local staffuses = (act.invobject.replica.inventoryitem.classified.percentused:value() or 0) * TUNING.ORANGESTAFF_USES / 100
 
 		if IsMioBoosted(act.doer) then
 			local is_fuel_enough, fuel_num = act.doer.replica.inventory:Has(FUELTYPE, num)
@@ -55,7 +63,43 @@ local function OnBlinked(...)
 end
 UpvalueUtil.SetUpvalue(BlinkStaff.Blink, "OnBlinked", OnBlinked)
 
+local function BlinkKingCaneOnMap(act)
+	local act_pos = act:GetActionPoint()
+	local staff = act.invobject
+	local blinkstaff = staff.components.blinkstaff
+	local corruption = staff.components.corruption
+	local uses = corruption:IsCorrupted() and 1 or act.distancecount
+	local onblinkfn = blinkstaff.onblinkfn
+	local inventory = act.doer.components.inventory
+	local skipsanity = IsMioBoosted(act.doer) and inventory and (inventory:Has(FUELTYPE, 1) or inventory:Has("horrorfuel", 1))
+
+	if onblinkfn then
+		blinkstaff.onblinkfn = function(inst, pos, caster)
+			if skipsanity then
+				caster = nil
+			end
+			-- Apply all casting costs before the native onblink event can fully corrupt the staff.
+			for i = 1, uses do
+				onblinkfn(inst, pos, caster)
+			end
+		end
+	end
+	local ok, blinked = pcall(blinkstaff.Blink, blinkstaff, act_pos, act.doer)
+	blinkstaff.onblinkfn = onblinkfn
+	if not ok then
+		error(blinked, 0)
+	end
+	if blinked and uses > 1 then
+		-- Blink already applied the first use's corruption through its native event.
+		corruption:DoDelta(TUNING.KING_CANE_CORRUPTION.orangegem * (uses - 1))
+	end
+	return blinked
+end
+
 local function onblink_map(act)
+	if IsOrangeKingCane(act.invobject) then
+		return BlinkKingCaneOnMap(act)
+	end
 	local act_pos = act:GetActionPoint()
 	if act.invobject.components.blinkstaff:Blink(act_pos, act.doer) then
 		if act.invobject and act.invobject.components.blinkstaff.onblinkfn then
@@ -76,8 +120,7 @@ local blink_map_code = ACTIONS_MAP_REMAP[ACTIONS.BLINK.code]
 local action_can_map_soulhop = UpvalueUtil.GetUpvalue(ACTIONS.BLINK_MAP.fn, "ActionCanMapSoulhop")
 
 local function ActionCanMapSoulhop(act)
-	-- if act.invobject and act.invobject.components.blinkstaff and act.doer and ValidateUses(act) then
-	if act.invobject and act.invobject.prefab == "orangestaff" and act.doer and ClientValidateUses(act) then
+	if act.doer and ClientValidateUses(act) then
 		return true
 	end
 	return action_can_map_soulhop(act)
@@ -96,6 +139,10 @@ end
 
 local blink_map_stroverridefn = ACTIONS.BLINK_MAP.stroverridefn
 ACTIONS.BLINK_MAP.stroverridefn = function(act)
+	if IsOrangeKingCane(act.invobject) and act.doer then
+		local uses = act.invobject:HasTag("corrupted") and 1 or act.distancecount
+		return subfmt(STRINGS.ACTIONS.BLINK_MAP.GENERIC, { uses = uses })
+	end
 	local blinkstaff = act.invobject and act.invobject.prefab == "orangestaff"
 	local doer = act.doer
 
