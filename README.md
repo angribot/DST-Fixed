@@ -31,7 +31,7 @@ These modules are kept in the repository but their options are hidden, so they d
 
 ### Equipment
 
-- **Orange Staff Map Blink** — Allow the Lazy Explorer and the King's Staff socketed with an Orange Gem to teleport via the map. Before full corruption, distance scales the King's Staff's corruption gain and normal sanity cost, with no cooldown even when a teleport reaches full corruption. When already fully corrupted, each teleport counts as one use with the normal cooldown.
+- **Orange Staff Map Blink** — Allow the Lazy Explorer and the King's Staff socketed with an Orange Gem to teleport via the map.
 - **Combinable Equipment** — Combine durability between equipment of the same type.
 - **Hide Inactive Enlightened Crown**
 - **Enhanced Enlightened Crown** — Use Moon Shards instead of sanity for attacks; replace Gestalts with an effect that benefits from player damage multipliers (at least 1×) and buffs.

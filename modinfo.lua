@@ -150,9 +150,8 @@ configuration_options = {
 		name = "BLINK_MAP",
 		label = zheng("橙杖地图传送", "Orange Staff Map Blink"),
 		hover = zheng(
-			"懒人魔杖和镶嵌橙宝石的国王魔杖可以使用地图传送\n国王魔杖未完全腐化时按距离增加腐化；施法前已完全腐化时，每次传送只触发一次原版冷却",
-			"The Lazy Explorer and the King's Staff socketed with an Orange Gem can teleport via the map.\n"
-				.. "The King's Staff gains corruption based on distance; if already fully corrupted, each teleport triggers one normal cooldown."
+			"懒人魔杖和插入橙宝石的国王魔杖可以使用地图传送",
+			"The Lazy Explorer and the King's Staff socketed with an Orange Gem can teleport via the map."
 		),
 		options = boolean,
 		default = false,
