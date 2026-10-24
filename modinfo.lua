@@ -6,7 +6,7 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.26.0"
+version = "2.26.1"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -16,9 +16,15 @@ local new_modules = {
 
 changelog = zheng(
 	[[
+- 【橙杖地图传送】同时支持插入橙宝石的国王魔杖
+
+近期更新：
 - 新模块【幸运马蹄铁更大堆叠】：幸运马蹄铁的堆叠上限提高至40
 ]],
 	[[
+- Orange Staff Map Blink now also supports the King's Staff socketed with an Orange Gem.
+
+Recent Changes:
 - New module: Horseshoe More Stacks. Increase the Horseshoe stack limit to 40.
 ]]
 )
