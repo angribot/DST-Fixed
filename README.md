@@ -93,3 +93,11 @@ These options remain listed for compatibility, but their values are no longer re
 - **Custom Action Fail String** — Character-specific action-failure dialogue is now provided by the game.
 - **Disable Forest Resources Regen** — Use the world's Basic Resource Regrowth setting instead.
 - **Better Fossil Repairing** — The game guarantees the correct fossil form when a Shadow Heart is nearby, including in a player's inventory; unconditional success is no longer provided.
+
+## Patch Notes
+
+`main/asscleaner` holds vanilla bug fixes. They always load, with no option to disable them.
+
+### King's Staff Effect During Shard Changes
+
+The King's Staff's client-side effect can rebuild before the staff itself after moving between the surface and the caves. Vanilla then crashes with `attempt to index local 'owner' (a nil value)` and leaves the gem and corruption effects stuck until the staff is re-equipped. `fix_king_cane_fx.lua` waits for the staff instead of failing.

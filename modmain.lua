@@ -90,6 +90,7 @@ local asscleaner = {
 	"abandon_ship_board",
 	"dummytarget_dps",
 	"fix_staff_lunarplant",
+	"fix_king_cane_fx",
 	-- "getmapaction_pos", -- Cancel for debugging.
 }
 

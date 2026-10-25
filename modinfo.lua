@@ -6,7 +6,7 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.26.1"
+version = "2.26.2"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -16,15 +16,17 @@ local new_modules = {
 
 changelog = zheng(
 	[[
-- 【橙杖地图传送】同时支持插入橙宝石的国王魔杖
+- 【修复】更换世界时国王魔杖特效会报 owner 为空的错误
 
 近期更新：
+- 【橙杖地图传送】同时支持插入橙宝石的国王魔杖
 - 新模块【幸运马蹄铁更大堆叠】：幸运马蹄铁的堆叠上限提高至40
 ]],
 	[[
-- Orange Staff Map Blink now also supports the King's Staff socketed with an Orange Gem.
+- Fixed a Lua error from the King's Staff effect when it has no owner after a shard change.
 
 Recent Changes:
+- Orange Staff Map Blink now also supports the King's Staff socketed with an Orange Gem.
 - New module: Horseshoe More Stacks. Increase the Horseshoe stack limit to 40.
 ]]
 )
