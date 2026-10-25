@@ -1,3 +1,5 @@
+table.insert(Assets, Asset("ANIM", "anim/dst_fixed_icker_preserve.zip"))
+
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 

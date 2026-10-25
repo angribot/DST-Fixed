@@ -1,7 +1,6 @@
 local preserve = require("dst_fixed/ickerpreserve")
 
--- Temporary vanilla collapsed-chest artwork; storage remains an inventoryitemholder, not a container.
-local assets = { Asset("ANIM", "anim/treasure_chest_upgraded.zip") }
+local assets = { Asset("ANIM", "anim/dst_fixed_icker_preserve.zip") }
 local prefabs = { "gelblob_storage", "construction_rebuild_container", "collapse_small", "chestupgrade_stacksize_fx", "alterguardianhatshard" }
 
 local function SetPreserve(inst, storage)
@@ -103,9 +102,10 @@ local function fn()
 	inst.entity:AddAnimState()
 	inst.entity:AddSoundEmitter()
 	inst.entity:AddNetwork()
-	inst.AnimState:SetBank("chest_upgraded")
-	inst.AnimState:SetBuild("treasure_chest_upgraded")
+	inst.AnimState:SetBank("dst_fixed_icker_preserve")
+	inst.AnimState:SetBuild("dst_fixed_icker_preserve")
 	inst.AnimState:PlayAnimation("collapsed_idle")
+	inst.AnimState:SetLightOverride(0.1)
 	inst:AddTag("pickable_rummage_str")
 	inst:AddTag("constructionsite")
 	inst:AddTag("rebuildconstructionsite")
