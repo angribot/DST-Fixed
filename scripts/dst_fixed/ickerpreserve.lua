@@ -12,6 +12,8 @@ local function Refresh(inst)
 end
 
 local function OnUpgrade(inst, doer, item)
+	inst.AnimState:SetBank("dst_fixed_icker_preserve")
+	inst.AnimState:SetBuild("dst_fixed_icker_preserve")
 	inst.components.upgradeable.upgradetype = nil
 	Refresh(inst)
 	inst.components.lootdropper:SetLoot({ "alterguardianhatshard" })
