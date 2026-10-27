@@ -6,7 +6,7 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.26.3"
+version = "2.26.4"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -16,18 +16,20 @@ local new_modules = {
 
 changelog = zheng(
 	[[
-- 【强化恶液储存箱】升级后的储存箱和坍塌残骸现在使用专属外观与动画。
-- 【修复】更换世界时国王魔杖特效会报 owner 为空的错误
+- 优化【橙杖地图传送】对于国王魔杖的处理
 
 近期更新：
+- 【强化恶液储存箱】升级后的储存箱和坍塌残骸现在使用专属外观与动画。
+- 【修复】更换世界时国王魔杖特效会报 owner 为空的错误
 - 【橙杖地图传送】同时支持插入橙宝石的国王魔杖
 - 新模块【幸运马蹄铁更大堆叠】：幸运马蹄铁的堆叠上限提高至40
 ]],
 	[[
-- Enhanced Icker Preserve now gives upgraded preserves and their collapsed remains dedicated visuals and animations.
-- Fixed a Lua error from the King's Staff effect when it has no owner after a shard change.
+- Improve code logic with module Orange Staff Map Blink
 
 Recent Changes:
+- Enhanced Icker Preserve now gives upgraded preserves and their collapsed remains dedicated visuals and animations.
+- Fixed a Lua error from the King's Staff effect when it has no owner after a shard change.
 - Orange Staff Map Blink now also supports the King's Staff socketed with an Orange Gem.
 - New module: Horseshoe More Stacks. Increase the Horseshoe stack limit to 40.
 ]]
