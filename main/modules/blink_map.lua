@@ -70,14 +70,9 @@ local function BlinkKingCaneOnMap(act)
 	local corruption = staff.components.corruption
 	local uses = corruption:IsCorrupted() and 1 or act.distancecount
 	local onblinkfn = blinkstaff.onblinkfn
-	local inventory = act.doer.components.inventory
-	local skipsanity = IsMioBoosted(act.doer) and inventory and (inventory:Has(FUELTYPE, 1) or inventory:Has("horrorfuel", 1))
 
 	if onblinkfn then
 		blinkstaff.onblinkfn = function(inst, pos, caster)
-			if skipsanity then
-				caster = nil
-			end
 			-- Apply all casting costs before the native onblink event can fully corrupt the staff.
 			for i = 1, uses do
 				onblinkfn(inst, pos, caster)
