@@ -68,13 +68,19 @@ local function BlinkKingCaneOnMap(act)
 	local staff = act.invobject
 	local blinkstaff = staff.components.blinkstaff
 	local corruption = staff.components.corruption
-	local uses = corruption:IsCorrupted() and 1 or act.distancecount
+	local corruption_per_use = TUNING.KING_CANE_CORRUPTION.orangegem
+	local uncorrupted_uses = 0
+	if not corruption:IsCorrupted() then
+		local uses_until_corrupted = math.ceil((TUNING.KING_CANE_MAX_CORRUPTION - corruption:GetCurrent()) / corruption_per_use)
+		uncorrupted_uses = math.min(act.distancecount, uses_until_corrupted)
+	end
+	local corrupted_uses = act.distancecount - uncorrupted_uses
 	local onblinkfn = blinkstaff.onblinkfn
 
 	if onblinkfn then
 		blinkstaff.onblinkfn = function(inst, pos, caster)
-			-- Apply all casting costs before the native onblink event can fully corrupt the staff.
-			for i = 1, uses do
+			-- Settle the uncorrupted portion before the native onblink event adds corruption.
+			for i = 1, math.max(1, uncorrupted_uses) do
 				onblinkfn(inst, pos, caster)
 			end
 		end
@@ -84,9 +90,19 @@ local function BlinkKingCaneOnMap(act)
 	if not ok then
 		error(blinked, 0)
 	end
-	if blinked and uses > 1 then
-		-- Blink already applied the first use's corruption through its native event.
-		corruption:DoDelta(TUNING.KING_CANE_CORRUPTION.orangegem * (uses - 1))
+	if blinked then
+		if uncorrupted_uses > 1 then
+			-- Blink already applied the first use's corruption through its native event.
+			corruption:DoDelta(corruption_per_use * (uncorrupted_uses - 1))
+		end
+		if corrupted_uses > 0 then
+			if uncorrupted_uses > 0 and onblinkfn then
+				-- The remaining distance costs one corrupted cast, now that the staff is corrupted.
+				onblinkfn(staff, act_pos, act.doer)
+			end
+			local rechargeable = staff.components.rechargeable
+			rechargeable:SetChargeTime(rechargeable:GetChargeTime() * math.min(corrupted_uses, 20))
+		end
 	end
 	return blinked
 end
