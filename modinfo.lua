@@ -6,7 +6,7 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.26.6"
+version = "2.26.7"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -16,9 +16,10 @@ local new_modules = {
 
 changelog = zheng(
 	[[
-- 【物品栏换皮肤】排除国王魔杖。
+- 【禁用万圣节猪王糖果】修复开启该模块时会同时禁用南瓜炸弹和南瓜雕刻器的问题。
 
 近期更新：
+- 【物品栏换皮肤】排除国王魔杖。
 - 【橙杖地图传送】腐化的国王魔杖按传送距离计算冷却。
 - 优化【橙杖地图传送】对于国王魔杖的处理
 - 【强化恶液储存箱】升级后的储存箱和坍塌残骸现在使用专属外观与动画。
@@ -27,9 +28,10 @@ changelog = zheng(
 - 新模块【幸运马蹄铁更大堆叠】：幸运马蹄铁的堆叠上限提高至40
 ]],
 	[[
-- Reskin From Inventory excludes the King's Staff.
+- Fixed No Halloween Candies also disabling Pumpkin Bombs and Pumpkin Carvers.
 
 Recent Changes:
+- Reskin From Inventory excludes the King's Staff.
 - Orange Staff Map Blink now scales the corrupted King's Staff cooldown with teleport distance.
 - Improve code logic with module Orange Staff Map Blink
 - Enhanced Icker Preserve now gives upgraded preserves and their collapsed remains dedicated visuals and animations.
