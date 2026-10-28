@@ -23,6 +23,7 @@ end
 AddAction(HANDRESKIN)
 local CANT_PREFABS = {
 	["cane"] = true,
+	["king_cane"] = true,
 	["orangestaff"] = true,
 	["reskin_tool"] = true,
 }

@@ -41,7 +41,7 @@ These modules are kept in the repository but their options are hidden, so they d
 - **Nameable Backtrek Watch** — Name Backtrek and Rift Watches with a Feather Pencil.
 - **Short Backtrek Watch Cooldown** — Reduce subsequent Backtrek Watch cooldowns to 1 minute, including watches produced by Rift Watches. Existing cooldowns are unchanged.
 - **No Blow Dart Waste** — Drop darts instead of consuming them when they hit an invalid target.
-- **Reskin From Inventory** — Use the Clean Sweeper on inventory items, except Walking Canes.
+- **Reskin From Inventory** — Use the Clean Sweeper on inventory items, except Walking Canes, the King's Staff, and the Orange Staff.
 - **No Bowing for Bee Queen Crown** — Stop players from bowing to other players wearing the crown.
 - **Glowing Mushroom Hats**
 - **Double Gloomerang Projectiles**

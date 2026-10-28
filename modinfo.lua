@@ -239,7 +239,7 @@ configuration_options = {
 	{
 		name = "POCKETRESKIN",
 		label = zheng("物品栏换皮肤", "Reskin From Inventory"),
-		hover = zheng("扫把可以对物品栏内的物品使用（手杖除外）", "Clean Sweeper can sweep inventory items (Cane not included)"),
+		hover = zheng("扫把可以对物品栏内的物品使用（手杖、国王魔杖和橙杖除外）", "Clean Sweeper can sweep inventory items (Cane, King's Staff, and Orange Staff excluded)"),
 		options = boolean,
 		default = false,
 	},
