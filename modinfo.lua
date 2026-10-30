@@ -6,7 +6,7 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.26.7"
+version = "2.26.8"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -16,9 +16,10 @@ local new_modules = {
 
 changelog = zheng(
 	[[
-- 【禁用万圣节猪王糖果】修复开启该模块时会同时禁用南瓜炸弹和南瓜雕刻器的问题。
+- 修复【强化启迪之冠】与暗夜故事集兼容性问题
 
 近期更新：
+- 【禁用万圣节猪王糖果】修复开启该模块时会同时禁用南瓜炸弹和南瓜雕刻器的问题。
 - 【物品栏换皮肤】排除国王魔杖。
 - 【橙杖地图传送】腐化的国王魔杖按传送距离计算冷却。
 - 优化【橙杖地图传送】对于国王魔杖的处理
@@ -28,9 +29,10 @@ changelog = zheng(
 - 新模块【幸运马蹄铁更大堆叠】：幸运马蹄铁的堆叠上限提高至40
 ]],
 	[[
-- Fixed No Halloween Candies also disabling Pumpkin Bombs and Pumpkin Carvers.
+- Fix compatibility issue with Night Stories
 
 Recent Changes:
+- Fixed No Halloween Candies also disabling Pumpkin Bombs and Pumpkin Carvers.
 - Reskin From Inventory excludes the King's Staff.
 - Orange Staff Map Blink now scales the corrupted King's Staff cooldown with teleport distance.
 - Improve code logic with module Orange Staff Map Blink
