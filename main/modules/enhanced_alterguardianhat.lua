@@ -38,7 +38,7 @@ local function owner_testfn(owner)
 end
 
 local function glash_fn(inst, owner, data)
-	if not (data and data.from_doattack) or data.weapon == inst then
+	if not (data and data.from_doattack) or data.weapon == inst or (data.weapon and data.weapon:HasTag("glash")) then
 		return
 	end
 
@@ -108,6 +108,7 @@ local function on_attack(inst, attacker, target)
 end
 
 AddPrefabPostInit("alterguardianhat", function(inst)
+	inst:AddTag("glash")
 	inst:AddTag("ignore_planar_entity")
 	if not TheWorld.ismastersim then
 		inst.OnEntityReplicated = OnEntityReplicated
