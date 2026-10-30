@@ -1,3 +1,4 @@
+local AddComponentPostInit = AddComponentPostInit
 GLOBAL.setfenv(1, GLOBAL)
 local UpvalueUtil = require("upvalueutil")
 
@@ -16,6 +17,25 @@ end
 local function IsOrangeKingCane(staff)
 	return staff and staff.prefab == "king_cane" and staff._gem:value() == "orangegem"
 end
+
+AddComponentPostInit("playeractionpicker", function(self)
+	local GetPointSpecialActions = self.GetPointSpecialActions
+	self.GetPointSpecialActions = function(self, ...)
+		local actions = GetPointSpecialActions(self, ...)
+		local inventory = self.inst.replica.inventory
+		local staff = inventory and inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+		if self.inst.checkingmapactions and staff and (staff.prefab == "orangestaff" or IsOrangeKingCane(staff)) then
+			-- Keep native body targets, but do not let a targetless swap hide staff map blinks.
+			for i = #actions, 1, -1 do
+				local act = actions[i]
+				if act.action == ACTIONS.SWAPBODIES_MAP and not act.action.maponly_checkvalidpos_fn(act) then
+					table.remove(actions, i)
+				end
+			end
+		end
+		return actions
+	end
+end)
 
 local function ValidateUses(act)
 	if IsOrangeKingCane(act.invobject) then

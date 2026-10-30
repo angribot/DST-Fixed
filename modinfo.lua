@@ -6,7 +6,7 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.26.8"
+version = "2.26.9"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -16,9 +16,10 @@ local new_modules = {
 
 changelog = zheng(
 	[[
-- 修复【强化启迪之冠】与暗夜故事集兼容性问题
+- 修复【橙杖地图传送】与 WX-78 地图传输意识操作的冲突。
 
 近期更新：
+- 修复【强化启迪之冠】与暗夜故事集兼容性问题
 - 【禁用万圣节猪王糖果】修复开启该模块时会同时禁用南瓜炸弹和南瓜雕刻器的问题。
 - 【物品栏换皮肤】排除国王魔杖。
 - 【橙杖地图传送】腐化的国王魔杖按传送距离计算冷却。
@@ -29,9 +30,10 @@ changelog = zheng(
 - 新模块【幸运马蹄铁更大堆叠】：幸运马蹄铁的堆叠上限提高至40
 ]],
 	[[
-- Fix compatibility issue with Night Stories
+- Fixed a conflict between Orange Staff Map Blink and WX-78's Transfer Consciousness map action.
 
 Recent Changes:
+- Fix compatibility issue with Night Stories
 - Fixed No Halloween Candies also disabling Pumpkin Bombs and Pumpkin Carvers.
 - Reskin From Inventory excludes the King's Staff.
 - Orange Staff Map Blink now scales the corrupted King's Staff cooldown with teleport distance.
