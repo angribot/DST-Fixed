@@ -69,6 +69,7 @@ These modules are kept in the repository but their options are hidden, so they d
 
 ### World
 
+- **Cave Migration Queue** — Queue shard migrations and gate client map-loading completion to avoid concurrent cave-loading issues. Adapted from Cutlass's [No More Cave Bug](https://steamcommunity.com/sharedfiles/filedetails/?id=3828908041); do not enable both together.
 - **Seeds Disappear on Perished** — Make ordinary Seeds disappear when spoiled instead of producing Rot.
 - **No Picking Evil Flowers** — Require digging to remove Evil Flowers.
 - **No Ocean Tree Strike Drops** — Stop planted ocean trees from dropping Cut Grass and Twigs when struck by lightning.

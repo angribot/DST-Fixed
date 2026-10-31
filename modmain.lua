@@ -59,6 +59,7 @@ local config_table = {
 	FIXMINOTAURCHESTLOOTS = "fix_minotaurchest_loots",
 
 	-- The World --
+	CAVEMIGRATIONQUEUE = "cave_migration_queue",
 	SEED = "disable_seedrots",
 	FLOWER = "nopicking_evil_flower",
 	NOOCEANTREESTRIKEDROP = "no_oceantree_strike_drop",

@@ -6,42 +6,20 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.26.9"
+version = "2.27.0"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
 local new_modules = {
-	HORSESHOE_STACKS = true,
+	CAVEMIGRATIONQUEUE = true,
 }
 
 changelog = zheng(
 	[[
-- 修复【橙杖地图传送】与 WX-78 地图传输意识操作的冲突。
-
-近期更新：
-- 修复【强化启迪之冠】与暗夜故事集兼容性问题
-- 【禁用万圣节猪王糖果】修复开启该模块时会同时禁用南瓜炸弹和南瓜雕刻器的问题。
-- 【物品栏换皮肤】排除国王魔杖。
-- 【橙杖地图传送】腐化的国王魔杖按传送距离计算冷却。
-- 优化【橙杖地图传送】对于国王魔杖的处理
-- 【强化恶液储存箱】升级后的储存箱和坍塌残骸现在使用专属外观与动画。
-- 【修复】更换世界时国王魔杖特效会报 owner 为空的错误
-- 【橙杖地图传送】同时支持插入橙宝石的国王魔杖
-- 新模块【幸运马蹄铁更大堆叠】：幸运马蹄铁的堆叠上限提高至40
+- 新模块【洞穴迁移排队】
 ]],
 	[[
-- Fixed a conflict between Orange Staff Map Blink and WX-78's Transfer Consciousness map action.
-
-Recent Changes:
-- Fix compatibility issue with Night Stories
-- Fixed No Halloween Candies also disabling Pumpkin Bombs and Pumpkin Carvers.
-- Reskin From Inventory excludes the King's Staff.
-- Orange Staff Map Blink now scales the corrupted King's Staff cooldown with teleport distance.
-- Improve code logic with module Orange Staff Map Blink
-- Enhanced Icker Preserve now gives upgraded preserves and their collapsed remains dedicated visuals and animations.
-- Fixed a Lua error from the King's Staff effect when it has no owner after a shard change.
-- Orange Staff Map Blink now also supports the King's Staff socketed with an Orange Gem.
-- New module: Horseshoe More Stacks. Increase the Horseshoe stack limit to 40.
+- New module: Cavr Migration Queue
 ]]
 )
 description = zheng("版本: ", "Version: ") .. version .. zheng("\n\n本次更新:\n", "\n\nChange:\n") .. changelog
@@ -377,6 +355,16 @@ configuration_options = {
 		default = false,
 	},
 	AddTitle(zheng("世界相关", "The World")),
+	{
+		name = "CAVEMIGRATIONQUEUE",
+		label = zheng("洞穴迁移排队", "Cave Migration Queue"),
+		hover = zheng(
+			"跨世界迁移排队，规避多人同时进出洞穴时无限加载的问题。请勿与 No More Cave Bug 同时启用。",
+			"Queue shard migrations to avoid infinite loading when players enter or leave caves together. Do not enable alongside No More Cave Bug."
+		),
+		options = boolean,
+		default = false,
+	},
 	{
 		name = "SEED",
 		label = zheng("普通种子腐烂后消失", "Seeds Disappear on Perished"),
