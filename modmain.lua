@@ -92,6 +92,7 @@ local asscleaner = {
 	"dummytarget_dps",
 	"fix_staff_lunarplant",
 	"fix_king_cane_fx",
+	"fix_mound_bats",
 	-- "getmapaction_pos", -- Cancel for debugging.
 }
 
