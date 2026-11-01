@@ -6,7 +6,7 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.27.0"
+version = "2.27.1"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -16,10 +16,16 @@ local new_modules = {
 
 changelog = zheng(
 	[[
+- 修复部分原版问题
+
+近期更新：
 - 新模块【洞穴迁移排队】
 ]],
 	[[
-- New module: Cavr Migration Queue
+- Fixed some vanilla bugs
+
+Recent Changes:
+- New module: Cave Migration Queue
 ]]
 )
 description = zheng("版本: ", "Version: ") .. version .. zheng("\n\n本次更新:\n", "\n\nChange:\n") .. changelog
