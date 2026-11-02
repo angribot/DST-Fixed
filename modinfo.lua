@@ -6,7 +6,7 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.27.1"
+version = "2.27.2"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -16,15 +16,17 @@ local new_modules = {
 
 changelog = zheng(
 	[[
-- 修复部分原版问题
+- 修复巨大洞穴蠕虫读档后冒头时导致洞穴崩溃的问题
 
 近期更新：
+- 修复部分原版问题
 - 新模块【洞穴迁移排队】
 ]],
 	[[
-- Fixed some vanilla bugs
+- Fixed the caves crashing when a Great Depths Worm emerges after loading
 
 Recent Changes:
+- Fixed some vanilla bugs
 - New module: Cave Migration Queue
 ]]
 )
