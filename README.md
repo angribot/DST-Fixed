@@ -102,3 +102,7 @@ These options remain listed for compatibility, but their values are no longer re
 ### King's Staff Effect During Shard Changes
 
 The King's Staff's client-side effect can rebuild before the staff itself after moving between the surface and the caves. Vanilla then crashes with `attempt to index local 'owner' (a nil value)` and leaves the gem and corruption effects stuck until the staff is re-equipped. `fix_king_cane_fx.lua` waits for the staff instead of failing.
+
+### Great Depths Worm After Loading
+
+A full-length Great Depths Worm saved while digging to a new spot crashes the caves with `attempt to index field 'dirt_start' (a nil value)` when its head next emerges. `fix_worm_boss_tail.lua` skips the tail dirt that loading already removed.
