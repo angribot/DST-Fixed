@@ -6,7 +6,7 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.27.2"
+version = "2.27.3"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -16,16 +16,18 @@ local new_modules = {
 
 changelog = zheng(
 	[[
-- 修复巨大洞穴蠕虫读档后冒头时导致洞穴崩溃的问题
+- 修复【人人皆是魔术师】使用魔术帽致死时导致服务器崩溃的问题
 
 近期更新：
+- 修复巨大洞穴蠕虫读档后冒头时导致洞穴崩溃的问题
 - 修复部分原版问题
 - 新模块【洞穴迁移排队】
 ]],
 	[[
-- Fixed the caves crashing when a Great Depths Worm emerges after loading
+- Fixed the server crashing when using a magic hat with Magic Hat for Everyone kills the player
 
 Recent Changes:
+- Fixed the caves crashing when a Great Depths Worm emerges after loading
 - Fixed some vanilla bugs
 - New module: Cave Migration Queue
 ]]
