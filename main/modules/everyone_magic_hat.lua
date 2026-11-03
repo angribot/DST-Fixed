@@ -12,7 +12,9 @@ ACTIONS.USEMAGICTOOL.fn = function(act)
 		then
 			act.doer.components.sanity:DoDelta(-15)
 		end
-		return true
+		-- The sanity cost can stop the tool, e.g. by killing a character whose
+		-- sanity loss is redirected to health.
+		return act.doer.components.magician.item ~= nil
 	end
 end
 
