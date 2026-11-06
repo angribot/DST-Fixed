@@ -93,7 +93,7 @@ local asscleaner = {
 	"fix_staff_lunarplant",
 	"fix_king_cane_fx",
 	"fix_mound_bats",
-	"fix_cave_worms",
+	"fix_worm_boss_tail",
 	-- "getmapaction_pos", -- Cancel for debugging.
 }
 

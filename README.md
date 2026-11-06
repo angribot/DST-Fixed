@@ -105,8 +105,4 @@ The King's Staff's client-side effect can rebuild before the staff itself after 
 
 ### Great Depths Worm After Loading
 
-A full-length Great Depths Worm saved while digging to a new spot crashes the caves with `attempt to index field 'dirt_start' (a nil value)` when its head next emerges. `fix_cave_worms.lua` skips the tail dirt that loading already removed.
-
-### Worm Attacks After Loading
-
-If a Great Depths Worm despawns after every player has left the caves, and the caves save and reload before anyone returns, the worm attack timer stops counting down and worm attacks never come again. `fix_cave_worms.lua` restarts attack planning on load, so the next attack is scheduled when a player enters the caves.
+A full-length Great Depths Worm saved while digging to a new spot crashes the caves with `attempt to index field 'dirt_start' (a nil value)` when its head next emerges. `fix_worm_boss_tail.lua` skips the tail dirt that loading already removed.
