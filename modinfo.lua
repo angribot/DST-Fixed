@@ -6,7 +6,7 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.27.5"
+version = "2.28.0"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -16,24 +16,10 @@ local new_modules = {
 
 changelog = zheng(
 	[[
-- 移除洞穴蠕虫袭击读档后永久停止的修复，原版游戏已修复该问题
-
-近期更新：
-- 修复原版游戏中洞穴蠕虫袭击在特定读档情况下永久停止的问题
-- 修复【人人皆是魔术师】使用魔术帽致死时导致服务器崩溃的问题
-- 修复巨大洞穴蠕虫读档后冒头时导致洞穴崩溃的问题
-- 修复部分原版问题
-- 新模块【洞穴迁移排队】
+- 新模块【附身生物只掉纯粹恐惧】
 ]],
 	[[
-- Removed the fix for Cave Worm Attacks stopping for good after loading, since the vanilla game now fixes it
-
-Recent Changes:
-- Fixed a bug in the vanilla game where Cave Worm Attacks stop for good after certain loads
-- Fixed the server crashing when using a magic hat with Magic Hat for Everyone kills the player
-- Fixed the caves crashing when a Great Depths Worm emerges after loading
-- Fixed some vanilla bugs
-- New module: Cave Migration Queue
+- New module: Inthralled Drop Only Pure Horror
 ]]
 )
 description = zheng("版本: ", "Version: ") .. version .. zheng("\n\n本次更新:\n", "\n\nChange:\n") .. changelog
