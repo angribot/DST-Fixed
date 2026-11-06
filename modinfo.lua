@@ -11,7 +11,7 @@ name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
 local new_modules = {
-	CAVEMIGRATIONQUEUE = true,
+	PARASITELOOT = true,
 }
 
 changelog = zheng(
@@ -351,6 +351,16 @@ configuration_options = {
 		name = "TENTACLE",
 		label = zheng("大触手无掉落物", "Tentacle Pillars no Looting"),
 		hover = zheng("大触手不再掉落任何东西（减少垃圾产生）", "Removes Tentacle pillar's loottable"),
+		options = boolean,
+		default = false,
+	},
+	{
+		name = "PARASITELOOT",
+		label = zheng("附身生物只掉纯粹恐惧", "Inthralled Drop Only Pure Horror"),
+		hover = zheng(
+			"被虚空面具附身的生物死亡时只掉落纯粹恐惧，不再掉落面具和原有战利品；身上携带的物品照常掉落",
+			"Creatures possessed by a Void Masque drop only Pure Horror on death, without masques or their regular loot. Carried items still drop."
+		),
 		options = boolean,
 		default = false,
 	},

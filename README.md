@@ -64,6 +64,7 @@ These modules are kept in the repository but their options are hidden, so they d
 - **Birds No Sleeping** — Keep birds awake at night.
 - **Block Pooping With a Bung** — Use a Bung to stop Beefalo from producing manure.
 - **Tentacle Pillars No Looting** — Remove Tentacle Pillar drops.
+- **Inthralled Drop Only Pure Horror** — Make creatures possessed by a Void Masque drop only Pure Horror instead of masques and their regular loot.
 - **Bee Queen Extra Drops** — Make Bee Queen drop a Gift Wrap Blueprint.
 - **Fix Guardian's Loot** — Fix the types of loot in the Ancient Guardian's Large Ornate Chest.
 

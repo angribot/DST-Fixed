@@ -55,6 +55,7 @@ local config_table = {
 	BIRD = "birds_no_sleep",
 	BLOCKABLEPOOPING = "blockable_pooping",
 	TENTACLE = "tentacle_pillar_noloot",
+	PARASITELOOT = "parasite_horror_only",
 	BEEQUEENGIFTWRAP = "giftwrap_blueprint",
 	FIXMINOTAURCHESTLOOTS = "fix_minotaurchest_loots",
 
