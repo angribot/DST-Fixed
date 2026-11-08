@@ -6,7 +6,7 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.28.0"
+version = "2.28.1"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -16,9 +16,15 @@ local new_modules = {
 
 changelog = zheng(
 	[[
+- 修复原版游戏中暗影之手在洞穴中越积越多、直到服务器重启才消失的问题
+
+近期更新：
 - 新模块【附身生物只掉纯粹恐惧】
 ]],
 	[[
+- Fixed a bug in the vanilla game where Shadow Hands pile up in the caves until the server restarts
+
+Recent Changes:
 - New module: Inthralled Drop Only Pure Horror
 ]]
 )
