@@ -6,28 +6,20 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.28.2"
+version = "2.29.0"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
 local new_modules = {
-	PARASITELOOT = true,
+	WORMBOSSOFFSCREEN = true,
 }
 
 changelog = zheng(
 	[[
-- 进一步修复原版游戏中暗影手臂在远古大门附近越积越多、直到服务器重启才消失的问题
-
-近期更新：
-- 修复原版游戏中暗影之手在洞穴中越积越多、直到服务器重启才消失的问题
-- 新模块【附身生物只掉纯粹恐惧】
+- 新模块【巨大洞穴蠕虫延迟消失】
 ]],
 	[[
-- Further fixed a bug in the vanilla game where shadow arms pile up near the Ancient Gateway until the server restarts
-
-Recent Changes:
-- Fixed a bug in the vanilla game where Shadow Hands pile up in the caves until the server restarts
-- New module: Inthralled Drop Only Pure Horror
+- New module: Delayed Great Depths Worm Despawn
 ]]
 )
 description = zheng("版本: ", "Version: ") .. version .. zheng("\n\n本次更新:\n", "\n\nChange:\n") .. changelog
@@ -369,6 +361,16 @@ configuration_options = {
 		name = "FIXMINOTAURCHESTLOOTS",
 		label = zheng("固定远古守卫者掉落", "Fix Guardian's Loot"),
 		hover = zheng("远古守卫者箱子掉落物固定种类", "Fix chest loots from the Large Ornate Chest"),
+		options = boolean,
+		default = false,
+	},
+	{
+		name = "WORMBOSSOFFSCREEN",
+		label = zheng("巨大洞穴蠕虫延迟消失", "Delayed Great Depths Worm Despawn"),
+		hover = zheng(
+			"巨大洞穴蠕虫和枯萎洞穴巨虫远离所有玩家约5分钟后才会消失，原版为30秒",
+			"Great Depths Worms and Blighted Great Depths Worms disappear after about 5 minutes away from all players instead of 30 seconds."
+		),
 		options = boolean,
 		default = false,
 	},
