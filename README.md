@@ -67,6 +67,7 @@ These modules are kept in the repository but their options are hidden, so they d
 - **Inthralled Drop Only Pure Horror** — Make creatures possessed by a Void Masque drop only Pure Horror instead of masques and their regular loot.
 - **Bee Queen Extra Drops** — Make Bee Queen drop a Gift Wrap Blueprint.
 - **Fix Guardian's Loot** — Fix the types of loot in the Ancient Guardian's Large Ornate Chest.
+- **Delayed Great Depths Worm Despawn** — Make Great Depths Worms and Blighted Great Depths Worms disappear after about 5 minutes away from all players instead of 30 seconds.
 
 ### World
 

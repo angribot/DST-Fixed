@@ -58,6 +58,7 @@ local config_table = {
 	PARASITELOOT = "parasite_horror_only",
 	BEEQUEENGIFTWRAP = "giftwrap_blueprint",
 	FIXMINOTAURCHESTLOOTS = "fix_minotaurchest_loots",
+	WORMBOSSOFFSCREEN = "worm_boss_offscreen_delay",
 
 	-- The World --
 	CAVEMIGRATIONQUEUE = "cave_migration_queue",
