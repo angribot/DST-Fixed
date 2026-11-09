@@ -95,7 +95,7 @@ local asscleaner = {
 	"fix_king_cane_fx",
 	"fix_mound_bats",
 	"fix_worm_boss_tail",
-	"fix_shadowhand_sleep",
+	"fix_atrium_keystone_hand",
 	-- "getmapaction_pos", -- Cancel for debugging.
 }
 

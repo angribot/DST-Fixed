@@ -108,6 +108,6 @@ The King's Staff's client-side effect can rebuild before the staff itself after 
 
 A full-length Great Depths Worm saved while digging to a new spot crashes the caves with `attempt to index field 'dirt_start' (a nil value)` when its head next emerges. `fix_worm_boss_tail.lua` skips the tail dirt that loading already removed.
 
-### Shadow Hands Piling Up in the Caves
+### Shadow Arms Piling Up at the Ancient Gateway
 
-A Shadow Hand that falls asleep while creeping toward a fire stays frozen in place after waking. On the surface the next dawn clears it, but the caves have no dawn, so hands and their arms keep piling up around cave fires such as those at the Ancient Gateway until the server restarts or rolls back. `fix_shadowhand_sleep.lua` makes a frozen hand resume creeping when it wakes. In the caves, it also clears any hand still out after one full day.
+When a player disconnects or changes shards inside the Ancient Gateway's arena, the gateway keeps acting as if they were still there. If a Keystone lies nearby, it then spawns a hand every second while no one is around, and each hand leaves its shadow arm behind. Thousands of arms pile up until the server restarts, and lag the server for whoever next approaches. `fix_atrium_keystone_hand.lua` makes the gateway forget players who leave this way and removes any arm whose hand is already gone.
