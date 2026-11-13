@@ -6,7 +6,7 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.29.0"
+version = "2.29.1"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -16,9 +16,15 @@ local new_modules = {
 
 changelog = zheng(
 	[[
+- 修复原版游戏中重复撒开煤炭导致的崩溃
+
+近期更新：
 - 新模块【巨大洞穴蠕虫延迟消失】
 ]],
 	[[
+- Fixed a crash in the vanilla game caused by duplicate scattered Coals
+
+Recent Changes:
 - New module: Delayed Great Depths Worm Despawn
 ]]
 )
