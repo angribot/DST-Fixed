@@ -112,3 +112,7 @@ A full-length Great Depths Worm saved while digging to a new spot crashes the ca
 ### Shadow Arms Piling Up at the Ancient Gateway
 
 When a player disconnects or changes shards inside the Ancient Gateway's arena, the gateway keeps acting as if they were still there. If a Keystone lies nearby, it then spawns a hand every second while no one is around, and each hand leaves its shadow arm behind. Thousands of arms pile up until the server restarts, and lag the server for whoever next approaches. `fix_atrium_keystone_hand.lua` makes the gateway forget players who leave this way and removes any arm whose hand is already gone.
+
+### Coals Piled Into One Spot
+
+A Great Depths Worm that can't swallow any more items flings nearby placed Coals next to its head, and they stay placed. If a flung Coals lands in the square of another placed Coals, every later load crashes with `assertion failed!` in `trap_fumarole_util.lua`. `fix_trap_fumarole_cell.lua` turns Coals back into items before the worm flings them, and loads any extra placed Coals in an occupied square as an item, so worlds already affected load again.

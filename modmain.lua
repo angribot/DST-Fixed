@@ -97,6 +97,7 @@ local asscleaner = {
 	"fix_mound_bats",
 	"fix_worm_boss_tail",
 	"fix_atrium_keystone_hand",
+	"fix_trap_fumarole_cell",
 	-- "getmapaction_pos", -- Cancel for debugging.
 }
 
