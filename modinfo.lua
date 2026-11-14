@@ -6,7 +6,7 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.29.1"
+version = "2.29.2"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -16,15 +16,17 @@ local new_modules = {
 
 changelog = zheng(
 	[[
-- 修复原版游戏中重复撒开煤炭导致的崩溃
+- 【橙杖地图传送】适配暗夜故事集中澪的暗影传送
 
 近期更新：
+- 修复原版游戏中重复撒开煤炭导致的崩溃
 - 新模块【巨大洞穴蠕虫延迟消失】
 ]],
 	[[
-- Fixed a crash in the vanilla game caused by duplicate scattered Coals
+- Orange Staff Map Blink now supports Mio's Shadowpoof from Night Stories
 
 Recent Changes:
+- Fixed a crash in the vanilla game caused by duplicate scattered Coals
 - New module: Delayed Great Depths Worm Despawn
 ]]
 )
