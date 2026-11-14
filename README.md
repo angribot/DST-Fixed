@@ -79,7 +79,7 @@ These modules are kept in the repository but their options are hidden, so they d
 - **Mourning Glory into Dug Grave** — Restore dug graves with Mourning Glory.
 - **Enhanced Eyeturrets** — Make Eyeturrets target bats.
 - **Gather Moon Dial's Glass** — Move glass dropped by Moon Dials at the end of the storm event to the Celestial Portal.
-- **No Halloween Candies** — Stop Pig King trades from giving Halloween candies.
+- **No Halloween Candies** — Stop Pig King and King of the Merms trades, Leaf Piles, Frankenswine, Vamphares, and Mermummies from producing Halloween candies; other Hallowed Nights rewards still drop.
 - **Less Loots in Winter's Feast** — Disable trinket and snack drops while preserving boss ornaments.
 
 ### Crafting

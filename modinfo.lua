@@ -444,8 +444,11 @@ configuration_options = {
 	},
 	{
 		name = "HALLOWEEN",
-		label = zheng("禁用万圣节猪王糖果", "No Halloween Candies"),
-		hover = zheng("万圣节期间猪王不会给糖果（减少垃圾产生）", "Disable halloween candies on trading with Pig King."),
+		label = zheng("禁用万圣夜糖果生成", "No Halloween Candies"),
+		hover = zheng(
+			"万圣夜期间猪王、鱼人之王、落叶堆、科学怪猪、吸血兔和鱼人木乃伊不再产出糖果（减少垃圾产生）",
+			"Pig King, King of the Merms, Leaf Piles, Frankenswine, Vamphares and Mermummies no longer produce Halloween candies."
+		),
 		options = boolean,
 		default = false,
 	},
