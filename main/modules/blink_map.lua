@@ -2,7 +2,6 @@ local AddComponentPostInit = AddComponentPostInit
 GLOBAL.setfenv(1, GLOBAL)
 local UpvalueUtil = require("upvalueutil")
 
-local FUELTYPE = "nightmarefuel"
 local CHS_CODE = {
 	zh = true,
 	zht = true,
@@ -10,8 +9,10 @@ local CHS_CODE = {
 }
 STRINGS.ACTIONS.BLINK_MAP.GENERIC = CHS_CODE[LanguageTranslator.defaultlang] and "传送({uses})" or "Telepoof({uses})"
 
-local function IsMioBoosted(doer)
-	return doer and doer:HasTag("mio_boosted_task")
+-- Characters can pay part of the distance themselves, e.g. with fuel, by defining doer:GetExtraBlinkUses(staff).
+local function GetExtraBlinkUses(act)
+	local doer = act.doer
+	return doer and doer.GetExtraBlinkUses and doer:GetExtraBlinkUses(act.invobject) or 0
 end
 
 local function IsOrangeKingCane(staff)
@@ -42,14 +43,8 @@ local function ValidateUses(act)
 		return not act.invobject:HasTag("nomagiccast") and act.invobject.components.rechargeable:IsCharged()
 	end
 	if act.invobject and act.invobject.components.blinkstaff then
-		local num = act.distancecount
 		local staffuses = act.invobject.components.finiteuses:GetUses()
-
-		if IsMioBoosted(act.doer) then
-			local is_fuel_enough, fuel_num = act.doer.components.inventory:Has(FUELTYPE, num)
-			return is_fuel_enough or (fuel_num + staffuses) >= num
-		end
-		return staffuses >= num
+		return staffuses + GetExtraBlinkUses(act) >= act.distancecount
 	end
 end
 
@@ -58,14 +53,8 @@ local function ClientValidateUses(act)
 		return not act.invobject:HasTag("nomagiccast")
 	end
 	if act.invobject and act.invobject.prefab == "orangestaff" then
-		local num = act.distancecount
 		local staffuses = (act.invobject.replica.inventoryitem.classified.percentused:value() or 0) * TUNING.ORANGESTAFF_USES / 100
-
-		if IsMioBoosted(act.doer) then
-			local is_fuel_enough, fuel_num = act.doer.replica.inventory:Has(FUELTYPE, num)
-			return is_fuel_enough or (fuel_num + staffuses) >= num
-		end
-		return staffuses >= num
+		return staffuses + GetExtraBlinkUses(act) >= act.distancecount
 	end
 end
 
@@ -170,20 +159,16 @@ end
 
 local blink_map_stroverridefn = ACTIONS.BLINK_MAP.stroverridefn
 ACTIONS.BLINK_MAP.stroverridefn = function(act)
+	-- Labels from other mods, e.g. character-specific casts, take precedence.
+	local str = blink_map_stroverridefn(act)
+	if str then
+		return str
+	end
 	if IsOrangeKingCane(act.invobject) and act.doer then
 		local uses = act.invobject:HasTag("corrupted") and 1 or act.distancecount
 		return subfmt(STRINGS.ACTIONS.BLINK_MAP.GENERIC, { uses = uses })
 	end
-	local blinkstaff = act.invobject and act.invobject.prefab == "orangestaff"
-	local doer = act.doer
-
-	if blinkstaff and doer then
-		if IsMioBoosted(doer) then
-			if doer.replica.inventory:Has(FUELTYPE, 1) then
-				return subfmt(STRINGS.ACTIONS.BLINK_MAP.FUEL, { uses = act.distancecount })
-			end
-		end
+	if act.invobject and act.invobject.prefab == "orangestaff" and act.doer then
 		return subfmt(STRINGS.ACTIONS.BLINK_MAP.GENERIC, { uses = act.distancecount })
 	end
-	return blink_map_stroverridefn(act)
 end
