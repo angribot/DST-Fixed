@@ -18,7 +18,7 @@ These modules are kept in the repository but their options are hidden, so they d
 
 ### Player
 
-- **Enable Quick Attack** — Remove the player attack-speed limit.
+- **Enable Quick Attack** — Remove the player attack-speed limit, including darts and the Howlitzer.
 - **Inventory Unwrap** — Unwrap items into an inventory or container instead of dropping them on the ground.
 - **Extended Player Skins** — Allow players to use other characters' skins.
 - **Static Sit Emote** — Always use the sitting animation for `/sit`.

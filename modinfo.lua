@@ -85,6 +85,7 @@ configuration_options = {
 	{
 		name = "ATKSPEED",
 		label = zheng("解除玩家攻速限制", "Enable Quick Attack"),
+		hover = zheng("含吹箭和嚎弹炮", "Includes darts and the Howlitzer."),
 		options = boolean,
 		default = false,
 	},
