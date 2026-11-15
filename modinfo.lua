@@ -6,7 +6,7 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.29.3"
+version = "2.29.4"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -16,17 +16,19 @@ local new_modules = {
 
 changelog = zheng(
 	[[
-- 【禁用万圣夜糖果生成】现在也会阻止鱼人之王、落叶堆、科学怪猪、吸血兔和鱼人木乃伊产出糖果
+- 【解除玩家攻速限制】现在也会加快吹箭和嚎弹炮的连射
 
 近期更新：
+- 【禁用万圣夜糖果生成】现在也会阻止鱼人之王、落叶堆、科学怪猪、吸血兔和鱼人木乃伊产出糖果
 - 【橙杖地图传送】适配暗夜故事集中澪的暗影传送
 - 修复原版游戏中重复撒开煤炭导致的崩溃
 - 新模块【巨大洞穴蠕虫延迟消失】
 ]],
 	[[
-- No Halloween Candies now also stops King of the Merms, Leaf Piles, Frankenswine, Vamphares and Mermummies from producing candies
+- Enable Quick Attack now also speeds up consecutive dart and Howlitzer shots
 
 Recent Changes:
+- No Halloween Candies now also stops King of the Merms, Leaf Piles, Frankenswine, Vamphares and Mermummies from producing candies
 - Orange Staff Map Blink now supports Mio's Shadowpoof from Night Stories
 - Fixed a crash in the vanilla game caused by duplicate scattered Coals
 - New module: Delayed Great Depths Worm Despawn
