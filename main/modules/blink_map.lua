@@ -26,10 +26,10 @@ AddComponentPostInit("playeractionpicker", function(self)
 		local inventory = self.inst.replica.inventory
 		local staff = inventory and inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 		if self.inst.checkingmapactions and staff and (staff.prefab == "orangestaff" or IsOrangeKingCane(staff)) then
-			-- Keep native body targets, but do not let a targetless swap hide staff map blinks.
+			-- Keep WX-78's map actions on their targets, but do not let a targetless one hide staff map blinks.
 			for i = #actions, 1, -1 do
 				local act = actions[i]
-				if act.action == ACTIONS.SWAPBODIES_MAP and not act.action.maponly_checkvalidpos_fn(act) then
+				if (act.action == ACTIONS.SWAPBODIES_MAP or act.action == ACTIONS.MAPSCOUTSELECT_MAP) and not act.action.maponly_checkvalidpos_fn(act) then
 					table.remove(actions, i)
 				end
 			end

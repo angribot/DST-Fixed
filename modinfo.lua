@@ -16,6 +16,7 @@ local new_modules = {
 
 changelog = zheng(
 	[[
+- 【橙杖地图传送】不再与 WX-78 的野外勘测冲突
 
 近期更新：
 - 【解除玩家攻速限制】现在也会加快吹箭和嚎弹炮的连射
@@ -25,6 +26,7 @@ changelog = zheng(
 - 新模块【巨大洞穴蠕虫延迟消失】
 ]],
 	[[
+- Orange Staff Map Blink no longer conflicts with WX-78's Field Survey
 
 Recent Changes:
 - Enable Quick Attack now also speeds up consecutive dart and Howlitzer shots
