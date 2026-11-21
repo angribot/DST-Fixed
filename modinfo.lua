@@ -6,34 +6,16 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.29.5"
+version = "2.30.0"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
-local new_modules = {
-	WORMBOSSOFFSCREEN = true,
-}
+local new_modules = {}
 
 changelog = zheng(
 	[[
-- 【橙杖地图传送】不再与 WX-78 的野外勘测冲突
-
-近期更新：
-- 【解除玩家攻速限制】现在也会加快吹箭和嚎弹炮的连射
-- 【禁用万圣夜糖果生成】现在也会阻止鱼人之王、落叶堆、科学怪猪、吸血兔和鱼人木乃伊产出糖果
-- 【橙杖地图传送】适配暗夜故事集中澪的暗影传送
-- 修复原版游戏中重复撒开煤炭导致的崩溃
-- 新模块【巨大洞穴蠕虫延迟消失】
 ]],
 	[[
-- Orange Staff Map Blink no longer conflicts with WX-78's Field Survey
-
-Recent Changes:
-- Enable Quick Attack now also speeds up consecutive dart and Howlitzer shots
-- No Halloween Candies now also stops King of the Merms, Leaf Piles, Frankenswine, Vamphares and Mermummies from producing candies
-- Orange Staff Map Blink now supports Mio's Shadowpoof from Night Stories
-- Fixed a crash in the vanilla game caused by duplicate scattered Coals
-- New module: Delayed Great Depths Worm Despawn
 ]]
 )
 description = zheng("版本: ", "Version: ") .. version .. zheng("\n\n本次更新:\n", "\n\nChange:\n") .. changelog
