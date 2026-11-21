@@ -71,6 +71,7 @@ local config_table = {
 	GATHERMOONGLASS = "gather_moonglass",
 	HALLOWEEN = "disable_halloween_candies",
 	WINTERSFEASTLOOTS = "disable_wintersfeast_trash",
+	TRAPFUMAROLEOFFSCREEN = "trap_fumarole_offscreen_throttle",
 
 	-- The Recipe --
 	RANDOMLIGHTS = "random_winter_lights",

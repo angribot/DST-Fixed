@@ -10,12 +10,16 @@ version = "2.30.0"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
-local new_modules = {}
+local new_modules = {
+	TRAPFUMAROLEOFFSCREEN = true,
+}
 
 changelog = zheng(
 	[[
+- 新模块【煤炭离屏降频】
 ]],
 	[[
+- New module: Offscreen Coals Throttling
 ]]
 )
 description = zheng("版本: ", "Version: ") .. version .. zheng("\n\n本次更新:\n", "\n\nChange:\n") .. changelog
@@ -447,6 +451,16 @@ configuration_options = {
 		hover = zheng(
 			"禁用冬季盛宴期间小玩意儿和零食的掉落，但不影响BOSS的挂饰（减少垃圾产生）",
 			"Disable most loots in Winter's Feast, eipcs not included."
+		),
+		options = boolean,
+		default = false,
+	},
+	{
+		name = "TRAPFUMAROLEOFFSCREEN",
+		label = zheng("煤炭离屏降频", "Offscreen Coals Throttling"),
+		hover = zheng(
+			"远离所有玩家时，撒开的煤炭每2.5秒检测一次目标，被煤炭灼烧的物品每2.5秒更新一次（原版分别为0.5秒和每帧），减轻堆满掉落物的煤炭农场造成的卡顿。生物不受影响。",
+			"While away from all players, scattered Coals look for targets every 2.5 seconds instead of 0.5, and items burning on them update every 2.5 seconds instead of every frame, reducing lag from Coals farms piled with loot. Creatures are unaffected."
 		),
 		options = boolean,
 		default = false,
