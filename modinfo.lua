@@ -6,34 +6,20 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.29.5"
+version = "2.30.0"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
 local new_modules = {
-	WORMBOSSOFFSCREEN = true,
+	TRAPFUMAROLEOFFSCREEN = true,
 }
 
 changelog = zheng(
 	[[
-- 【橙杖地图传送】不再与 WX-78 的野外勘测冲突
-
-近期更新：
-- 【解除玩家攻速限制】现在也会加快吹箭和嚎弹炮的连射
-- 【禁用万圣夜糖果生成】现在也会阻止鱼人之王、落叶堆、科学怪猪、吸血兔和鱼人木乃伊产出糖果
-- 【橙杖地图传送】适配暗夜故事集中澪的暗影传送
-- 修复原版游戏中重复撒开煤炭导致的崩溃
-- 新模块【巨大洞穴蠕虫延迟消失】
+- 新模块【煤炭离屏降频】
 ]],
 	[[
-- Orange Staff Map Blink no longer conflicts with WX-78's Field Survey
-
-Recent Changes:
-- Enable Quick Attack now also speeds up consecutive dart and Howlitzer shots
-- No Halloween Candies now also stops King of the Merms, Leaf Piles, Frankenswine, Vamphares and Mermummies from producing candies
-- Orange Staff Map Blink now supports Mio's Shadowpoof from Night Stories
-- Fixed a crash in the vanilla game caused by duplicate scattered Coals
-- New module: Delayed Great Depths Worm Despawn
+- New module: Offscreen Coals Throttling
 ]]
 )
 description = zheng("版本: ", "Version: ") .. version .. zheng("\n\n本次更新:\n", "\n\nChange:\n") .. changelog
@@ -465,6 +451,16 @@ configuration_options = {
 		hover = zheng(
 			"禁用冬季盛宴期间小玩意儿和零食的掉落，但不影响BOSS的挂饰（减少垃圾产生）",
 			"Disable most loots in Winter's Feast, eipcs not included."
+		),
+		options = boolean,
+		default = false,
+	},
+	{
+		name = "TRAPFUMAROLEOFFSCREEN",
+		label = zheng("煤炭离屏降频", "Offscreen Coals Throttling"),
+		hover = zheng(
+			"远离所有玩家时，撒开的煤炭每2.5秒检测一次目标，煤炭上的灼烧目标每2.5秒更新一次（原版分别为0.5秒和每帧），减轻堆满掉落物的煤炭农场造成的卡顿。生物和即将起火的可燃物仍每帧更新。",
+			"While away from all players, scattered Coals look for targets every 2.5 seconds instead of 0.5, and targets burning on them update every 2.5 seconds instead of every frame, reducing lag from Coals farms piled with loot. Creatures and burnables about to catch fire still update every frame."
 		),
 		options = boolean,
 		default = false,

@@ -81,6 +81,7 @@ These modules are kept in the repository but their options are hidden, so they d
 - **Gather Moon Dial's Glass** — Move glass dropped by Moon Dials at the end of the storm event to the Celestial Portal.
 - **No Halloween Candies** — Stop Pig King and King of the Merms trades, Leaf Piles, Frankenswine, Vamphares, and Mermummies from producing Halloween candies; other Hallowed Nights rewards still drop.
 - **Less Loots in Winter's Feast** — Disable trinket and snack drops while preserving boss ornaments.
+- **Offscreen Coals Throttling** — While away from all players, make scattered Coals look for targets every 2.5 seconds instead of 0.5, and update targets burning on them every 2.5 seconds instead of every frame, catching up on the elapsed time when they wake. Creatures, and burnables heating up to catch fire, still update every frame.
 
 ### Crafting
 
