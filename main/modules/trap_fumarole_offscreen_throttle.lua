@@ -19,9 +19,18 @@ local AWAKE_PERIOD = 0.5
 -- fixed TRAP_FUMAROLE_PROPAGATOR_RATE of heat. Propagator:AddHeat accepts only
 -- max_heat_this_update per 0.5-second propagator update and the heat decays in
 -- between, so the burnable reaches its flashpoint only at per-frame call rates.
+-- AddHeat adds nothing during a propagator delay, to fireimmune targets, or on
+-- tiles with no_fire_spread, where GetHeatResistance is 0; those stay slow.
 local function IsHeatingToIgnite(self)
-	local propagator = self.inst.components.propagator
-	return self.ignitetime > TUNING.TRAP_FUMAROLE_IGNITE_TIME and self.inst.components.cookable == nil and propagator ~= nil and propagator:AcceptsHeat()
+	local inst = self.inst
+	local propagator = inst.components.propagator
+	return self.ignitetime > TUNING.TRAP_FUMAROLE_IGNITE_TIME
+		and inst.components.cookable == nil
+		and propagator ~= nil
+		and propagator:AcceptsHeat()
+		and propagator.delay == nil
+		and not inst:HasTag("fireimmune")
+		and propagator:GetHeatResistance() > 0
 end
 
 local function GetAsleepPeriod(self)
