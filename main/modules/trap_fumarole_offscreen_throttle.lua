@@ -115,8 +115,11 @@ AddComponentPostInit("trapfumaroleburning", function(self, inst)
 	end
 
 	-- Coals scanning while asleep add this component to targets already asleep,
-	-- which get no OnEntitySleep call.
-	if inst:IsAsleep() then
+	-- which get no OnEntitySleep call. Targets spawned this tick, such as Rot from
+	-- spoilage, already report IsAsleep() but still get their initial
+	-- OnEntitySleep (sleepstatepending in entityscript.lua), which starts the
+	-- asleep update; starting it here too would leave a second task running.
+	if inst:IsAsleep() and not inst.sleepstatepending then
 		StartAsleepUpdate(self)
 	end
 end)

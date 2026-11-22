@@ -16,11 +16,13 @@ local new_modules = {
 
 changelog = zheng(
 	[[
+- 【煤炭离屏降频】不再导致服务器崩溃
 
 近期更新：
 - 新模块【煤炭离屏降频】
 ]],
 	[[
+- Offscreen Coals Throttling no longer crashes the server
 
 Recent Changes:
 - New module: Offscreen Coals Throttling
