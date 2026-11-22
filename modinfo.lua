@@ -18,6 +18,7 @@ changelog = zheng(
 	[[
 - 减轻原版游戏中地图图标、暖石、瓦器人、薇机人和船造成的服务器卡顿
 - 【哀悼荣耀填坟】不再在坟墓旁堆积隐形光柱
+- 清除存档里残留的隐形光柱
 
 近期更新：
 - 【煤炭离屏降频】不再导致服务器崩溃
@@ -26,6 +27,7 @@ changelog = zheng(
 	[[
 - Reduce server lag from map icons, Thermal Stones, W.O.B.O.T.s, W.I.N.bots and boats in the vanilla game
 - Mourning Glory into Dug Grave no longer piles up invisible light beams at graves
+- Clear invisible light beams left in saves
 
 Recent Changes:
 - Offscreen Coals Throttling no longer crashes the server

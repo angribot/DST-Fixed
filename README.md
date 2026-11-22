@@ -126,3 +126,7 @@ Some vanilla code repeats the same work every frame or for every item, which lag
 - Thermal Stones look up the local temperature once per update instead of twice, with a faster scan of Ice Crystaleyezers.
 - Map icons of Moon Dials, Ocuvigils, Ice Crystaleyezers and Lazy Deserters stop following their structure while it is away from all players and not on a boat.
 - Boats stop updating their health trend arrow, which nothing displays, while away from all players.
+
+### Chester's Light Beam Left in Saves
+
+Chester's light beam is written to the save if the world saves while Chester is transforming, and once loaded nothing ever removes it. It stays invisible, but the server keeps sending it to nearby players. Mourning Glory into Dug Grave left one per honored grave at every dawn before 2.30.2. `fix_chesterlight_save.lua` removes light beams restored from a save.
