@@ -100,7 +100,7 @@ These options remain listed for compatibility, but their values are no longer re
 
 ## Patch Notes
 
-`main/asscleaner` holds vanilla bug fixes. They always load, with no option to disable them.
+`main/asscleaner` holds vanilla bug fixes and performance fixes that leave gameplay unchanged. They always load, with no option to disable them.
 
 ### King's Staff Effect During Shard Changes
 
@@ -117,3 +117,12 @@ When a player disconnects or changes shards inside the Ancient Gateway's arena, 
 ### Coals Piled Into One Spot
 
 A Great Depths Worm that can't swallow any more items flings nearby placed Coals next to its head, and they stay placed. If a flung Coals lands in the square of another placed Coals, every later load crashes with `assertion failed!` in `trap_fumarole_util.lua`. `fix_trap_fumarole_cell.lua` turns Coals back into items before the worm flings them, and loads any extra placed Coals in an occupied square as an item, so worlds already affected load again.
+
+### Query Optimization
+
+Some vanilla code repeats the same work every frame or for every item, which lags large, long-running worlds. `query_optimization.lua` skips the repeated work with the same results:
+
+- W.O.B.O.T.s and W.I.N.bots look up nearby containers once per search instead of once for every item on the ground.
+- Thermal Stones look up the local temperature once per update instead of twice, with a faster scan of Ice Crystaleyezers.
+- Map icons of Moon Dials, Ocuvigils, Ice Crystaleyezers and Lazy Deserters stop following their structure while it is away from all players and not on a boat.
+- Boats stop updating their health trend arrow, which nothing displays, while away from all players.

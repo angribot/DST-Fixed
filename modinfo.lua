@@ -16,12 +16,14 @@ local new_modules = {
 
 changelog = zheng(
 	[[
+- 减轻原版游戏中地图图标、暖石、瓦器人、薇机人和船造成的服务器卡顿
 
 近期更新：
 - 【煤炭离屏降频】不再导致服务器崩溃
 - 新模块【煤炭离屏降频】
 ]],
 	[[
+- Reduce server lag from map icons, Thermal Stones, W.O.B.O.T.s, W.I.N.bots and boats in the vanilla game
 
 Recent Changes:
 - Offscreen Coals Throttling no longer crashes the server
