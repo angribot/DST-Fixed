@@ -74,6 +74,15 @@ local function StartAsleepUpdate(self)
 		return
 	end
 
+	-- The engine can call OnEntitySleep twice with no wake in between: placing a
+	-- target spawned this tick, such as Rot from spoilage, in a sleeping area
+	-- calls it at once, and the initial sleep state still arrives at the end of
+	-- the tick. A second task would be left running after a wake and index the
+	-- cleared _asleeptask.
+	if self._asleeptask ~= nil then
+		return
+	end
+
 	self.inst:StopUpdatingComponent(self)
 	self._asleepupdatetime = GetTime()
 	local period = GetAsleepPeriod(self)
@@ -115,11 +124,8 @@ AddComponentPostInit("trapfumaroleburning", function(self, inst)
 	end
 
 	-- Coals scanning while asleep add this component to targets already asleep,
-	-- which get no OnEntitySleep call. Targets spawned this tick, such as Rot from
-	-- spoilage, already report IsAsleep() but still get their initial
-	-- OnEntitySleep (sleepstatepending in entityscript.lua), which starts the
-	-- asleep update; starting it here too would leave a second task running.
-	if inst:IsAsleep() and not inst.sleepstatepending then
+	-- which may get no further OnEntitySleep call.
+	if inst:IsAsleep() then
 		StartAsleepUpdate(self)
 	end
 end)
