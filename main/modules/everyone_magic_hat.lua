@@ -26,4 +26,12 @@ AddPlayerPostInit(function(inst)
 	if not inst.components.magician then
 		inst:AddComponent("magician")
 	end
+
+	local onload = inst.OnLoad
+	inst.OnLoad = function(inst, ...)
+		if onload ~= nil then
+			onload(inst, ...)
+		end
+		inst.components.magician:StopUsing()
+	end
 end)
