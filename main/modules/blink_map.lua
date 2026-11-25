@@ -59,16 +59,6 @@ local function ClientValidateUses(act)
 	end
 end
 
-local BlinkStaff = require("components/blinkstaff")
-local on_blinked = UpvalueUtil.GetUpvalue(BlinkStaff.Blink, "OnBlinked")
-local function OnBlinked(...)
-	on_blinked(...)
-	if TheWorld and TheWorld.components.walkableplatformmanager then -- NOTES(JBK): Workaround for teleporting too far causing the client to lose sync.
-		TheWorld.components.walkableplatformmanager:PostUpdate(0)
-	end
-end
-UpvalueUtil.SetUpvalue(BlinkStaff.Blink, "OnBlinked", OnBlinked)
-
 local function BlinkKingCaneOnMap(act)
 	local act_pos = act:GetActionPoint()
 	local staff = act.invobject
