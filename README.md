@@ -130,3 +130,19 @@ Some vanilla code repeats the same work every frame or for every item, which lag
 ### Chester's Light Beam Left in Saves
 
 Chester's light beam is written to the save if the world saves while Chester is transforming, and once loaded nothing ever removes it. It stays invisible, but the server keeps sending it to nearby players. Mourning Glory into Dug Grave left one per honored grave at every dawn before 2.30.2. `fix_chesterlight_save.lua` removes light beams restored from a save.
+
+### Plank Left Occupied
+
+If jumping off a Plank with Abandon Ship is interrupted, for example when armor breaks, the Plank stays occupied and no one can use it again. `abandon_ship_board.lua` frees the Plank when the jump is cut short.
+
+### Bats From Graves Without Land Nearby
+
+Digging up a grave during Hallowed Nights can release bats. When no land lies near the grave, vanilla has no position for them and the server crashes with `attempt to index local 'pos' (a nil value)`. `fix_mound_bats.lua` releases them at the grave instead.
+
+### Brightshade Staff's Last Hit
+
+The Brightshade Staff spends durability when its projectile hits, so the hit that uses the last charge breaks the staff and removes its weapon while the projectile is still bouncing on to the next target. That bounce then attacks with a staff that is no longer a weapon, which can crash the server. `fix_staff_lunarplant.lua` spends durability when the staff fires, and keeps a broken staff a weapon so shots already in flight still land.
+
+### Dummy Targets
+
+The Dummy Target and its lunar and shadow versions have no names, die to a single hit of 1,000 damage or more, and show only the latest hit, so hits landing in the same frame replace each other. `dummytarget_dps.lua` names them, keeps them alive, and shows the last hit, the total for that frame, and the damage over the last second.
