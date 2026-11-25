@@ -376,6 +376,8 @@ end
 
 function Talker:SpeakStrCode(strcode, time, forcetext, sgparam)
 	if self.str_code_speaker ~= nil and TheWorld.ismastersim then
+		-- Vanilla prefabs/wagdrone_laserwire.lua:SetBeam (763928): sets a different value with set_local first to force a dirty send
+		self.str_code_speaker.strcode:set_local("")
 		self.str_code_speaker.strcode:set(strcode)
 		self.str_code_speaker.strtime:set(time or 0)
 		self.str_code_speaker.forcetext:set(forcetext == true)
