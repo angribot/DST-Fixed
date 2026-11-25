@@ -1,7 +1,6 @@
+-- Vanilla modutil.lua:getfenvminfield (763928): copy
 local function getfenvminfield(level, fieldname)
-	level = level + 1 -- increase level due to this function call
-	-- tail call doesn't have full debug info, its func is nil
-	-- use rawget to circumvent strict.lua's checks of _G that we might hit
+	level = level + 1
 	while
 		debug.getinfo(level) ~= nil and (debug.getinfo(level).func == nil or rawget(getfenv(level), fieldname) == nil)
 	do
@@ -14,6 +13,7 @@ local function getfenvminfield(level, fieldname)
 	return getfenv(level)[fieldname]
 end
 
+-- Vanilla modutil.lua:initprint (763928): copy
 local function initprint(...)
 	if KnownModIndex:IsModInitPrintEnabled() then
 		local modname = getfenvminfield(3, "modname")
@@ -21,7 +21,6 @@ local function initprint(...)
 	end
 end
 
--- set a recipe not listed in search filter or "EVERYTHING".
 local function RecipeNoSearch(recipe)
 	local CraftingMenuWidget = require("widgets/redux/craftingmenu_widget")
 	local is_recipe_valid_for_search = CraftingMenuWidget.IsRecipeValidForSearch
@@ -43,9 +42,11 @@ local function AddRecipeToFilter(recipe_name, filter_name)
 	end
 end
 
--- a smarter way to add a mod recipe, and you don't need to think about filters too much.
--- also, with confog.hidden, you can set your recipe no searching or in "EVERYTHING" filter.
--- same format as AddRecipe2
+---@param name string
+---@param ingredients table
+---@param tech table
+---@param config table? AddRecipe2's config; hidden = true also keeps the recipe out of search and the Everything filter
+---@param filters string[]? filters to add the recipe to besides the defaults AddRecipe2 picks from config
 local function AddRecipe(name, ingredients, tech, config, filters)
 	initprint("AddRecipe2", name)
 	require("recipe")
@@ -80,8 +81,6 @@ local function AddRecipe(name, ingredients, tech, config, filters)
 	rec:SetModRPCID()
 	return rec
 end
---------------------------------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------------------------------
 local function get_index(t, v)
 	for index, value in pairs(t) do
 		if value == v then
@@ -123,18 +122,16 @@ local function try_sorting(a, b, filter_type, offset)
 	end
 end
 
--- a quick way to sort recipes before or after current recipes.
----@param a string - the recipe name that you want to sort
----@param b string - the target recipe name that we base on.
----@param filter_type string
--- e.g. SortAfter("darkcrystal", "purplegem") will sort "darkcrystal" after "purplegem" in all filters that "purplegem" has.
--- e.g. SortAfter("darkcrystal", "purplegem", "MAGIC") will only sort "darkcrystal" after "purplegem" in "MAGIC" filter.
--- e.g. SortAfter("darkcrystal", "purplegem", "TOOLS") will only sort "darkcrystal" to the last in "TOOLS" because "purplegem" is not in "TOOLS".
--- one of b and filter_type must not be nil.
+---@param a string recipe to move
+---@param b string? recipe to place a next to; without filter_type, in every filter holding b
+---@param filter_type string? the only filter to sort; a already in it goes last when b is not, and b may then be nil
 local function SortBefore(a, b, filter_type)
 	try_sorting(a, b, filter_type, 0)
 end
 
+---@param a string recipe to move
+---@param b string? recipe to place a next to; without filter_type, in every filter holding b
+---@param filter_type string? the only filter to sort; a already in it goes last when b is not, and b may then be nil
 local function SortAfter(a, b, filter_type)
 	try_sorting(a, b, filter_type, 1)
 end

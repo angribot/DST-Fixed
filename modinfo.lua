@@ -143,7 +143,6 @@ configuration_options = {
 	{
 		name = "WORTOXTIMETRAVEL",
 		label = zheng("沃托克斯时间旅行", "Wortox the Time Traveler"),
-		-- hover = zh_en("大部分检查文本将跟随客户端语言\n测试性功能，谨慎使用", "Make most descriptions follow client language.\n Testing func. Use at your own risk.",
 		options = boolean,
 		default = false,
 	},
@@ -183,7 +182,6 @@ configuration_options = {
 	{
 		name = "HIDELUNARCROWN",
 		label = zheng("隐藏未激活启迪之冠", "Hide Inactive Enlightened Crown"),
-		-- hover = zh_en("", "Moon Shard into Enlightened Crown",
 		options = boolean,
 		default = false,
 	},

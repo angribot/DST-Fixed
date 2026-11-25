@@ -4,10 +4,7 @@ local AddPrefabPostInitAny = AddPrefabPostInitAny
 local AddStategraphPostInit = AddStategraphPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
---------------------------------------------------------------------------------
--------------------------------- PLAYER COMMON ---------------------------------
---------------------------------------------------------------------------------
-
+-- Vanilla prefabs/player_common.lua:TryDescribe (763928): copy that returns the string path
 local function TryDescribe(base_str, descstrings, modifier)
 	return descstrings
 		and (
@@ -17,6 +14,7 @@ local function TryDescribe(base_str, descstrings, modifier)
 		)
 end
 
+-- Vanilla prefabs/player_common.lua:TryCharStrings (763928): copy that returns the string path
 local function TryCharStrings(inst, base_str, charstrings, modifier)
 	if charstrings then
 		base_str = base_str .. ".DESCRIBE."
@@ -26,6 +24,7 @@ local function TryCharStrings(inst, base_str, charstrings, modifier)
 	end
 end
 
+-- Vanilla prefabs/player_common.lua:GetDescription (763928): copy that returns a string code
 local function player_common_get_special_desc_fn(inst, viewer)
 	local modifier = inst.components.inspectable:GetStatus(viewer) or "GENERIC"
 	local character = string.upper(viewer.prefab)
@@ -48,31 +47,24 @@ AddPlayerPostInit(function(inst)
 	end
 end)
 
---------------------------------------------------------------------------------
----------------------------------- SKELETONS -----------------------------------
---------------------------------------------------------------------------------
-
+-- Vanilla componentutil.lua:GetPlayerDeathDescription (763928): copy that returns a string code
 local function skeleton_getdesc(inst, viewer)
 	if inst.char and not viewer:HasTag("playerghost") then
 		local mod = GetGenderStrings(inst.char)
-		-- local desc = GetDescriptionCode(viewer, inst, mod)
 		local char = string.upper(inst.char)
 		local name = inst.playername or STRINGS.NAMES[char] and STRCODE_HEADER .. ".NAMES." .. char
 		local params = {}
-		--no translations for player killer's name
 		if inst.pkname then
 			params = { name, inst.pkname }
 			return GetDescriptionCode(viewer, inst, mod, "format", params)
 		end
 
-		--permanent translations for death cause
 		if inst.cause == "unknown" then
 			inst.cause = "shenanigans"
 		elseif inst.cause == "moose" then
 			inst.cause = math.random() < 0.5 and "moose1" or "moose2"
 		end
 
-		--viewer based temp translations for death cause
 		local cause = inst.cause == "nil" and (CHARACTER_KNOWS_CHARLIE[viewer.prefab] and "charlie" or "darkness") or inst.cause
 
 		local caus = string.upper(cause)
@@ -101,10 +93,6 @@ AddPrefabPostInit("skeleton_player", function(inst)
 	end
 end)
 
---------------------------------------------------------------------------------
--------------------------------- SINGING SHELL ---------------------------------
---------------------------------------------------------------------------------
-
 local NOTES = {
 	"C",
 	"C#",
@@ -120,8 +108,8 @@ local NOTES = {
 	"B",
 }
 
+-- Vanilla prefabs/singingshell.lua:getdescription (763928): copy that returns a string code
 local function shell_getdescription(inst, viewer)
-	-- return subfmt(GetDescription(viewer, inst, "GENERIC"), {note = NOTES[inst.components.cyclable.step]})
 	return GetDescriptionCode(viewer, inst, "GENERIC", "subfmt", { note = NOTES[inst.components.cyclable.step] })
 end
 
@@ -142,18 +130,13 @@ for _, prefab in ipairs(shells) do
 	AddPrefabPostInit(prefab, shell_postinit)
 end
 
---------------------------------------------------------------------------------
---------------------------------- DEATH EVENT ----------------------------------
---------------------------------------------------------------------------------
-
--- local EventAnnouncer = require("widgets/eventannouncer")
 require("widgets/eventannouncer")
+-- Vanilla widgets/eventannouncer.lua:GetNewDeathAnnouncementString (763928): copy that returns a string code, without the charlie_vinesave check
 function GetNewDeathAnnouncementString(theDead, source, pkname, sourceispet)
 	if not theDead or not source then
 		return ""
 	end
 
-	-- local message = ""
 	local msg_tab = {
 		strtype = "format",
 		content = {},
@@ -174,7 +157,6 @@ function GetNewDeathAnnouncementString(theDead, source, pkname, sourceispet)
 					pkname,
 					STRCODE_HEADER .. "NAMES." .. string.upper(source),
 				}
-				-- theDead:GetDisplayName().." "..STRINGS.UI.HUD.DEATH_ANNOUNCEMENT_1.." "..string.format(STRINGS.UI.HUD.DEATH_PET_NAME, pkname, petname)
 			else
 				msg_tab.content = {
 					"$%s ",
@@ -185,7 +167,6 @@ function GetNewDeathAnnouncementString(theDead, source, pkname, sourceispet)
 					theDead:GetDisplayName(),
 					pkname,
 				}
-				-- message = theDead:GetDisplayName().." "..STRINGS.UI.HUD.DEATH_ANNOUNCEMENT_1.." "..pkname
 			end
 		elseif table.contains(GetActiveCharacterList(), source) then
 			msg_tab.content = {
@@ -197,7 +178,6 @@ function GetNewDeathAnnouncementString(theDead, source, pkname, sourceispet)
 				theDead:GetDisplayName(),
 				FirstToUpper(source),
 			}
-			-- message = theDead:GetDisplayName().." "..STRINGS.UI.HUD.DEATH_ANNOUNCEMENT_1.." "..FirstToUpper(source)
 		else
 			source = string.upper(source)
 			if source == "NIL" then
@@ -224,21 +204,16 @@ function GetNewDeathAnnouncementString(theDead, source, pkname, sourceispet)
 				theDead:GetDisplayName(),
 				STRCODE_HEADER .. "NAMES." .. (STRINGS.NAMES[source] and source or "SHENANIGANS"),
 			}
-			-- source = source and STRINGS.NAMES[source] or STRINGS.NAMES.SHENANIGANS
-			-- message = theDead:GetDisplayName().." "..STRINGS.UI.HUD.DEATH_ANNOUNCEMENT_1.." "..source
 		end
 
 		if not theDead.ghostenabled then
 			table.insert(msg_tab.content, "$.")
-			-- message = message.."."
 		else
 			local gender = GetGenderStrings(theDead.prefab)
 			if STRINGS.UI.HUD["DEATH_ANNOUNCEMENT_2_" .. gender] then
 				table.insert(msg_tab.content, "UI.HUD.DEATH_ANNOUNCEMENT_2_" .. gender)
-				-- message = message..STRINGS.UI.HUD["DEATH_ANNOUNCEMENT_2_"..gender]
 			else
 				table.insert(msg_tab.content, "UI.HUD.DEATH_ANNOUNCEMENT_2_DEFAULT")
-				-- message = message..STRINGS.UI.HUD.DEATH_ANNOUNCEMENT_2_DEFAULT
 			end
 		end
 	else
@@ -252,7 +227,6 @@ function GetNewDeathAnnouncementString(theDead, source, pkname, sourceispet)
 			msg_tab.params = {
 				theDead:GetDisplayName(),
 			}
-			-- message = theDead:GetDisplayName().." "..STRINGS.UI.HUD["GHOST_DEATH_ANNOUNCEMENT_"..gender]
 		else
 			msg_tab.content = {
 				"$%s ",
@@ -261,7 +235,6 @@ function GetNewDeathAnnouncementString(theDead, source, pkname, sourceispet)
 			msg_tab.params = {
 				theDead:GetDisplayName(),
 			}
-			-- message = theDead:GetDisplayName().." "..STRINGS.UI.HUD.GHOST_DEATH_ANNOUNCEMENT_DEFAULT
 		end
 	end
 
@@ -279,6 +252,7 @@ STRCODE_REVIERS[STRINGS.NAMES.MULTIPLAYER_PORTAL_MOONROCK] = "NAMES.MULTIPLAYER_
 STRCODE_REVIERS[STRINGS.NAMES.MULTIPLAYER_PORTAL_MOONROCK_CONSTR_PLANS] =
 	"NAMES.MULTIPLAYER_PORTAL_MOONROCK_CONSTR_PLANS"
 
+-- Vanilla widgets/eventannouncer.lua:GetNewRezAnnouncementString (763928): copy that returns a string code
 function GetNewRezAnnouncementString(theRezzed, source)
 	if not theRezzed or not source then
 		return ""
@@ -286,8 +260,6 @@ function GetNewRezAnnouncementString(theRezzed, source)
 	local strcode_source = source == STRINGS.NAMES.SHENANIGANS and STRCODE_HEADER .. "NAMES.SHENANIGANS"
 		or STRCODE_REVIERS[source] and STRCODE_HEADER .. STRCODE_REVIERS[source]
 		or source
-	-- print("GetNewRezAnnouncementString", strcode_source)
-	-- local message = theRezzed:GetDisplayName().." "..STRINGS.UI.HUD.REZ_ANNOUNCEMENT.." "..source.."."
 	local msg_tab = {
 		strtype = "format",
 		content = {
@@ -300,30 +272,8 @@ function GetNewRezAnnouncementString(theRezzed, source)
 			strcode_source,
 		},
 	}
-	-- return message
 	return EncodeStrCode(msg_tab)
 end
-
---------------------------------------------------------------------------------
---------------------------------- MOD OUTDATE ----------------------------------
---------------------------------------------------------------------------------
-
--- local Networking_ModOutOfDateAnnouncement = Networking_ModOutOfDateAnnouncement
--- function Networking_ModOutOfDateAnnouncement(mod)
---     local ret = {
---         strtype = "format",
---         content = IsRail() and "MODS.VERSIONING.OUT_OF_DATE_RAIL" or "MODS.VERSIONING.OUT_OF_DATE",
---         params = {
---             mod
---         }
---     }
-
---     Networking_Announcement(EncodeStrCode(ret), nil , "mod")
--- end
-
---------------------------------------------------------------------------------
----------------------------------- TERRARIUM -----------------------------------
---------------------------------------------------------------------------------
 
 STRCODE_ANNOUNCE[STRINGS.EYEOFTERROR_CANCEL] = "EYEOFTERROR_CANCEL"
 STRCODE_ANNOUNCE[STRINGS.EYEOFTERROR_COMING] = "EYEOFTERROR_COMING"
@@ -331,10 +281,6 @@ STRCODE_ANNOUNCE[STRINGS.TWINS_COMING] = "TWINS_COMING"
 
 STRCODE_SUBFMT[STRINGS.EYEOFTERROR_TARGET] = "EYEOFTERROR_TARGET"
 STRCODE_SUBFMT[STRINGS.TWINS_TARGET] = "TWINS_TARGET"
-
---------------------------------------------------------------------------------
---------------------------------- WAGSTAFF_NPC ---------------------------------
---------------------------------------------------------------------------------
 
 STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_START[1]] = "WAGSTAFF_NPC_START.1"
 STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_START[2]] = "WAGSTAFF_NPC_START.2"
@@ -450,10 +396,6 @@ end
 for _, prefab in ipairs({ "wagstaff_npc", "wagstaff_npc_pstboss", "alterguardian_contained" }) do
 	AddPrefabPostInit(prefab, npc_strcodespeaker_postinit)
 end
-
---------------------------------------------------------------------------------
---------------------------------- HERMIT_CRAB ----------------------------------
---------------------------------------------------------------------------------
 
 AddPrefabPostInit("hermitcrab", npc_strcodespeaker_postinit)
 
@@ -787,14 +729,12 @@ STRCODE_TALKER[STRINGS.HERMITCRAB_GIVE_PEARL[3]] = "HERMITCRAB_GIVE_PEARL.3"
 STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_SPOOKED] = "HERMITCRAB_ANNOUNCE_SPOOKED"
 STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_TOOL_SLIP] = "HERMITCRAB_ANNOUNCE_TOOL_SLIP"
 
---------------------------------------------------------------------------------
-------------------------------- TROPHYSCALE_FISH -------------------------------
---------------------------------------------------------------------------------
-
+-- Vanilla prefabs/trophyscale_fish.lua:IsHoldingItem (763928): copy
 local function IsHoldingItem(inst)
 	return inst.components.trophyscale.item_data ~= nil and not inst:HasTag("burnt")
 end
 
+-- Vanilla prefabs/trophyscale_fish.lua:getdesc (763928): copy that returns a string code
 local function trophyscale_fish_getdesc(inst, viewer)
 	if inst:HasTag("burnt") then
 		return GetDescriptionCode(viewer, inst, "BURNT")
@@ -805,10 +745,6 @@ local function trophyscale_fish_getdesc(inst, viewer)
 		local heavy_postfix = (data.is_heavy and "_HEAVY" or "")
 
 		if data.prefab_override_owner ~= nil then
-			-- return subfmt(GetDescription(viewer, inst, "HAS_ITEM"..heavy_postfix), {weight = data.weight or "",
-			--  owner = STRINGS.UI.HUD.TROPHYSCALE_PREFAB_OVERRIDE_OWNER[data.prefab_override_owner] ~= nil and STRINGS.UI.HUD.TROPHYSCALE_PREFAB_OVERRIDE_OWNER[data.prefab_override_owner]
-			--  or STRINGS.UI.HUD.TROPHYSCALE_UNKNOWN_OWNER})
-
 			return GetDescriptionCode(viewer, inst, "HAS_ITEM" .. heavy_postfix, "subfmt", {
 				weight = data.weight or "",
 				owner = STRINGS.UI.HUD.TROPHYSCALE_PREFAB_OVERRIDE_OWNER[data.prefab_override_owner] ~= nil
@@ -818,8 +754,6 @@ local function trophyscale_fish_getdesc(inst, viewer)
 		else
 			local name = data.owner_userid == nil and STRCODE_HEADER .. "UI.HUD.TROPHYSCALE_UNKNOWN_OWNER"
 				or data.owner_name
-			-- return data.owner_userid ~= nil and data.owner_userid == viewer.userid and subfmt(GetDescription(viewer, inst, "OWNER"..heavy_postfix), {weight = data.weight or "", owner = name or ""}) or
-			--  subfmt(GetDescription(viewer, inst, "HAS_ITEM"..heavy_postfix), {weight = data.weight or "", owner = name or ""})
 			return data.owner_userid ~= nil
 					and data.owner_userid == viewer.userid
 					and GetDescriptionCode(
@@ -849,10 +783,7 @@ AddPrefabPostInit("trophyscale_fish", function(inst)
 	inst.components.inspectable.getspecialdescription = trophyscale_fish_getdesc
 end)
 
---------------------------------------------------------------------------------
-------------------------- TROPHYSCALE_OVERSIZEDVEGGIES -------------------------
---------------------------------------------------------------------------------
-
+-- Vanilla prefabs/trophyscale_oversizedveggies.lua:getdesc (763928): copy that returns a string code
 local function trophyscale_oversizedveggies_getdesc(inst, viewer)
 	if inst:HasTag("burnt") then
 		return GetDescriptionCode(viewer, inst, "BURNT")
@@ -885,10 +816,7 @@ AddPrefabPostInit("trophyscale_oversizedveggies", function(inst)
 	inst.components.inspectable.getspecialdescription = trophyscale_oversizedveggies_getdesc
 end)
 
---------------------------------------------------------------------------------
---------------------------- YOTC_CARRAT_RACE_FINISH ----------------------------
---------------------------------------------------------------------------------
-
+-- Vanilla prefabs/yotc_carrat_race_finish.lua:getdesc (763928): copy that returns a string code
 local function yotc_carrat_race_finish_getdesc(inst, viewer)
 	if inst:HasTag("burnt") then
 		return GetDescriptionCode(viewer, inst, "BURNT")
@@ -910,12 +838,8 @@ AddPrefabPostInit("yotc_carrat_race_finish", function(inst)
 	inst.components.inspectable.getspecialdescription = yotc_carrat_race_finish_getdesc
 end)
 
---------------------------------------------------------------------------------
-------------------------------- USE_POCKET_SCALE -------------------------------
---------------------------------------------------------------------------------
-
+-- Vanilla stategraphs/SGwilson.lua:use_pocket_scale (763928): copy of the weighing TimeEvent that announces a string code, failing at frame 51 without setting action_failed
 AddStategraphPostInit("wilson", function(self)
-	-- local onenter = self.states["use_pocket_scale"].onenter
 	self.states["use_pocket_scale"].timeline[1] = TimeEvent(30 * FRAMES, function(inst)
 		local weight = inst.sg.statemem.target ~= nil and inst.sg.statemem.target.components.weighable:GetWeight()
 			or nil
@@ -934,10 +858,6 @@ AddStategraphPostInit("wilson", function(self)
 	end)
 end)
 
---------------------------------------------------------------------------------
----------------------------------- BLUEPRINT -----------------------------------
---------------------------------------------------------------------------------
-
 local function get_blueprint_string_ret(inst)
 	local ret = inst.is_rare
 			and {
@@ -951,7 +871,6 @@ local function get_blueprint_string_ret(inst)
 			}
 		or {
 			content = {
-				-- "$angri ", -- Test String
 				STRINGS.NAMES[string.upper(inst.recipetouse)] and "NAMES." .. string.upper(inst.recipetouse)
 					or "NAMES.UNKNOWN",
 				"$ ",
@@ -988,10 +907,7 @@ end
 
 AddPrefabPostInit("blueprint", blueprint_postinit)
 
---------------------------------------------------------------------------------
------------------------------------ MINISIGN -----------------------------------
---------------------------------------------------------------------------------
-
+-- Vanilla prefabs/minisign.lua:displaynamefn (763928): copy that resolves a string code in the drawn image name
 local function minisign_displaynamefn(inst)
 	return #inst._imagename:value() > 0
 			and subfmt(STRINGS.NAMES.MINISIGN_DRAWN, {
@@ -1015,6 +931,7 @@ for _, sign in ipairs(minisigns) do
 end
 
 require("components/drawingtool")
+-- Vanilla actions.lua:ACTIONS.DRAW.stroverridefn (763928): copy that resolves a string code in drawnameoverride
 ACTIONS.DRAW.stroverridefn = function(act)
 	local item = FindEntityToDraw(act.target, act.invobject)
 	local drawnameoverride = item and item.drawnameoverride
@@ -1042,7 +959,6 @@ local function spicedfoods_drawnameoverride_fn(inst)
 			food = STRCODE_HEADER .. "NAMES." .. string.upper(inst.nameoverride),
 		},
 	}
-	-- subfmt(STRINGS.NAMES[data.spice.."_FOOD"], { food = STRINGS.NAMES[string.upper(inst.nameoverride)] })
 	inst.drawnameoverride = inst.drawnameoverride or EncodeStrCode(drawnameoverride)
 end
 
@@ -1066,10 +982,6 @@ local function add_drawname_override(inst)
 end
 
 AddPrefabPostInitAny(add_drawname_override)
-
---------------------------------------------------------------------------------
------------------------------------- SKETCH ------------------------------------
---------------------------------------------------------------------------------
 
 local function get_sketch_string_fn(inst)
 	local ret = {
@@ -1106,10 +1018,6 @@ for i = 1, #sketch_prefabs do
 	AddPrefabPostInit(sketch_prefabs[i], sketch_postinit)
 end
 
---------------------------------------------------------------------------------
--------------------------------- POSSIBLENAMES ---------------------------------
---------------------------------------------------------------------------------
-
 local function rename_possiblenames(inst)
 	inst.components.named:PickNewName()
 end
@@ -1126,7 +1034,6 @@ local function insert_possiblenames(table, index, strcode)
 end
 
 local possiblenames_prefabs = {
-	-- ["mooseegg"] = {"NAMES.MOOSEEGG", "NAMES.MOOSENEST"},
 	["moose"] = "NAMES.MOOSE",
 	["bunnyman"] = "BUNNYMANNAMES.",
 	["carnival_crowkid"] = "CROWNAMES.",
@@ -1158,7 +1065,6 @@ for prefab, strcode in pairs(possiblenames_prefabs) do
 	do_possiblenames_postinit(prefab, strcode)
 end
 
--- local override_moose_strings
 scheduler:ExecuteInTime(0, function()
 	local moose_languages = { "zh", "zht", "chs" }
 	for i = 1, #moose_languages do
@@ -1169,7 +1075,6 @@ scheduler:ExecuteInTime(0, function()
 			STRINGS.NAMES.MOOSEEGG2 = "麋鹿鹅蛋"
 			STRINGS.NAMES.MOOSENEST1 = "麋鹿鸭巢"
 			STRINGS.NAMES.MOOSENEST2 = "麋鹿鹅巢"
-			-- print("Moose Strings Hack!")
 		end
 	end
 end)
@@ -1177,7 +1082,6 @@ end)
 do_possiblenames_postinit("mooseegg", "NAMES.MOOSEEGG", { STRINGS.NAMES["MOOSEEGG1"], STRINGS.NAMES["MOOSEEGG2"] })
 do_possiblenames_postinit("mooseegg", "NAMES.MOOSENEST", { STRINGS.NAMES["MOOSENEST1"], STRINGS.NAMES["MOOSENEST2"] })
 
--- Fix string hack after loading.
 AddPrefabPostInit("mooseegg", function(inst)
 	if not TheWorld.ismastersim then
 		return

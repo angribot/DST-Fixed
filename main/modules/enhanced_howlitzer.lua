@@ -24,7 +24,8 @@ end)
 
 AddPrefabPostInit("moonglass", function(inst)
 	inst:AddTag("blowpipeammo")
-	inst:AddTag("reloaditem_ammo") -- Action string.
+	-- Vanilla actions.lua:ACTIONS.CHANGE_TACKLE.strfn (763928): labels reloaditem_ammo items as ammo
+	inst:AddTag("reloaditem_ammo")
 end)
 
 local function auto_refill(inst, prev_item_prefab)
@@ -34,8 +35,6 @@ local function auto_refill(inst, prev_item_prefab)
 	local owner = inst.components.inventoryitem.owner
 	local inv = owner.components.inventory
 	local container = inst.components.container
-	local hat = inv and inv:GetEquippedItem(EQUIPSLOTS.HEAD)
-	-- local hat_container = hat and hat.prefab == "alterguardianhat" and hat.components.container
 	local item_fn = function(item)
 		return item.prefab == prev_item_prefab
 	end
@@ -43,16 +42,9 @@ local function auto_refill(inst, prev_item_prefab)
 	if new_item then
 		inv:RemoveItem(new_item, true)
 		container:GiveItem(new_item)
-		-- elseif hat_container then
-		--     local new_hat_item = hat_container:FindItem(item_fn)
-		--     if new_hat_item then
-		--         hat_container:RemoveItem(new_hat_item, true)
-		--         container:GiveItem(new_hat_item)
-		--     end
 	end
 end
 
--- [[ Upgradeable]] --
 local function on_upgrade(inst, doer, upgraded_from_item)
 	local numupgrades = inst.components.upgradeable.numupgrades
 	if numupgrades == 1 then
@@ -100,7 +92,6 @@ local function displaynamefn(inst)
 		or (STRINGS.NAMES.HOUNDSTOOTH_BLOWPIPE .. " +")
 end
 
-----------------------
 AddPrefabPostInit("houndstooth_blowpipe", function(inst)
 	inst.displaynamefn = displaynamefn
 

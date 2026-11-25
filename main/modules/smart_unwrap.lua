@@ -1,9 +1,6 @@
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
--- Well, I really don't like overriding this much,
--- but I can't think of a better way ):
-
 local Unwrappable = require("components/unwrappable")
 
 local function NoHoles(pt)
@@ -15,6 +12,7 @@ local function DoUnwrap(inst, self, doer)
 end
 
 local Unwrap = Unwrappable.Unwrap
+-- Vanilla components/unwrappable.lua:Unwrappable:Unwrap (763928): copy for held bundles that gives the items to the holder's container or the doer, returns the bundle to its slot, and passes should_give and grandowner_container to onunwrappedfn
 function Unwrappable:Unwrap(doer, nodelay, ...)
 	local doer_container = doer and (doer.components.container or doer.components.inventory)
 	local owner = self.inst.components.inventoryitem and self.inst.components.inventoryitem:GetGrandOwner()
@@ -58,10 +56,8 @@ function Unwrappable:Unwrap(doer, nodelay, ...)
 			return
 		end
 
-		-- Changed Part
 		local owner_pos = position_owner ~= owner and pos or owner:GetPosition()
 		removed_from_inv = self.inst.components.inventoryitem:RemoveFromOwner(true) ~= nil
-		-- Changed Part
 
 		local creator = self.origin and TheWorld.meta.session_identifier ~= self.origin and { sessionid = self.origin } or nil
 		for i, v in ipairs(self.itemdata) do
@@ -73,7 +69,6 @@ function Unwrappable:Unwrap(doer, nodelay, ...)
 					item.Transform:SetPosition(pos:Get())
 				end
 				item:SetPersistData(v.data)
-				-- Changed Part
 				if item.components.inventoryitem then
 					if item.prefab == "giftsurprise" then
 						item.components.inventoryitem:OnDropped(true, 0.5)
@@ -82,14 +77,13 @@ function Unwrappable:Unwrap(doer, nodelay, ...)
 					end
 				end
 				item:PushEvent("unwrappeditem", { bundle = self.inst, doer = doer })
-				-- Changed Part
 			end
 		end
 		self.itemdata = nil
 	end
 	self.inst:PushEvent("unwrapped", { doer = doer })
 	if self.onunwrappedfn then
-		self.onunwrappedfn(self.inst, pos, doer, true, grandowner_container) -- Added two new params: should_give, grandowner_container
+		self.onunwrappedfn(self.inst, pos, doer, true, grandowner_container)
 	end
 
 	if removed_from_inv and self.inst:IsValid() and owner:IsValid() then
@@ -103,7 +97,8 @@ AddPrefabPostInit("bundle", function(inst)
 	end
 
 	local onunwrappedfn = inst.components.unwrappable.onunwrappedfn
-	inst.components.unwrappable:SetOnUnwrappedFn(function(inst, pos, doer, should_give, grandowner_container) -- Last two params are from our overrided Unwrappable.Unwrap
+	-- Vanilla prefabs/bundle.lua:OnUnwrapped (763928): copy that gives the Wax Paper to the holder's container or the doer when should_give is set
+	inst.components.unwrappable:SetOnUnwrappedFn(function(inst, pos, doer, should_give, grandowner_container)
 		if not should_give then
 			return onunwrappedfn(inst, pos, doer)
 		end

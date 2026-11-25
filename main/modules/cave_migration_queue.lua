@@ -1,5 +1,4 @@
--- Adapted from No More Cave Bug 1.5 by Cutlass.
--- https://steamcommunity.com/sharedfiles/filedetails/?id=3828908041
+-- Adapted from No More Cave Bug 1.5 by Cutlass: https://steamcommunity.com/sharedfiles/filedetails/?id=3828908041
 local _G = GLOBAL
 local NAMESPACE = "DSTFixedCaveMigrationQueue"
 local maxwaittime = 30
@@ -72,17 +71,17 @@ AddModRPCHandler(NAMESPACE, "ready", function(userid)
 end)
 _G.MarkUserIDRPC(NAMESPACE, "ready")
 
--- Delay the engine's loading-complete handshake until the server grants a slot.
 if not _G.TheNet:GetIsServer() then
 	local Net = _G.getmetatable(_G.TheNet).__index
 	local _DoneLoadingMap = Net.DoneLoadingMap
-	Net.DoneLoadingMap = function(net)
+	local function DoneLoadingMapOnceSlotGranted(net)
 		resume = function()
 			_DoneLoadingMap(net)
 		end
 		SendModRPCToServer(GetModRPC(NAMESPACE, "ready"))
 		StartGateTimer(maxwaittime)
 	end
+	Net.DoneLoadingMap = DoneLoadingMapOnceSlotGranted
 	return
 end
 
@@ -91,8 +90,7 @@ local StartMigration
 local pending = {}
 local gated = {}
 local authed = {}
--- Only the master shard coordinates this shared FIFO for migrations and loading gates.
-local queue = {}
+local master_queue = {}
 local holder
 local holder_shardid
 local holder_dest
@@ -127,8 +125,8 @@ local function Arrived(userid, shardid, spawned)
 		return
 	end
 	if holder_dest ~= nil then
-		-- A migration completes at destination authentication, not at source departure.
-		if spawned or shardid ~= holder_dest then
+		local authenticated_at_destination = not spawned and shardid == holder_dest
+		if not authenticated_at_destination then
 			return
 		end
 	elseif shardid == MASTER then
@@ -183,7 +181,7 @@ GrantNext = function()
 	if holder ~= nil then
 		return
 	end
-	local entry = table.remove(queue, 1)
+	local entry = table.remove(master_queue, 1)
 	if entry == nil then
 		return
 	end
@@ -197,7 +195,7 @@ GrantNext = function()
 	else
 		SendModRPCToShard(GetShardModRPC(NAMESPACE, "grant"), entry.shardid, entry.userid)
 	end
-	for i, v in ipairs(queue) do
+	for i, v in ipairs(master_queue) do
 		if v.dest == nil then
 			if v.shardid == myshard then
 				SendWaiting(v.userid)
@@ -209,7 +207,7 @@ GrantNext = function()
 end
 
 local function Enqueue(userid, shardid, dest)
-	table.insert(queue, { userid = userid, shardid = tostring(shardid), dest = dest ~= nil and tostring(dest) or nil })
+	table.insert(master_queue, { userid = userid, shardid = tostring(shardid), dest = dest ~= nil and tostring(dest) or nil })
 	GrantNext()
 	return holder ~= userid
 end
@@ -255,9 +253,9 @@ end)
 local function OnShardDisconnected(world_id)
 	if _G.Shard_IsMaster() then
 		world_id = tostring(world_id)
-		for i = #queue, 1, -1 do
-			if queue[i].shardid == world_id then
-				table.remove(queue, i)
+		for i = #master_queue, 1, -1 do
+			if master_queue[i].shardid == world_id then
+				table.remove(master_queue, i)
 			end
 		end
 		if holder_shardid == world_id then

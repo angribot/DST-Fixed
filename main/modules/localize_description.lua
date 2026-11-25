@@ -1,6 +1,5 @@
 local AddPlayerPostInit = AddPlayerPostInit
 local AddPrefabPostInit = AddPrefabPostInit
--- local AddPrefabPostInitAny = AddPrefabPostInitAny
 local AddClassPostConstruct = AddClassPostConstruct
 local modimport = modimport
 GLOBAL.setfenv(1, GLOBAL)
@@ -136,7 +135,7 @@ local function GetDescriptionCodes(character, inst, item, itemname, modifier)
 		end
 	end
 
-	-- Keep the conditions and ordering in sync with GetDescription_AddSpecialCases.
+	-- Vanilla stringutil.lua:GetDescription_AddSpecialCases (763928): same announcements, conditions and order
 	if type(inst) == "table" then
 		if item.components.shadowlevel ~= nil and inst:HasTag("shadowmagic") then
 			AddAnnouncement("ANNOUNCE_SHADOWLEVEL_ITEM")
@@ -308,7 +307,6 @@ function ResolveStrCode(message)
 	return res
 end
 
--- Components Talker --
 local Talker = require("components/talker")
 
 local enable_say_parse = true
@@ -321,7 +319,7 @@ function Talker:Say(script, time, noanim, ...)
 		return TalkerSay(self, script, time, noanim, ...)
 	end
 
-	-- sgparam is the tenth argument of Talker:Say.
+	-- Vanilla components/talker.lua:Talker:Say (763928): sgparam is the tenth parameter
 	local sgparam = select(7, ...)
 	if enable_say_parse then
 		if IsStrCode(script) then
@@ -376,10 +374,7 @@ local function OnCancelSpeaker(inst, self)
 	self.str_code_speaker.strcode:set_local("")
 end
 
--- TODO: Make a net event for repeat speech
---NOTE: forcetext translates to noanim + force say
 function Talker:SpeakStrCode(strcode, time, forcetext, sgparam)
-	-- print("SpeakStrCode", strcode)
 	if self.str_code_speaker ~= nil and TheWorld.ismastersim then
 		self.str_code_speaker.strcode:set(strcode)
 		self.str_code_speaker.strtime:set(time or 0)
@@ -388,7 +383,7 @@ function Talker:SpeakStrCode(strcode, time, forcetext, sgparam)
 			self.str_code_speaker.task:Cancel()
 		end
 		self.str_code_speaker.task = self.inst:DoTaskInTime(1, OnCancelSpeaker, self)
-		-- The server stategraph handles sgparam; its resulting animation is replicated.
+		-- Vanilla components/talker.lua:sayfn (763928): passes sgparam to the ontalk event, which only server stategraphs read
 		OnSpeakerDirty(self.inst, sgparam)
 	end
 end
@@ -472,5 +467,4 @@ function Named:PickNewName()
 	end
 end
 
--- fix strings code for specified prefabs
 modimport("main/asscleaner/special_description_code")

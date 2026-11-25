@@ -69,9 +69,10 @@ end
 
 local UpvalueUtil = require("upvalueutil")
 AddSimPostInit(function()
+	-- Vanilla prefabs/beefaloherd.lua:SpawnableParent (763928): copy that skips members plugged with a Hardened Rubber Bung
 	UpvalueUtil.SetUpvalue(Prefabs["beefaloherd"].fn, "OnSpawned.SpawnableParent", function(inst)
 		for member in pairs(inst.components.herd.members) do
-			if not member.no_periodicspawn then -- Changed Part
+			if not member.no_periodicspawn then
 				if
 					member.components.domesticatable == nil
 					or (

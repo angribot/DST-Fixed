@@ -1,6 +1,10 @@
 local AddPlayerPostInit = AddPlayerPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
+local function IsStillUsingTool(doer)
+	return doer.components.magician.item ~= nil
+end
+
 local USEMAGICTOOL_fn = ACTIONS.USEMAGICTOOL.fn
 ACTIONS.USEMAGICTOOL.fn = function(act)
 	if USEMAGICTOOL_fn(act) then
@@ -12,9 +16,7 @@ ACTIONS.USEMAGICTOOL.fn = function(act)
 		then
 			act.doer.components.sanity:DoDelta(-15)
 		end
-		-- The sanity cost can stop the tool, e.g. by killing a character whose
-		-- sanity loss is redirected to health.
-		return act.doer.components.magician.item ~= nil
+		return IsStillUsingTool(act.doer)
 	end
 end
 

@@ -2,32 +2,16 @@ local AddComponentPostInit = AddComponentPostInit
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
--- Confirmed in DST build 762172: some vanilla code repeats the same work every
--- frame or for every item, which adds up in large, long-running worlds. Each
--- patch below skips repeated work and leaves its results unchanged.
--- After a game update, recheck the functions named in each section, and remove
--- a patch once vanilla stops repeating that work.
 local UpvalueUtil = require("upvalueutil")
 
---------------------------------------------------------------------------
--- W.O.B.O.T. and W.I.N.bot container search
-
--- FindItemToPickupAndStore in scripts/prefabs/storage_robot_common.lua runs
--- FindContainerWithItem for each item on the ground, and each run queries the
--- nearby containers again and scans every slot. An idle W.I.N.bot repeats the
--- whole search every 3 seconds (TryReactivate in winona_storage_robot.lua). This
--- patch keeps the container lookups for the duration of one
--- FindItemToPickupAndStore call: one container query, the item-independent
--- checks once per container, and Has once per container and prefab. It returns
--- the same container as vanilla: all checks are read-only queries, so their
--- results cannot change within the call, and containers are still tried in
--- FindEntities order.
-
+-- Vanilla prefabs/storage_robot_common.lua:FindItemToPickupAndStore (763928): runs FindContainerWithItem for each item on the ground
+-- Vanilla prefabs/storage_robot_common.lua:FindContainerWithItem (763928): queries the nearby containers and scans every slot on each call
+-- Vanilla prefabs/winona_storage_robot.lua:TryReactivate (763928): repeats the whole search every 3 seconds while idle
 local function PatchStorageRobotSearch()
 	local StorageRobotCommon = require("prefabs/storage_robot_common")
 	local FindItemToPickupAndStore = StorageRobotCommon.FindItemToPickupAndStore
 	local FindContainerWithItem = StorageRobotCommon.FindContainerWithItem
-	-- Klei marks these fields as not guaranteed to stay.
+	-- Vanilla prefabs/storage_robot_common.lua:FindContainerWithItem (763928): reads these from exports Klei marks as not guaranteed to stay
 	local CONTAINER_MUST_TAGS = StorageRobotCommon.CONTAINER_MUST_TAGS
 	local CONTAINER_CANT_TAGS = StorageRobotCommon.CONTAINER_CANT_TAGS
 	local ALLOWED_CONTAINER_TYPES = StorageRobotCommon.ALLOWED_CONTAINER_TYPES
@@ -35,10 +19,8 @@ local function PatchStorageRobotSearch()
 		return
 	end
 
-	-- Lookups for the FindItemToPickupAndStore call in progress.
-	local search = nil
+	local call_lookups = nil
 
-	-- The FindContainerWithItem checks that do not depend on the item.
 	local function IsStorageContainer(ent, platform)
 		local container = ent.components.container
 		return container ~= nil
@@ -49,9 +31,8 @@ local function PatchStorageRobotSearch()
 			and ent:GetCurrentPlatform() == platform
 	end
 
-	-- Containers passing the item-independent checks, in FindEntities order.
 	local function GetStorageContainers(inst)
-		if search.containers == nil then
+		if call_lookups.containers == nil then
 			local x, y, z = StorageRobotCommon.GetSpawnPoint(inst):Get()
 			local platform = inst:GetCurrentPlatform()
 			local containers = {}
@@ -61,13 +42,13 @@ local function PatchStorageRobotSearch()
 					table.insert(containers, ent)
 				end
 			end
-			search.containers = containers
+			call_lookups.containers = containers
 		end
-		return search.containers
+		return call_lookups.containers
 	end
 
 	local function GetContainersWithPrefab(inst, prefab)
-		local containers = search.byprefab[prefab]
+		local containers = call_lookups.byprefab[prefab]
 		if containers == nil then
 			containers = {}
 			for _, ent in ipairs(GetStorageContainers(inst)) do
@@ -75,13 +56,13 @@ local function PatchStorageRobotSearch()
 					table.insert(containers, ent)
 				end
 			end
-			search.byprefab[prefab] = containers
+			call_lookups.byprefab[prefab] = containers
 		end
 		return containers
 	end
 
 	StorageRobotCommon.FindContainerWithItem = function(inst, item, count, ...)
-		if search == nil then
+		if call_lookups == nil then
 			return FindContainerWithItem(inst, item, count, ...)
 		end
 
@@ -95,34 +76,19 @@ local function PatchStorageRobotSearch()
 	end
 
 	StorageRobotCommon.FindItemToPickupAndStore = function(inst, ...)
-		search = { byprefab = {} }
+		call_lookups = { byprefab = {} }
 		local item, container = FindItemToPickupAndStore(inst, ...)
-		search = nil
+		call_lookups = nil
 		return item, container
 	end
 end
 
---------------------------------------------------------------------------
--- Thermal Stone local temperature
-
--- Temperature:OnUpdate calls GetTemperatureAtXZ every frame, which measures the
--- distance to every enabled temperatureoverrider (Ice Crystaleyezers, the
--- Shrouded Queen's arena). Each update then pushes "temperaturedelta", and the
--- Thermal Stone's handler (TemperatureChange in scripts/prefabs/heatrock.lua)
--- calls GetLocalTemperature at the same position, measuring every distance
--- again. Thermal Stones keep updating while asleep and inside containers.
--- This patch:
--- - inlines EntityScript:GetDistanceSqToPoint and math2d.DistSq in the loop,
---   with the same arithmetic, comparisons and iteration order;
--- - during one Temperature:OnUpdate, reuses the result of the last lookup for a
---   repeated lookup at the same point. Overriders change only on player actions
---   and spawns, never inside an update, so the reused result is the one vanilla
---   would compute.
-
+-- Vanilla components/temperature.lua:Temperature:OnUpdate (763928): calls GetTemperatureAtXZ every frame, even for sleeping or stored Thermal Stones
+-- Vanilla prefabs/heatrock.lua:TemperatureChange (763928): looks up the temperature at the same point again on each temperaturedelta
 local function PatchTemperatureLookup()
 	local overriders = UpvalueUtil.GetUpvalue(GetTemperatureAtXZ, "_overriders")
 
-	-- Same as vanilla GetTemperatureAtXZ in scripts/components/temperatureoverrider.lua.
+	-- Vanilla components/temperatureoverrider.lua:GetTemperatureAtXZ (763928): copy with GetDistanceSqToPoint and math2d.DistSq inlined
 	local function LookupTemperatureAtXZ(x, z)
 		local mindsq = math.huge
 		local closest_ent = nil
@@ -167,25 +133,13 @@ local function PatchTemperatureLookup()
 	function Temperature:OnUpdate(...)
 		in_temperature_update = true
 		OnUpdate(self, ...)
-		-- When updates nest, this also ends reuse for the rest of the outer
-		-- update, which only costs repeated lookups.
 		in_temperature_update = false
 		ForgetLastLookup()
 	end
 end
 
---------------------------------------------------------------------------
--- Global map icons of structures
-
--- TrackEntity in scripts/prefabs/globalmapicon.lua makes the icon copy its
--- target's position every frame, and the icon never sleeps. These structures
--- move only as platform followers of a boat (EntityScript:AddPlatformFollower),
--- so while one is asleep and not on a boat, its icon stops updating, and resumes
--- when the structure wakes. Vanilla skips the updates entirely for an icon that
--- can never move (oceanwhirlbigportal.lua passes noupdate).
--- The check waits a tick: a structure loaded on a boat becomes its platform
--- follower only in that tick's WalkablePlatformManager:PostUpdate, which runs
--- after the icon is created and possibly after the structure falls asleep.
+-- Vanilla prefabs/globalmapicon.lua:TrackEntity (763928): copies the target's position every frame unless passed noupdate, and the icon never sleeps
+-- Vanilla components/walkableplatformmanager.lua:WalkablePlatformManager:PostUpdate (763928): attaches a structure loaded on a boat only after its icon exists
 local STATIC_ICON_TARGETS = {
 	deerclopseyeball_sentryward = true,
 	moondial = true,
@@ -222,20 +176,11 @@ AddPrefabPostInit("globalmapicon", function(inst)
 			inst:StartUpdatingComponent(updatelooper)
 		end, target)
 
-		-- Icons are created after their target, which may already be asleep.
 		OnTargetSleep()
 	end
 end)
 
---------------------------------------------------------------------------
--- Boat health trend
-
--- HealthSyncer:OnUpdate in scripts/components/healthsyncer.lua recomputes the
--- health trend arrow every frame, and the component never stops updating.
--- Only teammate health badges read the arrow (teammatehealthbadge.lua); the boat
--- health meter reads only the health percent, which health events keep in sync.
--- Boats stop updating the arrow while asleep, and resume when they wake.
-
+-- Vanilla components/healthsyncer.lua:HealthSyncer:OnUpdate (763928): recomputes the trend arrow every frame, which only teammate health badges read
 local function HealthSyncerOnEntitySleep(self)
 	if self.inst.components.walkableplatform ~= nil then
 		self.inst:StopUpdatingComponent(self)
@@ -258,8 +203,6 @@ AddComponentPostInit("healthsyncer", function(self, inst)
 	self.OnEntitySleep = HealthSyncerOnEntitySleep
 	self.OnEntityWake = HealthSyncerOnEntityWake
 end)
-
---------------------------------------------------------------------------
 
 PatchStorageRobotSearch()
 PatchTemperatureLookup()

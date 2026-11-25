@@ -51,13 +51,10 @@ local function OnCyclesChanged(inst)
 		inst.AnimState:PlayAnimation("gravedirt")
 
 		inst._light = SpawnPrefab("chesterlight")
-		-- The dawn autosave runs 1 second after "cycles" changes (autosaver.lua),
-		-- and the light removes itself only after 4 seconds, so every light would
-		-- otherwise be saved.
+		-- Vanilla components/autosaver.lua:OnSave (763928): saves 1 second after "cycles" changes, before this beam removes itself
 		inst._light.persists = false
 		inst._light.Transform:SetPosition(inst.Transform:GetWorldPosition())
 		inst._light:TurnOn()
-		-- inst.SoundEmitter:PlaySound("dontstarve/creatures/chester/raise")
 
 		inst._light:DoTaskInTime(2, turnoff)
 	end

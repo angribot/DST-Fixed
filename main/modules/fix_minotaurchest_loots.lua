@@ -3,24 +3,23 @@ GLOBAL.setfenv(1, GLOBAL)
 
 local UpvalueUtil = require("upvalueutil")
 
+-- Vanilla prefabs/minotaur.lua:dospawnchest (763928): loot table without the Thulecite Club, Star Caller's Staff, amulets and Gears
 local chest_loot = {
-	{ item = { "armorruins", "ruinshat" }, count = 1 }, -- {item = {"armorruins", "ruinshat", "ruins_bat"}, count = 1},
-	{ item = { "orangestaff" }, count = 1 }, -- {item = {"orangestaff", "yellowstaff"}, count = 1},
-	-- {item = {"orangeamulet", "yellowamulet"}, count = 1},
+	{ item = { "armorruins", "ruinshat" }, count = 1 },
+	{ item = { "orangestaff" }, count = 1 },
 	{ item = { "yellowgem" }, count = { 2, 4 } },
 	{ item = { "orangegem" }, count = { 2, 4 } },
 	{ item = { "greengem" }, count = { 2, 3 } },
 	{ item = { "thulecite" }, count = { 8, 14 } },
 	{ item = { "thulecite_pieces" }, count = { 12, 36 } },
-	-- {item = {"gears"}, count = {3, 6}},
 }
 
+-- Vanilla prefabs/minotaur.lua:dospawnchest (763928): copy that gives every loot entry instead of a random pick
 local function dospawnchest(inst, loading)
 	local chest = SpawnPrefab("minotaurchest")
 	local x, y, z = inst.Transform:GetWorldPosition()
 	chest.Transform:SetPosition(x, 0, z)
 
-	--Set up chest loot
 	if not WORLDSTATETAGS.GetTagEnabled("ATRIUM_KEY_FOUND") then
 		chest.components.container:GiveItem(SpawnPrefab("atrium_key"))
 	end
@@ -29,8 +28,6 @@ local function dospawnchest(inst, loading)
 	for i, _ in ipairs(chest_loot) do
 		table.insert(loot_keys, i)
 	end
-	-- local max_loots = math.min(#chest_loot, chest.components.container.numslots - 1)
-	-- loot_keys = PickSome(math.random(max_loots - 2, max_loots), loot_keys)
 
 	for _, i in ipairs(loot_keys) do
 		local loot = chest_loot[i]
@@ -42,7 +39,6 @@ local function dospawnchest(inst, loading)
 			chest.components.container:GiveItem(item)
 		end
 	end
-	--
 
 	if not chest:IsAsleep() then
 		chest.SoundEmitter:PlaySound("dontstarve/common/ghost_spawn")

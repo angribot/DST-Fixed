@@ -10,12 +10,6 @@ SB = {}
 
 modimport("main/showbundle_widgetcreation.lua")
 
--- Default Values:
--- pos:         Vector3(0, 95)
--- scale:       0.52 (0.6 will be as same as normal slot size)
--- slot_scale:  1
--- bg_scale:    1
-
 SB.supported_items = {
 	bundle = {},
 	gift = {},
@@ -25,7 +19,7 @@ SB.supported_items = {
 	redpouch_yotb = {},
 	redpouch_yot_catcoon = {},
 	redpouch_yotr = {},
-	myth_bundle = {}, -- For Myth mod
+	myth_bundle = {},
 	alterguardianhat = {
 		prefab = "showbundle_alterguardianhat",
 		is_container = true,
@@ -79,7 +73,6 @@ local function make_itemdata(items)
 				data.recharge = percent ~= 1 and percent or nil
 			end
 
-			-- Spoil check
 			if item:HasTag("show_spoiled") then
 				data.show_spoiled = true
 			end
@@ -96,9 +89,7 @@ local function make_itemdata(items)
 				end
 			end
 
-			-- Fix spiced foods
 			if c.edible and c.edible.spice and item.nameoverride then
-				--print(item.nameoverride)
 				data.nameoverride = item.nameoverride
 			end
 			itemdata[slot] = data
@@ -135,7 +126,6 @@ local function handle_redpouch_data(target, data)
 end
 
 local function make_itemdata_for_unwrappable(unwrappable)
-	-- print("make_itemdata_for", unwrappable.inst)
 	if unwrappable and unwrappable.itemdata then
 		local items = {}
 		local creator = unwrappable.origin
@@ -163,7 +153,6 @@ local function refresh_all_bundle_data()
 	end
 end
 
--- Override Unwrappable:WrapItems() to record extra data while making bundle
 local Unwrappable = require("components/unwrappable")
 
 local wrap_items = Unwrappable.WrapItems
@@ -174,26 +163,21 @@ function Unwrappable:WrapItems(items, doer, ...)
 	end
 end
 
+local function HasEmptyEntry(showbundle_itemdata)
+	for _, data in ipairs(showbundle_itemdata) do
+		if IsTableEmpty(data) then
+			return true
+		end
+	end
+	return false
+end
+
 local onload = Unwrappable.OnLoad or function() end
 function Unwrappable:OnLoad(data, ...)
 	local ret = onload(self, data, ...)
 	if self.itemdata then
-		local should_regenerate_itemdata = false
-		if not self.itemdata.showbundle_itemdata then
-			-- Migrate bundles made before this mod is enabled
-			should_regenerate_itemdata = true
-		else
-			-- Klei changed Unwrappable:WrapItems to take strings,
-			-- so some old ones contain bad data,
-			-- we need to catch them here and refresh the bundle data in that case
-			for _, data in ipairs(self.itemdata.showbundle_itemdata) do
-				if IsTableEmpty(data) then
-					should_regenerate_itemdata = true
-					break
-				end
-			end
-		end
-		if should_regenerate_itemdata then
+		local showbundle_itemdata = self.itemdata.showbundle_itemdata
+		if not showbundle_itemdata or HasEmptyEntry(showbundle_itemdata) then
 			make_itemdata_for_unwrappable(self)
 		end
 	end
@@ -219,10 +203,6 @@ local function should_show_tip(target)
 		and (not data.is_container or target.replica.container and not target.replica.container:IsOpenedBy(ThePlayer))
 end
 
--- Refresh/invalidate tipbox for containers (because items inside container can change)
--- when changing target or after 1s
--- Always show tipbox for others (currently unwrappables only)
-
 local last_target
 
 local function send_showbundle_request(target)
@@ -235,13 +215,9 @@ local function should_invalidate_last_data(target)
 end
 
 local function show_tip(target)
-	-- Invalidate show bundle data on moving focus away and when the data is stale
-	-- (can happen because we add in itemdata asynchronously)
 	if target ~= last_target then
-		-- Moving target away
 		if last_target and last_target.replica.container then
 			last_target.showbundle_itemdata = nil
-		-- Invalidate stale data
 		elseif target and target.replica.container and should_invalidate_last_data(target) then
 			target.showbundle_itemdata = nil
 		end
@@ -287,12 +263,10 @@ local function text_on_show()
 
 	local hoverinst = TheInput.hoverinst
 	if hoverinst and hoverinst.entity:IsValid() and hoverinst.entity:IsVisible() then
-		-- None UI entity
 		if hoverinst.Transform then
 			show_tip(hoverinst)
 			return
 		end
-		-- UI entity
 		local parent = hoverinst.widget and hoverinst.widget.parent
 		if parent and parent.is_a and parent:is_a(ItemTile) then
 			local item = parent.item
@@ -321,9 +295,7 @@ end)
 
 local function serialize(data_table)
 	local serialized = DataDumper(data_table, nil, true)
-	-- return {data}, remove return {} part
-	-- 123456789
-	return string.sub(serialized, 9, -2)
+	return string.sub(serialized, #"return {" + 1, -2)
 end
 
 local function unserialize(data_str)
@@ -335,7 +307,6 @@ local function unserialize(data_str)
 	end
 end
 
--- RPC data handler
 AddClientModRPCHandler(modname, "ShowBundleCallback", function(target, data)
 	target.showbundle_itemdata = unserialize(data) or {}
 	if target == last_target then
@@ -358,10 +329,6 @@ AddModRPCHandler(modname, "ShowBundle", function(player, target)
 		itemdata = make_itemdata(target.components.container.slots)
 	end
 	itemdata = handle_redpouch_data(target, itemdata) or itemdata
-	-- Test code for simulating network delay
-	-- player:DoTaskInTime(1, function()
-	--     SendModRPCToClient(CLIENT_MOD_RPC[modname]["ShowBundleCallback"], player.userid, target, serialize(itemdata))
-	-- end)
 	SendModRPCToClient(CLIENT_MOD_RPC[modname]["ShowBundleCallback"], player.userid, target, serialize(itemdata))
 end)
 

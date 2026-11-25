@@ -9,7 +9,6 @@ local prefab = {
 	"winter_ornament_light8",
 }
 
--------------------------------
 local function onbuilt(inst, builder)
 	local num = math.random(1, 8)
 	local item = SpawnPrefab("winter_ornament_light" .. num)
@@ -18,8 +17,8 @@ local function onbuilt(inst, builder)
 	inst:Remove()
 end
 
+-- Vanilla prefabs/critters.lua:MakeBuilder (763928): copy without the pet type
 local function MakeBuilder(prefab)
-	-- body
 	local function fn()
 		local inst = CreateEntity()
 
@@ -27,10 +26,8 @@ local function MakeBuilder(prefab)
 
 		inst:AddTag("CLASSIFIED")
 
-		--[[Non-networked entity]]
 		inst.persists = false
 
-		--Auto-remove if not spawned by builder
 		inst:DoTaskInTime(0, inst.Remove)
 
 		if not TheWorld.ismastersim then
@@ -44,7 +41,5 @@ local function MakeBuilder(prefab)
 
 	return Prefab(prefab .. "_builder", fn)
 end
-
----------------------------------------
 
 return MakeBuilder("winter_light")

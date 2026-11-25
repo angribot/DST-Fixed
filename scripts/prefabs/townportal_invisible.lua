@@ -1,7 +1,6 @@
 require("prefabutil")
 
 local assets = {
-	-- Asset("ANIM", "anim/townportal.zip"),
 	Asset("MINIMAP_IMAGE", "townportalactive"),
 }
 
@@ -16,34 +15,8 @@ local prefabs = {
 	"townportalsandcoffin_fx",
 }
 
-local function OnEntityWake(inst)
-	--     if inst.playingsound and not (inst:IsAsleep() or inst.SoundEmitter:PlayingSound("active")) then
-	--         inst.SoundEmitter:PlaySound("dontstarve/common/together/town_portal/talisman_active", "active")
-	--     end
-end
-
-local function OnEntitySleep(inst)
-	--     inst.SoundEmitter:KillSound("active")
-end
-
-local function StartSoundLoop(inst)
-	-- if not inst.playingsound then
-	--     inst.playingsound = true
-	-- OnEntityWake(inst)
-	-- end
-end
-
-local function StopSoundLoop(inst)
-	-- if inst.playingsound then
-	--     inst.playingsound = nil
-	--     -- inst.SoundEmitter:KillSound("active")
-	-- end
-end
-
+-- Vanilla prefabs/townportal.lua:OnStartChanneling (763928): copy without the animation and sound
 local function OnStartChanneling(inst, channeler)
-	-- inst.AnimState:PlayAnimation("turn_on")
-	-- inst.AnimState:PushAnimation("idle_on_loop")
-	StartSoundLoop(inst)
 	TheWorld:PushEvent("townportalactivated", inst)
 
 	inst.MiniMapEntity:SetIcon("townportalactive.png")
@@ -62,6 +35,7 @@ local function OnStartChanneling(inst, channeler)
 	end
 end
 
+-- Vanilla prefabs/townportal.lua:OnStopChanneling (763928): copy that also removes the portal 10 seconds later
 local function OnStopChanneling(inst, aborted)
 	TheWorld:PushEvent("townportaldeactivated", inst)
 
@@ -82,6 +56,7 @@ local function OnStopChanneling(inst, aborted)
 	end)
 end
 
+-- Vanilla prefabs/townportal.lua:OnLinkTownPortals (763928): copy without the animation and sound
 local function OnLinkTownPortals(inst, other)
 	inst.components.teleporter:Target(other)
 	if inst.components.channelable:IsChanneling() then
@@ -89,18 +64,9 @@ local function OnLinkTownPortals(inst, other)
 	else
 		inst.components.channelable:SetEnabled(other == nil)
 	end
-
-	-- if other then
-	-- inst.AnimState:PlayAnimation("turn_on")
-	-- inst.AnimState:PushAnimation("idle_on_loop")
-	-- StartSoundLoop(inst)
-	-- else
-	--     inst.AnimState:PlayAnimation("turn_off")
-	--     inst.AnimState:PushAnimation("idle_off")
-	--     StopSoundLoop(inst)
-	-- end
 end
 
+-- Vanilla prefabs/townportal.lua:OnStartTeleporting (763928): copy
 local function OnStartTeleporting(inst, doer)
 	if doer:HasTag("player") then
 		if doer.components.talker then
@@ -112,47 +78,14 @@ local function OnStartTeleporting(inst, doer)
 	end
 end
 
+-- Vanilla prefabs/townportal.lua:OnExitingTeleporter (763928): copy
 local function OnExitingTeleporter(inst, obj)
 	if obj and obj:HasTag("player") then
-		obj:DoTaskInTime(1, obj.PushEvent, "townportalteleport") -- for wisecracker
+		obj:DoTaskInTime(1, obj.PushEvent, "townportalteleport")
 	end
 end
 
--- local function onhammered(inst)
---     inst.components.lootdropper:DropLoot()
---     local fx = SpawnPrefab("collapse_small")
---     fx.Transform:SetPosition(inst.Transform:GetWorldPosition())
---     fx:SetMaterial("metal")
---     inst:Remove()
--- end
-
--- local function onhit(inst)
---     if inst.components.channelable:IsChanneling() then
---         inst.components.channelable:StopChanneling(true)
---         inst.AnimState:PlayAnimation("hit_on")
---     else
---         if inst.components.teleporter.targetTeleporter then
---             TheWorld:PushEvent("townportaldeactivated")
---             inst.AnimState:PlayAnimation("hit_on")
---         else
---             inst.AnimState:PlayAnimation("hit_off")
---         end
---     end
---     inst.AnimState:PushAnimation("idle_off")
--- end
-
--- local function onbuilt(inst)
---     inst.SoundEmitter:PlaySound("dontstarve/common/together/town_portal/craft")
---     inst.AnimState:PlayAnimation("place")
---     inst.AnimState:PushAnimation("idle_off")
-
---     if inst.components.teleporter.targetTeleporter then
---         inst.AnimState:PushAnimation("turn_on", false)
---         inst.AnimState:PushAnimation("idle_on_loop")
---         StartSoundLoop(inst)
---     end
--- end
-
+-- Vanilla prefabs/townportal.lua:init (763928): copy
 local function init(inst)
 	if inst.icon == nil then
 		inst.icon = SpawnPrefab("globalmapicon")
@@ -160,10 +93,12 @@ local function init(inst)
 	end
 end
 
+-- Vanilla prefabs/townportal.lua:GetStatus (763928): copy
 local function GetStatus(inst)
 	return (inst.components.channelable:IsChanneling() or inst.components.teleporter:IsActive()) and "ACTIVE" or nil
 end
 
+-- Vanilla prefabs/townportal.lua:fn (763928): unclickable copy without the art, collision, placement radius, hammering, haunting, weather buildup and inspection, removed unless channeled within 1 second
 local function fn()
 	local inst = CreateEntity()
 
@@ -177,15 +112,7 @@ local function fn()
 	inst.MiniMapEntity:SetCanUseCache(false)
 	inst.MiniMapEntity:SetDrawOverFogOfWar(true)
 
-	-- MakeObstaclePhysics(inst, .1)
-
-	-- inst.AnimState:SetBank("townportal")
-	-- inst.AnimState:SetBuild("townportal")
-	-- inst.AnimState:PlayAnimation("idle_off", true)
-	-- inst.AnimState:SetBloomEffectHandle("shaders/anim.ksh")
-
 	inst:AddTag("NOCLICK")
-	-- inst:AddTag("structure")
 	inst:AddTag("townportal")
 	MakeSnowCoveredPristine(inst)
 
@@ -194,13 +121,6 @@ local function fn()
 	if not TheWorld.ismastersim then
 		return inst
 	end
-
-	-----------------------
-	-- MakeHauntableWork(inst)
-	-- MakeSnowCovered(inst)
-
-	-------------------------
-	-- inst:AddComponent("lootdropper")
 
 	inst:AddComponent("channelable")
 	inst.components.channelable:SetChannelingFn(OnStartChanneling, OnStopChanneling)
@@ -213,13 +133,8 @@ local function fn()
 	inst.components.teleporter.travelcameratime = 2.9
 	inst.components.teleporter.travelarrivetime = 2.8
 
-	--inst:ListenForEvent("starttravelsound", StartTravelSound) -- triggered by player stategraph
 	inst:ListenForEvent("doneteleporting", OnExitingTeleporter)
 
-	-- inst:AddComponent("inspectable")
-	-- inst.components.inspectable.getstatus = GetStatus
-
-	-----------------------------
 	inst:ListenForEvent("linktownportals", OnLinkTownPortals)
 
 	TheWorld:PushEvent("ms_registertownportal", inst)
@@ -231,9 +146,6 @@ local function fn()
 			inst:Remove()
 		end
 	end)
-
-	inst.OnEntityWake = OnEntityWake
-	inst.OnEntitySleep = OnEntitySleep
 
 	return inst
 end

@@ -127,7 +127,7 @@ function Tipbox:SetData(data, force)
 	end
 end
 
-function Tipbox:UpdatePosition(x, y) -- Override
+function Tipbox:UpdatePosition(x, y)
 	local pos = Vector3(x, y)
 	local offset = Vector3(self.offset.x, self.offset.y)
 	local screen_width, screen_height = TheSim:GetScreenSize()

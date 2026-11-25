@@ -123,7 +123,7 @@ function SBItemTile:SetItemData(data)
 		end
 	end
 
-	if self.data.spoil then -- hasspoilage
+	if self.data.spoil then
 		self.spoilage:Show()
 	else
 		self.spoilage:Hide()

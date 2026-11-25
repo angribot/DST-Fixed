@@ -1,16 +1,10 @@
 GLOBAL.setfenv(1, GLOBAL)
 
--- Confirmed in DST build 761239: worm_boss.lua's OnLoad removes the tail chunk's
--- dirt_start and sets it to nil when a full-length worm is loaded. If the worm was
--- saved while digging to a new spot, the new chunk makes it longer than full length,
--- and when the head emerges there, worm_boss_util.lua's EmergeHead calls
--- chunks[1].dirt_start:IsValid() on nil.
--- After a game update, recheck EmergeHead. Remove this module and its modmain entry
--- once vanilla checks for a missing tail dirt.
+-- Vanilla prefabs/worm_boss.lua:OnLoad (763928): clears the tail's dirt_start on a full-length worm, which a worm saved mid-dig exceeds
+-- Vanilla prefabs/worm_boss_util.lua:EmergeHead (763928): calls chunks[1].dirt_start:IsValid() without a nil check
 local WORMBOSS_UTILS = require("prefabs/worm_boss_util")
 
--- EmergeHead checks IsValid() before every use of the tail's dirt_start, so this
--- stand-in is skipped like a removed entity.
+-- Vanilla prefabs/worm_boss_util.lua:EmergeHead (763928): checks IsValid() before every use of the tail's dirt_start
 local REMOVED_DIRT = {
 	IsValid = function()
 		return false

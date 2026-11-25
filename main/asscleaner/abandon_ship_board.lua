@@ -1,10 +1,7 @@
 local AddStategraphPostInit = AddStategraphPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
--- Confirmed in DST build 761239: interrupting abandon_ship_pre (e.g. armor
--- breaking) can leave the plank mounted and non-interactable. After a game
--- update, recheck the interrupted path in scripts/stategraphs/SGwilson.lua.
--- Remove this module and its modmain entry once vanilla releases that occupancy.
+-- Vanilla stategraphs/SGwilson.lua:abandon_ship_pre (763928): has no onexit, so an interruption such as armor breaking leaves the plank mounted and unusable
 AddStategraphPostInit("wilson", function(self)
 	local onexit = self.states["abandon_ship_pre"].onexit
 	self.states["abandon_ship_pre"].onexit = function(inst, ...)
@@ -12,8 +9,7 @@ AddStategraphPostInit("wilson", function(self)
 		local plank = user ~= nil and user.current_plank or nil
 		local walkingplank = plank ~= nil and plank:IsValid() and plank.components.walkingplank or nil
 
-		-- Normal abandonment already dismounts. Only release our own leftover
-		-- occupancy; never replay a completed or cancelled buffered action.
+		-- Vanilla components/walkingplank.lua:WalkingPlank:AbandonShip (763928): dismounts on the normal path, clearing doer
 		if walkingplank ~= nil and walkingplank.doer == inst then
 			user:Dismount()
 		end

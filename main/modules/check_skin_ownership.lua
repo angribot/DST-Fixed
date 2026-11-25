@@ -14,11 +14,6 @@ local FREE_CHARACTERS = {
 	"webber",
 	"winona",
 	"warly",
-	--DLC chars:
-	-- "wortox",
-	-- "wormwood",
-	-- "wurt",
-	-- "wanda",
 	"walter",
 	"wonkey",
 }
@@ -74,6 +69,7 @@ if TheNet:GetIsServer() then
 
 	local Skinner = require("components/skinner")
 
+	-- Vanilla components/skinner.lua:Skinner:SetSkinMode (763928): copy that falls back to the normal skin for every skin type
 	function Skinner:SetSkinMode(skintype, default_build)
 		skintype = skintype or self.skintype
 		local base_skin = ""
@@ -81,15 +77,13 @@ if TheNet:GetIsServer() then
 		self.skintype = skintype
 
 		if self.skin_data == nil then
-			--fix for legacy saved games with already spawned players that don't have a skin_name set
 			self:SetSkinName(self.inst.prefab .. "_none", nil, true)
 		end
 
 		if skintype == "ghost_skin" then
-			--DST characters should all be using self.skin_data, ghostbuild is legacy for mod characters
-			base_skin = self.skin_data[skintype] or self.skin_data["normal_skin"] or self.inst.ghostbuild or default_build or "ghost_" .. self.inst.prefab .. "_build" -- Changed Part
+			base_skin = self.skin_data[skintype] or self.skin_data["normal_skin"] or self.inst.ghostbuild or default_build or "ghost_" .. self.inst.prefab .. "_build"
 		else
-			base_skin = self.skin_data[skintype] or self.skin_data["normal_skin"] or default_build or self.inst.prefab -- Changed Part
+			base_skin = self.skin_data[skintype] or self.skin_data["normal_skin"] or default_build or self.inst.prefab
 		end
 
 		SetSkinsOnAnim(self.inst.AnimState, self.inst.prefab, base_skin, self.clothing, self.monkey_curse, skintype, default_build)
@@ -102,7 +96,6 @@ if TheNet:GetIsServer() then
 	end
 end
 
--- if TheNet:GetIsClient() then
 if not TheNet:IsDedicated() then
 	local check_ownership = InventoryProxy.CheckOwnership
 	function InventoryProxy:CheckOwnership(skin_name, ...)
