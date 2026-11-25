@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+usage() {
+    cat <<'EOF'
+Usage:
+  .lint/check-comments [--all]
+
+Reports Lua comments that break .lint/comments.yml. By default it checks only
+the lines added in the staged diff; --all checks every tracked Lua file.
+
+Allowed comments:
+  ---@<annotation>
+  -- <Source> <path>:<symbol> (<version>): <fact>
+  -- Adapted from <work> by <author>[: <url>]
+
+  Source         Version
+  Vanilla        game build, as in DST-scripts commit subjects
+  Glassic API    commit in its local checkout
+  Night Stories  commit in its local checkout
+
+  <path> is relative to the source's root, e.g. prefabs/mound.lua for Vanilla.
+  <symbol> names a function, or a stategraph state by its name field.
+
+Write one line per comment. Reshape our own code instead of explaining it.
+EOF
+}
+
+die() {
+    printf 'Error: %s\n' "$*" >&2
+    exit 2
+}
+
+ALL=false
+while (($#)); do
+    case "$1" in
+        --all) ALL=true ;;
+        -h | --help)
+            usage
+            exit 0
+            ;;
+        *)
+            usage >&2
+            exit 2
+            ;;
+    esac
+    shift
+done
+
+command -v ast-grep >/dev/null || die "ast-grep is required"
+command -v jq >/dev/null || die "jq is required"
+
+ROOT="$(git rev-parse --show-toplevel)"
+readonly RULE="$ROOT/.lint/comments.yml"
+cd "$ROOT"
+
+FILES=()
+if [[ "$ALL" == true ]]; then
+    while IFS= read -r -d '' file; do
+        FILES+=("$file")
+    done < <(git ls-files -z -- '*.lua')
+else
+    while IFS= read -r -d '' file; do
+        FILES+=("$file")
+    done < <(git diff --cached -z --name-only --diff-filter=ACMR -- '*.lua')
+fi
+((${#FILES[@]} > 0)) || exit 0
+
+WORK_DIR="$(mktemp -d "${TMPDIR:-/tmp}/check-comments-XXXXXX")"
+trap 'rm -rf "$WORK_DIR"' EXIT HUP INT TERM
+
+for file in "${FILES[@]}"; do
+    mkdir -p "$WORK_DIR/$(dirname "$file")"
+    if [[ "$ALL" == true ]]; then
+        cp "$file" "$WORK_DIR/$file"
+    else
+        git show ":$file" >"$WORK_DIR/$file"
+    fi
+done
+
+ADDED=null
+if [[ "$ALL" == false ]]; then
+    ADDED="$(
+        for file in "${FILES[@]}"; do
+            git diff --cached -U0 --no-color -- "$file" |
+                sed -n 's/^@@ -[0-9,]* +\([0-9]*\)\(,\([0-9]*\)\)\{0,1\} @@.*$/\1 \3/p' |
+                while read -r start count; do
+                    printf '%s\t%s\t%s\n' "$file" "$start" "${count:-1}"
+                done
+        done | jq -R -s '[split("\n")[] | select(length > 0) | split("\t") | {file: .[0], start: (.[1] | tonumber), count: (.[2] | tonumber)}]'
+    )"
+fi
+
+FINDINGS="$(
+    cd "$WORK_DIR"
+    ast-grep scan --rule "$RULE" --json=stream "${FILES[@]}" |
+        jq -r --argjson added "$ADDED" '
+            .file as $file
+            | (.range.start.line + 1) as $first
+            | (.range.end.line + 1) as $last
+            | select($added == null or any($added[]; .file == $file and .count > 0 and $first <= .start + .count - 1 and $last >= .start))
+            | "\($file):\($first): \(.text | split("\n")[0])"
+        '
+)"
+
+[[ -z "$FINDINGS" ]] && exit 0
+
+printf 'Comments outside .lint/comments.yml:\n%s\n\n' "$FINDINGS" >&2
+usage >&2
+exit 1

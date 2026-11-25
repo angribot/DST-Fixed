@@ -1,0 +1,197 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+usage() {
+    cat <<'EOF'
+Usage:
+  .lint/check-upstream
+
+Lists comments whose cited upstream code changed after the cited version, or
+can no longer be found. Recheck each reported fact against the new code, then
+update the version in the comment.
+
+Each source is found among the .luarc.json workspace.library entries by its
+content, whatever the directory is called: Vanilla is the entry with
+mainfunctions.lua, and a mod is the entry whose modinfo.lua name starts with
+the source name. Comments whose source is not listed there are reported as
+unchecked without failing the run.
+
+<symbol> names a function, or a stategraph state by its name field.
+EOF
+}
+
+die() {
+    printf 'Error: %s\n' "$*" >&2
+    exit 2
+}
+
+case "${1:-}" in
+    "") ;;
+    -h | --help)
+        usage
+        exit 0
+        ;;
+    *)
+        usage >&2
+        exit 2
+        ;;
+esac
+
+command -v jq >/dev/null || die "jq is required"
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+[[ -f .luarc.json ]] || die ".luarc.json is missing; it lists the local checkouts"
+
+LIBRARIES=()
+while IFS= read -r entry; do
+    if library="$(cd "$ROOT" && cd "$entry" 2>/dev/null && pwd)"; then
+        LIBRARIES+=("$library")
+    fi
+done < <(jq -r '."workspace.library"[]?' .luarc.json)
+((${#LIBRARIES[@]} > 0)) || die ".luarc.json lists no existing workspace.library entries"
+
+is_source() {
+    local source="$1" dir="$2"
+    if [[ "$source" == Vanilla ]]; then
+        [[ -f "$dir/mainfunctions.lua" && ! -f "$dir/modinfo.lua" ]]
+    else
+        [[ -f "$dir/modinfo.lua" ]] &&
+            awk -v name="\"$source" '/^name[[:space:]]*=/ && index($0, name) { found = 1 } END { exit !found }' "$dir/modinfo.lua"
+    fi
+}
+
+source_dirs() {
+    local source="$1" dir
+    for dir in "${LIBRARIES[@]}"; do
+        if is_source "$source" "$dir"; then
+            printf '%s\n' "$dir"
+        fi
+    done
+}
+
+base_commit() {
+    local source="$1" dir="$2" version="$3"
+    if [[ "$source" == Vanilla ]]; then
+        git -C "$dir" log --format=%H -1 --grep="^${version}\$"
+    else
+        git -C "$dir" rev-parse -q --verify "${version}^{commit}" || true
+    fi
+}
+
+function_range() {
+    awk -v symbol="$1" '
+        function defines(line, at) {
+            at = index(line, "function " symbol "(")
+            if (at > 0) return 1
+            at = index(line, symbol " = function")
+            return at == 1 || (at > 1 && substr(line, at - 1, 1) ~ /[ \t]/)
+        }
+        function width(line, i, w, c) {
+            for (i = 1; i <= length(line); i++) {
+                c = substr(line, i, 1)
+                if (c == "\t") w += 4
+                else if (c == " ") w++
+                else break
+            }
+            return w
+        }
+        !start && index($0, "name = \"" symbol "\"") {
+            start = NR
+            state = 1
+            indent = width($0)
+            next
+        }
+        state && /[^ \t]/ {
+            if (width($0) < indent) {
+                print start "," NR
+                exit
+            }
+            next
+        }
+        !start && defines($0) {
+            start = NR
+            match($0, /^[ \t]*/)
+            indent = substr($0, 1, RLENGTH)
+            if ($0 ~ /[ \t)]end[,)]?[ \t]*$/) {
+                print start "," start
+                exit
+            }
+            next
+        }
+        start && substr($0, 1, length(indent) + 3) == indent "end" && substr($0, length(indent) + 4) ~ /^[,)]?[ \t]*$/ {
+            print start "," NR
+            exit
+        }
+    '
+}
+
+changes_since() {
+    local dir="$1" base="$2" path="$3" symbol="$4" format="$5" range
+    range="$(git -C "$dir" show "HEAD:$path" 2>/dev/null | function_range "$symbol")"
+    [[ -n "$range" ]] || return 1
+    [[ "$base" == "$(git -C "$dir" rev-parse HEAD)" ]] && return 0
+    git -C "$dir" log -s --format="$format" -L "$range:$path" "${base}..HEAD"
+}
+
+readonly COMMENT_RE='-- (Vanilla|Glassic API|Night Stories) ([^ ]+\.lua):([^ ]+) \(([^)]+)\): '
+
+TOTAL=0
+REPORTS=()
+UNCHECKED=()
+while IFS= read -r match; do
+    location="${match%%:*}"
+    rest="${match#*:}"
+    location="$location:${rest%%:*}"
+    line="${rest#*:}"
+    [[ "$line" =~ $COMMENT_RE ]] || continue
+    source="${BASH_REMATCH[1]}"
+    path="${BASH_REMATCH[2]}"
+    symbol="${BASH_REMATCH[3]}"
+    version="${BASH_REMATCH[4]}"
+    TOTAL=$((TOTAL + 1))
+    cited="$source $path:$symbol ($version)"
+
+    dir="$(source_dirs "$source")"
+    if [[ -z "$dir" ]]; then
+        UNCHECKED+=("$location: $cited: no $source entry in .luarc.json workspace.library")
+        continue
+    elif [[ "$dir" == *$'\n'* ]]; then
+        REPORTS+=("$location: $cited: several workspace.library entries are $source")
+        continue
+    fi
+
+    base="$(base_commit "$source" "$dir" "$version")"
+    if [[ -z "$base" ]]; then
+        REPORTS+=("$location: $cited: version not found in $dir")
+        continue
+    fi
+    format=%h
+    [[ "$source" == Vanilla ]] && format=%s
+    if ! changed="$(changes_since "$dir" "$base" "$path" "$symbol" "$format")"; then
+        REPORTS+=("$location: $cited: not found at $(git -C "$dir" log -1 --format="$format")")
+        continue
+    fi
+    changed="$(printf '%s\n' "$changed" | sed '/^$/d' | paste -sd ' ' -)"
+    if [[ -n "$changed" ]]; then
+        REPORTS+=("$location: $cited: changed in $changed")
+    fi
+done < <(git grep -n -E -e '-- (Vanilla|Glassic API|Night Stories) [^ ]+\.lua:[^ ]+ \([^)]+\): ' -- '*.lua')
+
+CHECKED=$((TOTAL - ${#UNCHECKED[@]}))
+if ((${#UNCHECKED[@]} > 0)); then
+    printf 'Unchecked:\n'
+    printf '%s\n' "${UNCHECKED[@]}"
+    printf '\n'
+fi
+
+if ((${#REPORTS[@]} == 0)); then
+    printf 'All %d checked upstream comments are current.\n' "$CHECKED"
+    exit 0
+fi
+
+printf '%s\n' "${REPORTS[@]}"
+printf '\n%d of %d checked upstream comments need a recheck.\n' "${#REPORTS[@]}" "$CHECKED"
+exit 1
