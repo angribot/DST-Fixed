@@ -1,0 +1,11 @@
+id: comment-format
+language: lua
+severity: warning
+message: 'Comment only on behavior forced by code we cannot change, as "-- <Source> <path>:<symbol> (<version>): <fact>", or credit adapted code as "-- Adapted from <work> by <author>".'
+rule:
+  kind: comment
+  not:
+    any:
+      - regex: '^---@'
+      - regex: '^-- (Vanilla|Glassic API|Night Stories) [\w./-]+\.lua:[\w.:]+ \([\w.]+\): \S'
+      - regex: '^-- Adapted from \S.* by \S'

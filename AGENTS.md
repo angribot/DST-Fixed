@@ -20,12 +20,18 @@ Each module is one option that loads one file:
 - `README.md` lists the module under the same category in Modules; keep that entry in step with the module's behavior.
 - Mark a new module in `modinfo.lua`'s `new_modules`; an X or Y bump clears the previous series' marks.
 
-Vanilla bug fixes go in `main/asscleaner/`, listed in `modmain.lua`'s `asscleaner` table, and always load. Give each a short section under `README.md`'s Patch Notes.
+Vanilla bug fixes go in `main/asscleaner/`, listed in `modmain.lua`'s `asscleaner` table, and always load. Give each a short section under `README.md`'s Patch Notes. Head each fix with comments citing the vanilla functions that hold the bug, and remove the fix, its entry, and its section once vanilla fixes the bug.
 
 ## Implementation
 
 - Reach for vanilla interfaces and existing files first; add a helper, wrapper, component, or file only when none of them can hold the code.
 - Guard only against states you can point to in the game source.
+
+## Comments
+
+- Write comments in the format `.lint/check-comments --help` describes. Head a copied upstream function with one that cites it and says what the copy changes.
+- Enable the pre-commit comment check once per clone: `git config core.hooksPath .githooks`.
+- After DST-scripts, GlassicAPI, or NightStories updates, run `.lint/check-upstream`, recheck each reported fact against the new code, and update the version in its comment.
 
 ## Lua compatibility
 
