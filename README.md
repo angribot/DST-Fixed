@@ -10,12 +10,6 @@ Modules follow the categories in `modinfo.lua`. Show Bundle is enabled by defaul
 
 - **Show Bundle** — Show bundle and gift contents on mouse hover.
 
-### Temporarily Disabled
-
-These modules are kept in the repository but their options are hidden, so they do not load.
-
-- **Highlight Containers** — Highlight nearby containers containing the held item.
-
 ### Player
 
 - **Enable Quick Attack** — Remove the player attack-speed limit, including darts and the Howlitzer.

@@ -8,7 +8,6 @@ GLOBAL.CONSTRUCTION_PLANS.collapsed_icker_preserve = {
 
 local config_table = {
 	BUNDLE = "show_bundle",
-	-- HIGHLIGHT_CONTAINERS = "highlight_containers",
 
 	ATKSPEED = "attack_speed",
 	SMARTUNWRAP = "smart_unwrap",
@@ -71,9 +70,6 @@ local config_table = {
 	CROWNFRAGMENT = "crown_fragment_recipe",
 	PROPSIGN = "craftable_prop_sign",
 	CLASSICBOOKGARDENING = "book_gardening_recipe",
-
-	-- To Be Removed --
-	-- PIGKINGMOONGLASS = "pigking_reward_moonglass",
 }
 
 for config, module in pairs(config_table) do
@@ -93,7 +89,6 @@ local asscleaner = {
 	"fix_trap_fumarole_cell",
 	"query_optimization",
 	"fix_chesterlight_save",
-	-- "getmapaction_pos", -- Cancel for debugging.
 }
 
 for _, v in ipairs(asscleaner) do

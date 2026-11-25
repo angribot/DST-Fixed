@@ -77,16 +77,6 @@ configuration_options = {
 		options = boolean,
 		default = true,
 	},
-	-- {
-	-- 	name = "HIGHLIGHT_CONTAINERS",
-	-- 	label = zheng("高亮匹配容器", "Highlight Containers"),
-	-- 	hover = zheng(
-	-- 		"高亮手持物品附近的容器",
-	-- 		"Highlight nearby containers containing the held item."
-	-- 	),
-	-- 	options = boolean,
-	-- 	default = true,
-	-- },
 	AddTitle(zheng("玩家相关", "The Player")),
 	{
 		name = "ATKSPEED",
@@ -532,14 +522,6 @@ configuration_options = {
 		options = boolean,
 		default = false,
 	},
-	-- AddTitle(zheng("即将移除", "To Be Removed")),
-	-- {
-	--     name = "PIGKINGMOONGLASS",
-	--     label = zheng("猪王给月亮碎片", "Pig King Reward Moong Shard"),
-	--     hover = zheng("月亮风暴期间猪王给月亮碎片", "Pig King reward Moon Shard during Moonstorm."),
-	--     options = boolean,
-	--     default = false
-	-- },
 }
 
 local NEWSTR = zheng("（新）", " (New)")
