@@ -1,6 +1,6 @@
 GLOBAL.setfenv(1, GLOBAL)
 
--- emotes.lua L.104
+-- Vanilla emotes.lua:CreateEmoteCommand (763928): copy
 local function CreateEmoteCommand(emotedef)
 	return {
 		aliases = emotedef.aliases,

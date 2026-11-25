@@ -13,12 +13,12 @@ local WEIGHTED_TAIL_FXS = {
 
 local LAUNCH_OFFSET_Y = 0.75
 
+-- Vanilla prefabs/houndstooth_blowpipe.lua:Projectile_CreateTailFx (763928): copy
 local function Projectile_CreateTailFx(inst)
 	local inst = CreateEntity()
 
 	inst:AddTag("FX")
 	inst:AddTag("NOCLICK")
-	--[[Non-networked entity]]
 	inst.entity:SetCanSleep(false)
 	inst.persists = false
 
@@ -40,11 +40,11 @@ local function Projectile_CreateTailFx(inst)
 	return inst
 end
 
+-- Vanilla prefabs/houndstooth_blowpipe.lua:Projectile_UpdateTail (763928): copy
 local function Projectile_UpdateTail(inst)
 	local c = (not inst.entity:IsVisible() and 0) or 1
 	local target = inst._target:value()
 
-	-- Does not spawn the tail if it is close to the target (visual bug).
 	if c > 0 and not (target ~= nil and target:IsValid() and inst:IsNear(target, 1.5)) then
 		local tail = inst:CreateTailFx()
 		tail.Transform:SetPosition(inst.Transform:GetWorldPosition())
@@ -53,24 +53,26 @@ local function Projectile_UpdateTail(inst)
 			tail.AnimState:SetTime(c * tail.AnimState:GetCurrentAnimationLength())
 		end
 
-		return tail -- Mods.
+		return tail
 	end
 end
 
+-- Vanilla prefabs/houndstooth_blowpipe.lua:Projectile_OnThrown (763928): copy
 local function Projectile_OnThrown(inst, owner, target, attacker)
 	inst._target:set(target)
 end
 
+-- Vanilla prefabs/houndstooth_blowpipe.lua:Projectile_SpawnImpactFx (763928): copy
 local function Projectile_SpawnImpactFx(inst, attacker, target)
 	if target ~= nil and attacker ~= nil and target:IsValid() and attacker:IsValid() then
 		local impactfx = SpawnPrefab("hitsparks_piercing_fx")
 		impactfx:Setup(attacker, target, inst, nil, true, LAUNCH_OFFSET_Y)
 
-		return impactfx -- Mods.
+		return impactfx
 	end
 end
 
--- NOTE(DiogoW): Using OnPreHit to be able to check health:IsDead().
+-- Vanilla prefabs/houndstooth_blowpipe.lua:Projectile_OnPreHit (763928): copy
 local function Projectile_OnPreHit(inst, attacker, target)
 	if
 		target ~= nil
@@ -83,6 +85,7 @@ local function Projectile_OnPreHit(inst, attacker, target)
 	end
 end
 
+-- Vanilla prefabs/houndstooth_blowpipe.lua:ProjectileFn (763928): homing copy with the Moon Shard dart build and 42.5 damage and planar damage
 local function fn()
 	local inst = CreateEntity()
 
@@ -111,10 +114,8 @@ local function fn()
 
 	inst.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
 
-	--weapon (from weapon component) added to pristine state for optimization.
 	inst:AddTag("weapon")
 
-	--projectile (from projectile component) added to pristine state for optimization.
 	inst:AddTag("projectile")
 
 	inst:AddTag("NOCLICK")

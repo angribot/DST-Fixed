@@ -1,11 +1,8 @@
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
--- Vanilla's highlightchild dirty listener passes syncowner:value() straight to the
--- prefab's onchangeownerfn. While a client rebuilds entities (shard transitions,
--- deserialization), that netvar can still point at an entity that has not been
--- registered yet, so the owner arrives as nil and king_cane.lua:71 indexes it.
--- Wait for the owner to replicate instead of dropping the update.
+-- Vanilla components/highlightchild.lua:OnSyncOwnerDirty (763928): passes on syncowner:value(), which is nil until the client registers the owner
+-- Vanilla prefabs/king_cane.lua:fx_OnChangeHighlightOwner (763928): indexes owner without a nil check
 local RETRY_FRAMES = 60
 
 AddPrefabPostInit("king_cane_fx", function(inst)

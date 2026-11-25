@@ -68,5 +68,4 @@ AddPrefabPostInit("marble", function(inst)
 	end
 	inst.components.repairer.repairmaterial = MATERIALS.MARBLE
 	inst.components.repairer.workrepairvalue = 2
-	-- inst:AddTag("work_" .. MATERIALS.MARBLE)
 end)

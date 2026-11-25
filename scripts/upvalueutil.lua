@@ -1,5 +1,4 @@
---Tool designed by Rezecib.
---Personal Changed by Tony.
+-- Adapted from UpvalueUtil by Rezecib, with changes by Tony
 
 local function GetUpvalueHelper(entry_fn, entry_name)
 	local i = 1

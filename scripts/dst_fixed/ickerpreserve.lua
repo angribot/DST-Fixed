@@ -102,7 +102,7 @@ local function Destroy(inst, deconstruct)
 				return
 			end
 		else
-			-- As with vanilla collapsed chests, sinking can discard excess contents.
+			-- Vanilla prefabs/treasurechest.lua:regular_Upgrade_OnHammered (763928): drops up to COLLAPSED_CHEST_EXCESS_STACKS_THRESHOLD stacks when sunk and loses the rest
 			M.DropStacks(inst, TUNING.COLLAPSED_CHEST_EXCESS_STACKS_THRESHOLD)
 		end
 	else

@@ -2,25 +2,13 @@ local AddComponentPostInit = AddComponentPostInit
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
--- Vanilla keeps Coals running at full rate away from players: each placed Coals
--- scans for targets every 0.5 seconds, and trapfumaroleburning updates every
--- frame on everything it burns, so a Coals farm covered in loot keeps costing
--- server time with nobody nearby. trap_fumarole.lua declares
--- UPDATE_TIME_ASLEEP = 2.5 for this but never uses it; this module applies it to
--- both the scans and the burning targets while they sleep.
+-- Vanilla prefabs/trap_fumarole.lua:StartUpdateTask (763928): scans every 0.5 seconds whether asleep or not, leaving UPDATE_TIME_ASLEEP = 2.5 unused
+-- Vanilla components/trapfumaroleburning.lua:TrapFumaroleBurning:OnUpdate (763928): runs every frame on each burning target, asleep or not
 local ASLEEP_PERIOD = 2.5
--- StartUpdateTask in trap_fumarole.lua
 local AWAKE_PERIOD = 0.5
 
---------------------------------------------------------------------------
--- Burning targets
-
--- Once a burnable passes TRAP_FUMAROLE_IGNITE_TIME, each OnUpdate call adds a
--- fixed TRAP_FUMAROLE_PROPAGATOR_RATE of heat. Propagator:AddHeat accepts only
--- max_heat_this_update per 0.5-second propagator update and the heat decays in
--- between, so the burnable reaches its flashpoint only at per-frame call rates.
--- AddHeat adds nothing during a propagator delay, to fireimmune targets, or on
--- tiles with no_fire_spread, where GetHeatResistance is 0; those stay slow.
+-- Vanilla components/trapfumaroleburning.lua:TrapFumaroleBurning:OnUpdate (763928): adds a fixed TRAP_FUMAROLE_PROPAGATOR_RATE of heat per call once ignitetime passes TRAP_FUMAROLE_IGNITE_TIME
+-- Vanilla components/propagator.lua:Propagator:AddHeat (763928): caps the heat per propagator update and adds none during a delay, to fireimmune targets, or at zero heat resistance
 local function IsHeatingToIgnite(self)
 	local inst = self.inst
 	local propagator = inst.components.propagator
@@ -54,8 +42,7 @@ AsleepUpdate = function(inst, self)
 	self._asleepupdatetime = time
 	self:OnUpdate(dt)
 
-	-- OnUpdate removes this component once the target is off Coals, and removes
-	-- the entity when it cooks a single item.
+	-- Vanilla components/trapfumaroleburning.lua:TrapFumaroleBurning:OnUpdate (763928): removes this component off Coals, and the entity when it cooks a single item
 	if inst:IsValid() and inst.components.trapfumaroleburning == self then
 		local period = GetAsleepPeriod(self)
 		if period ~= self._asleeptask.period then
@@ -66,19 +53,13 @@ AsleepUpdate = function(inst, self)
 end
 
 local function StartAsleepUpdate(self)
-	-- Health:OnUpdate ends a burn after 0.5 seconds without fire damage
-	-- (FIRE_TIMEOUT), and Health:DoFireDamage deals none during a burn's first
-	-- second (fire_timestart), so creatures updated less often than that never
-	-- take damage. Leave them on per-frame updates.
+	-- Vanilla components/health.lua:Health:OnUpdate (763928): ends a burn after FIRE_TIMEOUT (0.5 seconds) without fire damage
+	-- Vanilla components/health.lua:Health:DoFireDamage (763928): deals no damage during a burn's first fire_timestart (1 second)
 	if self.inst.components.health ~= nil then
 		return
 	end
 
-	-- The engine can call OnEntitySleep twice with no wake in between: placing a
-	-- target spawned this tick, such as Rot from spoilage, in a sleeping area
-	-- calls it at once, and the initial sleep state still arrives at the end of
-	-- the tick. A second task would be left running after a wake and index the
-	-- cleared _asleeptask.
+	-- Vanilla mainfunctions.lua:OnEntitySleep (763928): runs twice without a wake for a target spawned this tick in a sleeping area, such as Rot
 	if self._asleeptask ~= nil then
 		return
 	end
@@ -86,7 +67,6 @@ local function StartAsleepUpdate(self)
 	self.inst:StopUpdatingComponent(self)
 	self._asleepupdatetime = GetTime()
 	local period = GetAsleepPeriod(self)
-	-- A random first delay spreads targets that fall asleep together across frames.
 	ScheduleAsleepUpdate(self, period, math.random() * period)
 end
 
@@ -97,17 +77,13 @@ local function CatchUp(inst, self, dt)
 end
 
 local function StopAsleepUpdate(self)
-	-- Creatures never left per-frame updates.
 	if self._asleeptask == nil then
 		return
 	end
 
 	CancelAsleepUpdate(self)
 	self.inst:StartUpdatingComponent(self)
-	-- Catch up on the time since the last asleep update in a later tick: OnUpdate
-	-- can remove the entity by cooking it, and OnEntityWake in mainfunctions.lua
-	-- goes on to wake its other components, such as inventoryitemmoisture, which
-	-- would start tasks on the removed entity.
+	-- Vanilla mainfunctions.lua:OnEntityWake (763928): wakes the remaining components after this one, which would start tasks on an entity OnUpdate cooked away
 	self.inst:DoTaskInTime(0, CatchUp, self, GetTime() - self._asleepupdatetime)
 end
 
@@ -123,27 +99,21 @@ AddComponentPostInit("trapfumaroleburning", function(self, inst)
 		return OnRemoveFromEntity(self, ...)
 	end
 
-	-- Coals scanning while asleep add this component to targets already asleep,
-	-- which may get no further OnEntitySleep call.
+	-- Vanilla prefabs/trap_fumarole.lua:OnUpdate (763928): adds this component to targets that may already be asleep
 	if inst:IsAsleep() then
 		StartAsleepUpdate(self)
 	end
 end)
 
---------------------------------------------------------------------------
--- Coals scans
-
--- inst.task is the scan task that CheckActiveTrap in trap_fumarole.lua starts
--- and cancels; IsActiveTrap only checks that it exists. Restarting it keeps
--- the vanilla scan function and only changes the period.
+-- Vanilla prefabs/trap_fumarole.lua:CheckActiveTrap (763928): starts and cancels the scan task as inst.task
+-- Vanilla prefabs/trap_fumarole.lua:IsActiveTrap (763928): only checks that inst.task exists
 local function SetScanPeriod(inst, period)
 	local task = inst.task
 	if task ~= nil and task.period ~= period then
-		-- Periodic:Cancel clears fn, so read it first.
+		-- Vanilla scheduler.lua:Periodic:Cancel (763928): clears fn
 		local fn = task.fn
 		task:Cancel()
-		-- A random first delay spreads Coals that change state together across
-		-- frames, like StartUpdateTask does.
+		-- Vanilla prefabs/trap_fumarole.lua:StartUpdateTask (763928): randomizes the first delay the same way
 		inst.task = inst:DoPeriodicTask(period, fn, math.random() * period)
 	end
 end
@@ -153,8 +123,6 @@ local function OnEntitySleep(inst)
 end
 
 local function OnEntityWake(inst)
-	-- Restart instead of waiting out the slow period, so targets arriving as the
-	-- Coals wake are found within 0.5 seconds as in vanilla.
 	SetScanPeriod(inst, AWAKE_PERIOD)
 end
 

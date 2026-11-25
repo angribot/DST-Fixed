@@ -1,10 +1,7 @@
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
--- Confirmed in DST build 761239: mound.lua's Halloween bat task calls pos:Get()
--- without checking whether FindNearbyLand returned nil (e.g. offshore graves).
--- After a game update, recheck that task in scripts/prefabs/mound.lua. Remove
--- this module and its modmain entry once vanilla handles a missing land position.
+-- Vanilla prefabs/mound.lua:onfinishcallback (763928): the Halloween bat task calls pos:Get() on FindNearbyLand's result, which is nil offshore
 local function FindLandForGraveBats(position, range)
 	-- Bats can fly over water, so the grave itself is a valid fallback.
 	return FindNearbyLand(position, range) or position

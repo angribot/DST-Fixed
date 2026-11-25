@@ -62,13 +62,9 @@ local BlinkStaff = require("components/blinkstaff")
 local on_blinked = UpvalueUtil.GetUpvalue(BlinkStaff.Blink, "OnBlinked")
 local function OnBlinked(...)
 	on_blinked(...)
-
-	-- == -- == --
-	-- CV from KELI :angri:
 	if TheWorld and TheWorld.components.walkableplatformmanager then -- NOTES(JBK): Workaround for teleporting too far causing the client to lose sync.
 		TheWorld.components.walkableplatformmanager:PostUpdate(0)
 	end
-	-- == -- == --
 end
 UpvalueUtil.SetUpvalue(BlinkStaff.Blink, "OnBlinked", OnBlinked)
 
@@ -123,7 +119,6 @@ local function onblink_map(act)
 	local act_pos = act:GetActionPoint()
 	if act.invobject.components.blinkstaff:Blink(act_pos, act.doer) then
 		if act.invobject and act.invobject.components.blinkstaff.onblinkfn then
-			-- Cunsume Extra Uses
 			local num = act.distancecount - 1
 			if num > 0 then
 				for i = 1, num do

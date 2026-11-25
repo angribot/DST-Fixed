@@ -1,6 +1,8 @@
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
+-- Vanilla prefabs/dummytarget.lua:MakeDummy (763928): gives the dummy 1000 max health and no minimum, so a big enough hit kills it
+-- Vanilla prefabs/dummytarget.lua:OnHealthDelta (763928): shows only the latest hit, so hits in one frame replace each other
 local function count_dps(t)
 	local dps = 0
 	local time = GetTime() - 1
@@ -86,6 +88,7 @@ for _, prefab in ipairs(DUMMYTARGETS) do
 	AddPrefabPostInit(prefab, dummytarget_fix)
 end
 
+-- Vanilla prefabs/dummytarget.lua:MakeDummy (763928): registers the dummies without STRINGS.NAMES entries
 local CHS_CODES = {
 	["zh"] = true,
 	["zht"] = true,

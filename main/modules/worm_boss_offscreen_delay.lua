@@ -3,13 +3,10 @@ GLOBAL.setfenv(1, GLOBAL)
 
 local UpvalueUtil = require("upvalueutil")
 
--- Seconds a Great Depths Worm stays offscreen before it is removed. A living
--- worm is stored in hounded first; a dead one is removed outright.
 local OFFSCREEN_REMOVAL_DELAY = 300
 
--- Worm_OnEntitySleep and Worm_TestForRemoval in worm_boss.lua share the
--- file-local OFFSCREEN_REMOVAL_DELAY upvalue, so setting it once changes both
--- the first check delay and the removal threshold.
+-- Vanilla prefabs/worm_boss.lua:Worm_OnEntitySleep (763928): shares the file-local OFFSCREEN_REMOVAL_DELAY with Worm_TestForRemoval
+-- Vanilla prefabs/worm_boss.lua:Worm_TestForRemoval (763928): stores a living worm in hounded before removing it
 local function SetRemovalDelay(inst)
 	if not TheWorld.ismastersim then
 		return

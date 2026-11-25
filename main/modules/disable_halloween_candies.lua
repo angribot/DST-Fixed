@@ -7,9 +7,6 @@ for i = 1, NUM_HALLOWEENCANDY do
 	CANDIES["halloweencandy_" .. i] = true
 end
 
--- Keep the original implementation and its other rewards, then remove only the
--- Halloween candies it spawned. Pumpkin bombs, carvers, ornaments, trinkets, gold
--- and modded rewards stay.
 local function without_spawned_candies(fn)
 	return function(...)
 		local candies = {}
@@ -31,8 +28,9 @@ local function without_spawned_candies(fn)
 	end
 end
 
--- Frankenswine, Vamphares and Mermummies add their candies as chance loot when they
--- transform. Skip only those candies; their pumpkin bombs and ornaments still go through.
+-- Vanilla prefabs/pigman.lua:MakeFrankenPig (763928): adds candies as chance loot
+-- Vanilla prefabs/bunnyman.lua:MakeVampireBunny (763928): adds candies as chance loot
+-- Vanilla prefabs/merm.lua:MakeMummyMerm (763928): adds candies as chance loot
 local function without_candy_chance_loot(fn)
 	return function(inst, ...)
 		local lootdropper = inst.components.lootdropper
@@ -66,10 +64,9 @@ AddPrefabPostInit("pigking", function(inst)
 	UpvalueUtil.SetUpvalue(inst.components.trader.onaccept, "ontradeforgold", without_spawned_candies(ontradeforgold))
 end)
 
--- SGmermking calls inst:TradeItem() for both regular and Hallowed Nights trades.
+-- Vanilla stategraphs/SGmermking.lua:trade (763928): calls inst:TradeItem() for regular and Hallowed Nights trades alike
 wrap_instance_method("mermking", "TradeItem", without_spawned_candies)
--- Burnt Leaf Piles turn every rolled drop into Ash, so filtering spawns instead of
--- rolled drops keeps that Ash.
+-- Vanilla prefabs/leafpile.lua:DropLootFor (763928): turns every rolled drop into Ash when burnt
 wrap_instance_method("leafpile", "DropLootFor", without_spawned_candies)
 wrap_instance_method("pigman", "MakeFrankenPig", without_candy_chance_loot)
 wrap_instance_method("bunnyman", "MakeVampireBunny", without_candy_chance_loot)

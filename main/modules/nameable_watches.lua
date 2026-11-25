@@ -19,7 +19,7 @@ local SUPPORTED_WATCHES = {
 }
 
 local data = {
-	prompt = "", -- Unused
+	prompt = "",
 	animbank = "ui_board_5x3",
 	animbuild = "ui_board_5x3",
 	menuoffset = Vector3(6, -70, 0),
@@ -267,8 +267,6 @@ local function WatchPostInit(inst)
 			and doer.sg.currentstate.name == "rename_watch"
 			and (text == nil or text:utf8len() <= MAX_WRITEABLE_LENGTH)
 		then
-			-- local record_name = self.inst.watch_record_name:value()
-			-- if text == record_name or text == nil and record_name == "" then
 			if text == nil then
 				doer.sg:GoToState("idle", true)
 			else

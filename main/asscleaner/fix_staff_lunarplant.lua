@@ -2,6 +2,9 @@ local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 local UpvalueUtil = require("upvalueutil")
 
+-- Vanilla components/weapon.lua:Weapon:OnAttack (763928): spends durability on hit, so the staff can break while its last projectile is in flight
+-- Vanilla prefabs/staff_lunarplant.lua:DisableComponents (763928): removes the weapon on break, though that projectile still passes the staff to Combat:DoAttack as its weapon
+
 local function disable_components(inst)
 	inst:RemoveComponent("equippable")
 end
@@ -33,6 +36,7 @@ AddPrefabPostInit("staff_lunarplant", function(inst)
 	inst.components.finiteuses:SetIgnoreCombatDurabilityLoss(true)
 end)
 
+-- Vanilla components/finiteuses.lua:FiniteUses:SetUses (763928): pushes percentusedchange with a negative value before clamping it to 0
 local FiniteUses = require("components/finiteuses")
 local set_uses = FiniteUses.SetUses
 function FiniteUses:SetUses(val)

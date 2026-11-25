@@ -28,7 +28,8 @@ JUMPINWATCH.fn = function(act)
 	then
 		doer.components.inventory:ConsumeByName("wortox_soul", 1)
 		doer.sg.statemem.spell_watch = act.target
-		doer.sg:GoToState("wortox_pocketwatch_jumpin", doer.sg.statemem) -- 'warpback' is set by pocketwatch_recall
+		-- Vanilla prefabs/pocketwatch.lua:Recall_DoCastSpell (763928): sets sg.statemem.warpback
+		doer.sg:GoToState("wortox_pocketwatch_jumpin", doer.sg.statemem)
 	end
 	return true
 end

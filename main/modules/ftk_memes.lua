@@ -35,15 +35,14 @@ AddSimPostInit(function()
 	insert_loottable("penguin", "lightninggoathorn", 0.02)
 	insert_loottable("mutated_penguin", "lightninggoathorn", 0.02)
 
-	-- FTK classic strings
 	if CHINESE_CODES[LanguageTranslator.defaultlang] then
 		STRINGS.UI.NOTIFICATION.LEFTGAME = "%s 已断开连接。"
 		STRINGS.CHARACTERS.GENERIC.ANNOUNCE_STILLALIVE = STILL_ALIVE_ZH
-		STRINGS.NAMES.BOOK_WETNESS = "极水之卷" -- Night Stories
+		STRINGS.NAMES.BOOK_WETNESS = "极水之卷"
 	else
 		STRINGS.UI.NOTIFICATION.LEFTGAME = "%s has disconnected."
 		STRINGS.CHARACTERS.GENERIC.ANNOUNCE_STILLALIVE = STILL_ALIVE_EN
-		STRINGS.NAMES.BOOK_WETNESS = "Great Water Tome" -- Night Stories
+		STRINGS.NAMES.BOOK_WETNESS = "Great Water Tome"
 	end
 	if rawget(_G, "STRCODE_TALKER") then
 		STRCODE_TALKER[STRINGS.UI.NOTIFICATION.LEFTGAME] = "UI.NOTIFICATION.LEFTGAME"
@@ -76,7 +75,7 @@ AddPrefabPostInit("klaus", function(inst)
 	if not TheWorld.ismastersim then
 		local Say = inst.components.talker.Say
 		inst.components.talker.Say = function(self, script, time, noanim, force, ...)
-			-- Networking_Talk does not transmit force; the text uses the server's language.
+			-- Vanilla networking.lua:Networking_Talk (763928): drops force, and the text arrives in the server's language
 			if script == STILL_ALIVE_EN or script == STILL_ALIVE_ZH then
 				force = true
 			end

@@ -8,10 +8,9 @@ GLOBAL.CONSTRUCTION_PLANS.collapsed_icker_preserve = {
 }
 
 local config_table = {
-	-- Default On --
 	BUNDLE = "show_bundle",
 	-- HIGHLIGHT_CONTAINERS = "highlight_containers",
-	-- The Player --
+
 	ATKSPEED = "attack_speed",
 	SMARTUNWRAP = "smart_unwrap",
 	CHECKSKINOWNERSHIP = "check_skin_ownership",
@@ -23,7 +22,6 @@ local config_table = {
 	EVERYONEMAGICHAT = "everyone_magic_hat",
 	FTKMEMES = "ftk_memes",
 
-	-- The Equipment --
 	BLINK_MAP = "blink_map",
 	EQUIPMENT = "repairable_equipment",
 	HIDELUNARCROWN = "hide_inactive_alterguardianhat",
@@ -40,7 +38,6 @@ local config_table = {
 	DOUBLE_VBOOMERANG_PROJECTILES = "double_vboomerang_projectiles",
 	HORSESHOE_STACKS = "horseshoe_stacks",
 
-	-- The Builder --
 	SHADOW_STORAGE = "expanded_shadow_storage",
 	ICKER_PRESERVE = "enhanced_icker_preserve",
 	FIREFLIES = "fireflies_into_lamp",
@@ -51,7 +48,6 @@ local config_table = {
 	ENDTABLE = "floating_burnt_endtable",
 	FIREPITCHARCOAL = "no_firepit_charcoal",
 
-	-- The Mob --
 	BIRD = "birds_no_sleep",
 	BLOCKABLEPOOPING = "blockable_pooping",
 	TENTACLE = "tentacle_pillar_noloot",
@@ -60,7 +56,6 @@ local config_table = {
 	FIXMINOTAURCHESTLOOTS = "fix_minotaurchest_loots",
 	WORMBOSSOFFSCREEN = "worm_boss_offscreen_delay",
 
-	-- The World --
 	CAVEMIGRATIONQUEUE = "cave_migration_queue",
 	SEED = "disable_seedrots",
 	FLOWER = "nopicking_evil_flower",
@@ -73,7 +68,6 @@ local config_table = {
 	WINTERSFEASTLOOTS = "disable_wintersfeast_trash",
 	TRAPFUMAROLEOFFSCREEN = "trap_fumarole_offscreen_throttle",
 
-	-- The Recipe --
 	RANDOMLIGHTS = "random_winter_lights",
 	CROWNFRAGMENT = "crown_fragment_recipe",
 	PROPSIGN = "craftable_prop_sign",
@@ -89,7 +83,6 @@ for config, module in pairs(config_table) do
 	end
 end
 
--- Some temp fixes, since klei is too down bad
 local asscleaner = {
 	"abandon_ship_board",
 	"dummytarget_dps",

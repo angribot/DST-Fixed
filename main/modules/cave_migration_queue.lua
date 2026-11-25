@@ -1,5 +1,4 @@
--- Adapted from No More Cave Bug 1.5 by Cutlass.
--- https://steamcommunity.com/sharedfiles/filedetails/?id=3828908041
+-- Adapted from No More Cave Bug 1.5 by Cutlass: https://steamcommunity.com/sharedfiles/filedetails/?id=3828908041
 local _G = GLOBAL
 local NAMESPACE = "DSTFixedCaveMigrationQueue"
 local maxwaittime = 30

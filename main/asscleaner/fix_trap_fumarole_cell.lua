@@ -1,17 +1,9 @@
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
--- Confirmed in DST build 762172: trap_fumarole_util.lua's SetTrap asserts that
--- each 2x2 cell holds at most one placed Coals. A placed Coals moved without
--- SetItem keeps its old cell registered, so it can be saved inside another placed
--- Coals' cell. Loading then runs SetTrap for both, and the assert crashes the
--- shard on every load. A Great Depths Worm with a full inventory moves placed
--- Coals this way: worm_boss_util.lua's CollectThingsToEat passes them to the
--- head's LootDropper:FlingItem, which teleports them next to the head.
--- After a game update, recheck SetTrap in scripts/prefabs/trap_fumarole_util.lua,
--- OnLoad in scripts/prefabs/trap_fumarole.lua, and CollectThingsToEat in
--- scripts/prefabs/worm_boss_util.lua. Remove each patch once vanilla handles its
--- case, and this module and its modmain entry once both are fixed.
+-- Vanilla prefabs/trap_fumarole_util.lua:SetTrap (763928): asserts that each 2x2 cell holds at most one placed Coals
+-- Vanilla prefabs/trap_fumarole.lua:OnLoad (763928): runs SetTrap for each saved placed Coals, so two in one cell crash every load
+-- Vanilla prefabs/worm_boss_util.lua:CollectThingsToEat (763928): flings placed Coals without SetItem, leaving their old cell registered
 local TrapFumaroleUtil = require("prefabs/trap_fumarole_util")
 
 AddPrefabPostInit("trap_fumarole", function(inst)
@@ -28,7 +20,6 @@ AddPrefabPostInit("trap_fumarole", function(inst)
 		if data ~= nil and data.settrap ~= nil then
 			local x, _, z = inst.Transform:GetWorldPosition()
 			if TrapFumaroleUtil.HasTrapAtXZ(x, z) then
-				-- Another placed Coals already holds this cell; load this one as an item.
 				data = shallowcopy(data)
 				data.settrap = nil
 			end
@@ -50,8 +41,7 @@ local function PatchWormHeadFling(inst)
 	local FlingItem = lootdropper.FlingItem
 	lootdropper.FlingItem = function(self, loot, ...)
 		if loot ~= nil and loot.prefab == "trap_fumarole" and not loot:IsItem() then
-			-- Same as DeactivateInventoryItemBeforeLaunch: unregister the cell and
-			-- restore item physics before the Coals moves.
+			-- Vanilla componentutil.lua:DeactivateInventoryItemBeforeLaunch (763928): calls SetItem before other launches
 			loot:SetItem()
 		end
 		return FlingItem(self, loot, ...)

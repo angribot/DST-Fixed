@@ -1,5 +1,3 @@
--- table.insert(PrefabFiles, "gflash")
-
 local AddPrefabPostInit = AddPrefabPostInit
 GLOBAL.setfenv(1, GLOBAL)
 
@@ -68,12 +66,6 @@ local function alterguardianhat_test_fn(container, item, slot)
 end
 
 local function onequip(inst, owner, ...)
-	-- local open_fn
-	-- if inst.components.container then
-	--     open_fn = inst.components.container.Open
-	--     inst.components.container.Open = function() --[[ Disabled ]] end
-	-- end
-
 	inst.onequip_prefns["dst-fixed"](inst, owner, ...)
 
 	inst:RemoveEventCallback("onhitother", inst.alterguardian_spawngestalt_fn, owner)
@@ -82,10 +74,6 @@ local function onequip(inst, owner, ...)
 		glash_fn(inst, _owner, _data)
 	end
 	inst:ListenForEvent("onhitother", inst.glash_fn, owner)
-
-	-- if open_fn and inst.components.container then
-	--     inst.components.container.Open = open_fn
-	-- end
 end
 
 local function onunequip(inst, owner, ...)
@@ -95,7 +83,6 @@ end
 
 local function OnEntityReplicated(inst)
 	if inst.replica.container then
-		-- inst.replica.container.type = "head_inv"
 		inst.replica.container.acceptsstacks = true
 		inst.replica.container.itemtestfn = alterguardianhat_test_fn
 	end
@@ -123,7 +110,6 @@ AddPrefabPostInit("alterguardianhat", function(inst)
 	inst.components.container.acceptsstacks = true
 	container.itemtestfn = alterguardianhat_test_fn
 	if inst.replica.container then
-		-- inst.replica.container.type = "head_inv"
 		inst.replica.container.acceptsstacks = true
 		inst.replica.container.itemtestfn = alterguardianhat_test_fn
 	end
@@ -156,7 +142,6 @@ if not rawget(_G, "NS_PLANARENTITY_HACKING") then
 	local AbsorbDamage = PlanarEntity.AbsorbDamage
 
 	function PlanarEntity:AbsorbDamage(damage, attacker, weapon, spdmg, ...)
-		-- print(attacker)
 		if
 			(attacker and attacker:HasTag("ignore_planar_entity")) or (weapon and weapon:HasTag("ignore_planar_entity"))
 		then
