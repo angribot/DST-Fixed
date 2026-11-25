@@ -38,7 +38,7 @@ Modules follow the categories in `modinfo.lua`. Show Bundle is enabled by defaul
 - **Reskin From Inventory** — Use the Clean Sweeper on inventory items, except Walking Canes, the King's Staff, and the Orange Staff.
 - **No Bowing for Bee Queen Crown** — Stop players from bowing to other players wearing the crown.
 - **Glowing Mushroom Hats**
-- **Double Gloomerang Projectiles**
+- **Enhanced Gloomerang** — Remove the limit on active Gloomerang projectiles.
 - **Horseshoe More Stacks** — Increase the Horseshoe stack limit to 40.
 
 ### Buildings

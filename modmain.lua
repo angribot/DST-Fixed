@@ -33,7 +33,7 @@ local config_table = {
 	POCKETRESKIN = "pocket_reskin",
 	BEEQUEENHAT = "facking_hivehat",
 	MHATS = "glowing_mushroom_hats",
-	DOUBLE_VBOOMERANG_PROJECTILES = "double_vboomerang_projectiles",
+	DOUBLE_VBOOMERANG_PROJECTILES = "enhanced_vboomerang",
 	HORSESHOE_STACKS = "horseshoe_stacks",
 
 	SHADOW_STORAGE = "expanded_shadow_storage",
