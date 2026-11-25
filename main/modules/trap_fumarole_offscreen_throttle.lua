@@ -77,7 +77,7 @@ local function CatchUp(inst, self, dt)
 end
 
 local function StopAsleepUpdate(self)
-	if self._asleeptask == nil then
+	if self._asleeptask == nil or not self.inst:IsValid() then
 		return
 	end
 

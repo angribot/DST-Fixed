@@ -16,11 +16,12 @@ local new_modules = {
 
 changelog = zheng(
 	[[
+- 【煤炭离屏降频】修复与 HyperCore Server 同时启用时洞穴可能崩溃的问题
+
+近期更新：
 - 【检查文本跟随客户端语言】死亡公告不再把被藤蔓救下的薇诺娜说成变成鬼魂
 - 【检查文本跟随客户端语言】称量失败时不再播放弹簧秤音效
 - 【检查文本跟随客户端语言】客户端不再漏显紧接着重复的同一句台词
-
-近期更新：
 - 【人人皆是魔术师】使用中的魔术师高礼帽不再复制到地上
 - 【煤炭离屏降频】彻底修复服务器崩溃
 - 减轻原版游戏中地图图标、暖石、瓦器人、薇机人和船造成的服务器卡顿
@@ -30,11 +31,12 @@ changelog = zheng(
 - 新模块【煤炭离屏降频】
 ]],
 	[[
+- Offscreen Coals Throttling: Fix a possible cave crash alongside HyperCore Server
+
+Recent Changes:
 - Enhanced Localized Description no longer announces a vine-saved Winona as a ghost
 - Enhanced Localized Description no longer plays the Pocket Scale sound when weighing fails
 - Enhanced Localized Description no longer drops a line repeated right after itself on clients
-
-Recent Changes:
 - Magic Hat for Everyone no longer duplicates an in-use Magician's Top Hat on the ground
 - Offscreen Coals Throttling fully fixes the server crash
 - Reduce server lag from map icons, Thermal Stones, W.O.B.O.T.s, W.I.N.bots and boats in the vanilla game
