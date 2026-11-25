@@ -16,6 +16,8 @@ local new_modules = {
 
 changelog = zheng(
 	[[
+- 【检查文本跟随客户端语言】死亡公告不再把被藤蔓救下的薇诺娜说成变成鬼魂
+- 【检查文本跟随客户端语言】称量失败时不再播放弹簧秤音效
 
 近期更新：
 - 【人人皆是魔术师】使用中的魔术师高礼帽不再复制到地上
@@ -27,6 +29,8 @@ changelog = zheng(
 - 新模块【煤炭离屏降频】
 ]],
 	[[
+- Enhanced Localized Description no longer announces a vine-saved Winona as a ghost
+- Enhanced Localized Description no longer plays the Pocket Scale sound when weighing fails
 
 Recent Changes:
 - Magic Hat for Everyone no longer duplicates an in-use Magician's Top Hat on the ground

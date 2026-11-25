@@ -131,7 +131,7 @@ for _, prefab in ipairs(shells) do
 end
 
 require("widgets/eventannouncer")
--- Vanilla widgets/eventannouncer.lua:GetNewDeathAnnouncementString (763928): copy that returns a string code, without the charlie_vinesave check
+-- Vanilla widgets/eventannouncer.lua:GetNewDeathAnnouncementString (763928): copy that returns a string code
 function GetNewDeathAnnouncementString(theDead, source, pkname, sourceispet)
 	if not theDead or not source then
 		return ""
@@ -206,7 +206,7 @@ function GetNewDeathAnnouncementString(theDead, source, pkname, sourceispet)
 			}
 		end
 
-		if not theDead.ghostenabled then
+		if not theDead.ghostenabled or theDead.charlie_vinesave then
 			table.insert(msg_tab.content, "$.")
 		else
 			local gender = GetGenderStrings(theDead.prefab)
@@ -838,7 +838,7 @@ AddPrefabPostInit("yotc_carrat_race_finish", function(inst)
 	inst.components.inspectable.getspecialdescription = yotc_carrat_race_finish_getdesc
 end)
 
--- Vanilla stategraphs/SGwilson.lua:use_pocket_scale (763928): copy of the weighing TimeEvent that announces a string code, failing at frame 51 without setting action_failed
+-- Vanilla stategraphs/SGwilson.lua:use_pocket_scale (763928): copy of the weighing TimeEvent that announces a string code
 AddStategraphPostInit("wilson", function(self)
 	self.states["use_pocket_scale"].timeline[1] = TimeEvent(30 * FRAMES, function(inst)
 		local weight = inst.sg.statemem.target ~= nil and inst.sg.statemem.target.components.weighable:GetWeight()
@@ -853,7 +853,8 @@ AddStategraphPostInit("wilson", function(self)
 		else
 			inst.AnimState:ClearOverrideBuild(inst.sg.statemem.target_build)
 			inst:ClearBufferedAction()
-			inst.AnimState:SetTime(51 * FRAMES)
+			inst.AnimState:SetFrame(53)
+			inst.sg.statemem.action_failed = true
 		end
 	end)
 end)
