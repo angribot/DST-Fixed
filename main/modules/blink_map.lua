@@ -9,10 +9,13 @@ local CHS_CODE = {
 }
 STRINGS.ACTIONS.BLINK_MAP.GENERIC = CHS_CODE[LanguageTranslator.defaultlang] and "传送({uses})" or "Telepoof({uses})"
 
--- Characters can pay part of the distance themselves, e.g. with fuel, by defining doer:GetExtraBlinkUses(staff).
 local function GetExtraBlinkUses(act)
 	local doer = act.doer
 	return doer and doer.GetExtraBlinkUses and doer:GetExtraBlinkUses(act.invobject) or 0
+end
+
+local function IsWX78MapActionWithoutTarget(act)
+	return (act.action == ACTIONS.SWAPBODIES_MAP or act.action == ACTIONS.MAPSCOUTSELECT_MAP) and not act.action.maponly_checkvalidpos_fn(act)
 end
 
 local function IsOrangeKingCane(staff)
@@ -26,10 +29,8 @@ AddComponentPostInit("playeractionpicker", function(self)
 		local inventory = self.inst.replica.inventory
 		local staff = inventory and inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 		if self.inst.checkingmapactions and staff and (staff.prefab == "orangestaff" or IsOrangeKingCane(staff)) then
-			-- Keep WX-78's map actions on their targets, but do not let a targetless one hide staff map blinks.
 			for i = #actions, 1, -1 do
-				local act = actions[i]
-				if (act.action == ACTIONS.SWAPBODIES_MAP or act.action == ACTIONS.MAPSCOUTSELECT_MAP) and not act.action.maponly_checkvalidpos_fn(act) then
+				if IsWX78MapActionWithoutTarget(actions[i]) then
 					table.remove(actions, i)
 				end
 			end
@@ -83,8 +84,8 @@ local function BlinkKingCaneOnMap(act)
 	local onblinkfn = blinkstaff.onblinkfn
 
 	if onblinkfn then
+		-- Vanilla components/blinkstaff.lua:BlinkStaff:Blink (763928): calls onblinkfn before pushing onblink
 		blinkstaff.onblinkfn = function(inst, pos, caster)
-			-- Settle the uncorrupted portion before the native onblink event adds corruption.
 			for i = 1, math.max(1, uncorrupted_uses) do
 				onblinkfn(inst, pos, caster)
 			end
@@ -97,12 +98,11 @@ local function BlinkKingCaneOnMap(act)
 	end
 	if blinked then
 		if uncorrupted_uses > 1 then
-			-- Blink already applied the first use's corruption through its native event.
+			-- Vanilla prefabs/king_cane.lua:DoCorruption (763928): adds one use's corruption on onblink
 			corruption:DoDelta(corruption_per_use * (uncorrupted_uses - 1))
 		end
 		if corrupted_uses > 0 then
 			if uncorrupted_uses > 0 and onblinkfn then
-				-- The remaining distance costs one corrupted cast, now that the staff is corrupted.
 				onblinkfn(staff, act_pos, act.doer)
 			end
 			local rechargeable = staff.components.rechargeable
@@ -154,7 +154,6 @@ end
 
 local blink_map_stroverridefn = ACTIONS.BLINK_MAP.stroverridefn
 ACTIONS.BLINK_MAP.stroverridefn = function(act)
-	-- Labels from other mods, e.g. character-specific casts, take precedence.
 	local str = blink_map_stroverridefn(act)
 	if str then
 		return str

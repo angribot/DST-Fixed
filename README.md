@@ -50,7 +50,7 @@ These modules are kept in the repository but their options are hidden, so they d
 ### Buildings
 
 - **Expanded Shadow Storage** — Expand shared shadow storage to 20 slots.
-- **Enhanced Icker Preserve** — Allow the Icker Preserve to be upgraded with an Elastispacer.
+- **Enhanced Icker Preserve** — Allow the Icker Preserve to be upgraded with an Elastispacer. Turning the option off removes the upgrade from standing Icker Preserves, but collapsed ones still load with it, so rebuilding them recovers their contents.
 - **Fireflies in Lamps** — Put Fireflies into Mushlights and Glowcaps for permanent light.
 - **Enhanced Sisturn** — Allow Bone Shards and Mourning Glory in Sisturns.
 - **Glommer Statue Repairing** — Repair Glommer's Statue with Marble.

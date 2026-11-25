@@ -23,6 +23,7 @@ local function OnUpgrade(inst, doer, item)
 	end
 end
 
+-- Vanilla components/inventoryitemholder.lua:InventoryItemHolder:TakeItem (763928): reworked to take at most one normal stack and to run onitemtakenfn before GiveItem, which can merge the item away
 local function TakeItem(holder, taker, wholestack)
 	if not holder:CanTake(taker) then
 		return false
@@ -38,7 +39,6 @@ local function TakeItem(holder, taker, wholestack)
 		inst:RemoveEventCallback("ondropped", holder._onitemmissing, item)
 		inst:RemoveEventCallback("onputininventory", holder._onitemmissing, item)
 	end
-	-- Run the preserve's release callback before inventory merging can remove the item.
 	if holder.onitemtakenfn then
 		holder.onitemtakenfn(inst, item, taker, whole)
 	end
@@ -114,10 +114,10 @@ local function Destroy(inst, deconstruct)
 end
 
 function M.Install(inst)
-	if inst._ickerpreserve then
+	if inst._ickerpreserve_installed then
 		return
 	end
-	inst._ickerpreserve = true
+	inst._ickerpreserve_installed = true
 	local upgradeable = inst:AddComponent("upgradeable")
 	upgradeable.upgradetype = UPGRADETYPES.CHEST
 	upgradeable:SetOnUpgradeFn(OnUpgrade)
@@ -141,7 +141,7 @@ function M.Install(inst)
 	end)
 	inst:ListenForEvent("ondeconstructstructure", function(owner)
 		if upgradeable.numupgrades > 0 then
-			-- Staff already called our bounded TakeItem: no global staff patch is needed.
+			-- Vanilla prefabs/staff_common.lua:destroystructure (763928): calls TakeItem before pushing ondeconstructstructure
 			Destroy(owner, true)
 		end
 	end)
@@ -184,8 +184,8 @@ function M.Install(inst)
 end
 
 function M.RestoreRetained(inst, data)
-	if inst._ickerpreserve then
-		return -- Enabled-module SpawnSaveRecord already restored the upgrade after component loading.
+	if inst._ickerpreserve_installed then
+		return
 	end
 	M.Install(inst)
 	local upgradeable = inst.components.upgradeable

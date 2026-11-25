@@ -1,5 +1,4 @@
 Assets = {}
--- Retained collapsed preserves must remain loadable even when their upgrade option is off.
 PrefabFiles = { "collapsed_icker_preserve" }
 GLOBAL.CONSTRUCTION_PLANS.collapsed_icker_preserve = {
 	GLOBAL.Ingredient("dreadstone", 5),

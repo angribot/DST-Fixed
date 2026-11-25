@@ -163,26 +163,21 @@ function Unwrappable:WrapItems(items, doer, ...)
 	end
 end
 
+local function HasEmptyEntry(showbundle_itemdata)
+	for _, data in ipairs(showbundle_itemdata) do
+		if IsTableEmpty(data) then
+			return true
+		end
+	end
+	return false
+end
+
 local onload = Unwrappable.OnLoad or function() end
 function Unwrappable:OnLoad(data, ...)
 	local ret = onload(self, data, ...)
 	if self.itemdata then
-		local should_regenerate_itemdata = false
-		if not self.itemdata.showbundle_itemdata then
-			-- Migrate bundles made before this mod is enabled
-			should_regenerate_itemdata = true
-		else
-			-- Klei changed Unwrappable:WrapItems to take strings,
-			-- so some old ones contain bad data,
-			-- we need to catch them here and refresh the bundle data in that case
-			for _, data in ipairs(self.itemdata.showbundle_itemdata) do
-				if IsTableEmpty(data) then
-					should_regenerate_itemdata = true
-					break
-				end
-			end
-		end
-		if should_regenerate_itemdata then
+		local showbundle_itemdata = self.itemdata.showbundle_itemdata
+		if not showbundle_itemdata or HasEmptyEntry(showbundle_itemdata) then
 			make_itemdata_for_unwrappable(self)
 		end
 	end
@@ -208,10 +203,6 @@ local function should_show_tip(target)
 		and (not data.is_container or target.replica.container and not target.replica.container:IsOpenedBy(ThePlayer))
 end
 
--- Refresh/invalidate tipbox for containers (because items inside container can change)
--- when changing target or after 1s
--- Always show tipbox for others (currently unwrappables only)
-
 local last_target
 
 local function send_showbundle_request(target)
@@ -224,8 +215,6 @@ local function should_invalidate_last_data(target)
 end
 
 local function show_tip(target)
-	-- Invalidate show bundle data on moving focus away and when the data is stale
-	-- (can happen because we add in itemdata asynchronously)
 	if target ~= last_target then
 		if last_target and last_target.replica.container then
 			last_target.showbundle_itemdata = nil
@@ -306,9 +295,7 @@ end)
 
 local function serialize(data_table)
 	local serialized = DataDumper(data_table, nil, true)
-	-- return {data}, remove return {} part
-	-- 123456789
-	return string.sub(serialized, 9, -2)
+	return string.sub(serialized, #"return {" + 1, -2)
 end
 
 local function unserialize(data_str)

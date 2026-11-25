@@ -19,10 +19,8 @@ local function PatchStorageRobotSearch()
 		return
 	end
 
-	-- Lookups for the FindItemToPickupAndStore call in progress.
-	local search = nil
+	local call_lookups = nil
 
-	-- The FindContainerWithItem checks that do not depend on the item.
 	local function IsStorageContainer(ent, platform)
 		local container = ent.components.container
 		return container ~= nil
@@ -33,9 +31,8 @@ local function PatchStorageRobotSearch()
 			and ent:GetCurrentPlatform() == platform
 	end
 
-	-- Containers passing the item-independent checks, in FindEntities order.
 	local function GetStorageContainers(inst)
-		if search.containers == nil then
+		if call_lookups.containers == nil then
 			local x, y, z = StorageRobotCommon.GetSpawnPoint(inst):Get()
 			local platform = inst:GetCurrentPlatform()
 			local containers = {}
@@ -45,13 +42,13 @@ local function PatchStorageRobotSearch()
 					table.insert(containers, ent)
 				end
 			end
-			search.containers = containers
+			call_lookups.containers = containers
 		end
-		return search.containers
+		return call_lookups.containers
 	end
 
 	local function GetContainersWithPrefab(inst, prefab)
-		local containers = search.byprefab[prefab]
+		local containers = call_lookups.byprefab[prefab]
 		if containers == nil then
 			containers = {}
 			for _, ent in ipairs(GetStorageContainers(inst)) do
@@ -59,13 +56,13 @@ local function PatchStorageRobotSearch()
 					table.insert(containers, ent)
 				end
 			end
-			search.byprefab[prefab] = containers
+			call_lookups.byprefab[prefab] = containers
 		end
 		return containers
 	end
 
 	StorageRobotCommon.FindContainerWithItem = function(inst, item, count, ...)
-		if search == nil then
+		if call_lookups == nil then
 			return FindContainerWithItem(inst, item, count, ...)
 		end
 
@@ -79,9 +76,9 @@ local function PatchStorageRobotSearch()
 	end
 
 	StorageRobotCommon.FindItemToPickupAndStore = function(inst, ...)
-		search = { byprefab = {} }
+		call_lookups = { byprefab = {} }
 		local item, container = FindItemToPickupAndStore(inst, ...)
-		search = nil
+		call_lookups = nil
 		return item, container
 	end
 end
@@ -136,8 +133,6 @@ local function PatchTemperatureLookup()
 	function Temperature:OnUpdate(...)
 		in_temperature_update = true
 		OnUpdate(self, ...)
-		-- When updates nest, this also ends reuse for the rest of the outer
-		-- update, which only costs repeated lookups.
 		in_temperature_update = false
 		ForgetLastLookup()
 	end
@@ -181,7 +176,6 @@ AddPrefabPostInit("globalmapicon", function(inst)
 			inst:StartUpdatingComponent(updatelooper)
 		end, target)
 
-		-- Icons are created after their target, which may already be asleep.
 		OnTargetSleep()
 	end
 end)

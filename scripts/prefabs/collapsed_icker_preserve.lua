@@ -88,8 +88,6 @@ local function OnLoad(inst, data, newents)
 	if data and data.storage then
 		local storage = SpawnSaveRecord(data.storage, newents)
 		if storage then
-			-- This prefab stays registered when the option is off. Only its retained preserve
-			-- needs upgrade support; ordinary disabled preserves have no migration layer.
 			preserve.RestoreRetained(storage, data.storage.data)
 			inst:SetPreserve(storage)
 		end

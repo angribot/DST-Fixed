@@ -12,11 +12,10 @@ AddPrefabPostInit("king_cane_fx", function(inst)
 		return
 	end
 
-	-- Bumped on every owner change so a stale retry cannot override a newer one.
-	local generation = 0
+	local owner_changes = 0
 
 	highlightchild.onchangeownerfn = function(inst, owner)
-		generation = generation + 1
+		owner_changes = owner_changes + 1
 
 		if owner ~= nil then
 			onchangeownerfn(inst, owner)
@@ -28,10 +27,10 @@ AddPrefabPostInit("king_cane_fx", function(inst)
 			return
 		end
 
-		local token = generation
+		local owner_change = owner_changes
 		local frames = 0
 		local function retry()
-			if token ~= generation then
+			if owner_change ~= owner_changes then
 				return
 			end
 			local resolved = syncowner:value()
