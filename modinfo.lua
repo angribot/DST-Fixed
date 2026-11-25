@@ -6,7 +6,7 @@ local function zheng(zh, en)
 	return LOC[locale] or en
 end
 
-version = "2.30.6"
+version = "2.30.7"
 name = zheng("纯净辅助", "DST Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
@@ -16,9 +16,10 @@ local new_modules = {
 
 changelog = zheng(
 	[[
-- 【煤炭离屏降频】修复与 HyperCore Server 同时启用时洞穴可能崩溃的问题
+- 【阴郁双回旋镖】更名为【强化阴郁回旋镖】，不再限制同时飞出的数量
 
 近期更新：
+- 【煤炭离屏降频】修复与 HyperCore Server 同时启用时洞穴可能崩溃的问题
 - 【检查文本跟随客户端语言】死亡公告不再把被藤蔓救下的薇诺娜说成变成鬼魂
 - 【检查文本跟随客户端语言】称量失败时不再播放弹簧秤音效
 - 【检查文本跟随客户端语言】客户端不再漏显紧接着重复的同一句台词
@@ -31,9 +32,10 @@ changelog = zheng(
 - 新模块【煤炭离屏降频】
 ]],
 	[[
-- Offscreen Coals Throttling: Fix a possible cave crash alongside HyperCore Server
+- Double Gloomerang Projectiles is now Enhanced Gloomerang and no longer limits active projectiles
 
 Recent Changes:
+- Offscreen Coals Throttling: Fix a possible cave crash alongside HyperCore Server
 - Enhanced Localized Description no longer announces a vine-saved Winona as a ghost
 - Enhanced Localized Description no longer plays the Pocket Scale sound when weighing fails
 - Enhanced Localized Description no longer drops a line repeated right after itself on clients
@@ -257,7 +259,8 @@ configuration_options = {
 	},
 	{
 		name = "DOUBLE_VBOOMERANG_PROJECTILES",
-		label = zheng("阴郁双回旋镖", "Double Gloomerang Projectiles"),
+		label = zheng("强化阴郁回旋镖", "Enhanced Gloomerang"),
+		hover = zheng("阴郁回旋镖不再限制同时飞出的数量", "Remove the Gloomerang's active projectile limit."),
 		options = boolean,
 		default = false,
 	},
