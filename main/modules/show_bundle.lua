@@ -28,6 +28,10 @@ SB.supported_items = {
 	cookgift = {},
 }
 
+SB.inventory_holders = {
+	otterden = true,
+}
+
 local Tipbox = require("widgets/sbtipbox")
 
 local function make_itemdata(items)
@@ -184,12 +188,16 @@ function Unwrappable:OnLoad(data, ...)
 	return ret
 end
 
+local function has_live_contents(target)
+	return target.replica.container ~= nil or target.replica.inventory ~= nil
+end
+
 local function draw_tipbox(data, target)
 	if SB.tipbox then
 		local widget_settings = FunctionOrValue(SB.supported_items[target.prefab], target) or {}
 		SB.tipbox:WidgetSetup(widget_settings)
 		SB.tipbox:SetData(data)
-		if target.replica.container and (not data or (IsTableEmpty(data) and not widget_settings.show_on_empty)) then
+		if has_live_contents(target) and (not data or (IsTableEmpty(data) and not widget_settings.show_on_empty)) then
 			SB.tipbox:Hide()
 		elseif not SB.tipbox.shown then
 			SB.tipbox:Show()
@@ -216,9 +224,9 @@ end
 
 local function show_tip(target)
 	if target ~= last_target then
-		if last_target and last_target.replica.container then
+		if last_target and has_live_contents(last_target) then
 			last_target.showbundle_itemdata = nil
-		elseif target and target.replica.container and should_invalidate_last_data(target) then
+		elseif target and has_live_contents(target) and should_invalidate_last_data(target) then
 			target.showbundle_itemdata = nil
 		end
 	end
@@ -227,7 +235,7 @@ local function show_tip(target)
 	if should_show_tip(target) then
 		if target.showbundle_itemdata then
 			draw_tipbox(target.showbundle_itemdata, target)
-			if target.replica.container and GetTime() - target.showbundle_last_update_request_time >= 1 then
+			if has_live_contents(target) and GetTime() - target.showbundle_last_update_request_time >= 1 then
 				send_showbundle_request(target)
 			end
 		else
@@ -327,6 +335,8 @@ AddModRPCHandler(modname, "ShowBundle", function(player, target)
 		itemdata = showbundle_itemdata
 	elseif target.components.container then
 		itemdata = make_itemdata(target.components.container.slots)
+	elseif SB.inventory_holders[target.prefab] then
+		itemdata = make_itemdata(target.components.inventory.itemslots)
 	end
 	itemdata = handle_redpouch_data(target, itemdata) or itemdata
 	SendModRPCToClient(CLIENT_MOD_RPC[modname]["ShowBundleCallback"], player.userid, target, serialize(itemdata))
