@@ -7,7 +7,7 @@ local function zheng(zh, en)
 end
 
 version = "2.30.7"
-name = zheng("纯净辅助", "DST Fixed")
+name = zheng("纯净辅助", "Too Strong Fixed")
 author = zheng("鸭子乐园", "Ducklantis")
 
 local new_modules = {
