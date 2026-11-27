@@ -89,6 +89,7 @@ local asscleaner = {
 	"fix_trap_fumarole_cell",
 	"query_optimization",
 	"fix_chesterlight_save",
+	"fix_projectile_container_owner",
 }
 
 for _, v in ipairs(asscleaner) do

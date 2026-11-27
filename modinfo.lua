@@ -16,9 +16,10 @@ local new_modules = {
 
 changelog = zheng(
 	[[
-- 【显示包裹内容】优化内部实现
+- 修复切进背包的武器已射出的弹体打不出伤害
 
 近期更新：
+- 【显示包裹内容】优化内部实现
 - 【阴郁双回旋镖】更名为【强化阴郁回旋镖】，不再限制同时飞出的数量
 - 【煤炭离屏降频】修复与 HyperCore Server 同时启用时洞穴可能崩溃的问题
 - 【检查文本跟随客户端语言】死亡公告不再把被藤蔓救下的薇诺娜说成变成鬼魂
@@ -33,9 +34,10 @@ changelog = zheng(
 - 新模块【煤炭离屏降频】
 ]],
 	[[
-- Show Bundle: Improve the internal implementation
+- Fix shots dealing no damage once their weapon is moved into a backpack
 
 Recent Changes:
+- Show Bundle: Improve the internal implementation
 - Double Gloomerang Projectiles is now Enhanced Gloomerang and no longer limits active projectiles
 - Offscreen Coals Throttling: Fix a possible cave crash alongside HyperCore Server
 - Enhanced Localized Description no longer announces a vine-saved Winona as a ghost

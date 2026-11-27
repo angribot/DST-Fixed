@@ -133,6 +133,10 @@ If jumping off a Plank with Abandon Ship is interrupted, for example when armor 
 
 Digging up a grave during Hallowed Nights can release bats. When no land lies near the grave, vanilla has no position for them and the server crashes with `attempt to index local 'pos' (a nil value)`. `fix_mound_bats.lua` releases them at the grave instead.
 
+### Weapons Moved Into a Backpack Mid-Shot
+
+A shot from a weapon such as the Gloomerang or a staff deals no damage if the weapon is moved into a backpack while the shot is still in flight, and a Gloomerang's shot then vanishes instead of flying back. `fix_projectile_container_owner.lua` credits the hit to whoever carries the backpack.
+
 ### Brightshade Staff's Last Hit
 
 The Brightshade Staff spends durability when its projectile hits, so the hit that uses the last charge breaks the staff and removes its weapon while the projectile is still bouncing on to the next target. That bounce then attacks with a staff that is no longer a weapon, which can crash the server. `fix_staff_lunarplant.lua` spends durability when the staff fires, and keeps a broken staff a weapon so shots already in flight still land.
