@@ -10,6 +10,7 @@ CONFIG="$SCRIPT_DIR/config.json"
 CHANGE_NOTE=""
 CHANGE_NOTE_SET=false
 DRY_RUN=false
+PRINT_PUBLISHED_VERSION=false
 ASSUME_YES=false
 WORK_DIR=""
 
@@ -17,6 +18,7 @@ usage() {
     cat <<'EOF'
 Usage:
   .workshop/publish.sh [--changenote NOTE] [--dry-run] [--yes]
+  .workshop/publish.sh --published-version
 
 By default, the update note is built from the version and current English
 changelog entry in modinfo.lua.
@@ -28,6 +30,8 @@ Required:
 Options:
   --changenote NOTE  Override the update note; NOTE may contain newlines
   --dry-run          Build and inspect the payload without invoking the uploader
+  --published-version
+                     Print the version live on the Workshop and exit; needs curl
   --yes              Skip the interactive Workshop ID confirmation
   -h, --help         Show this help
 
@@ -210,6 +214,10 @@ while (($# > 0)); do
             DRY_RUN=true
             shift
             ;;
+        --published-version)
+            PRINT_PUBLISHED_VERSION=true
+            shift
+            ;;
         --yes)
             ASSUME_YES=true
             shift
@@ -262,6 +270,18 @@ fi
 PUBLISHED_FILE_ID="$(jq -r '.publishedFileId | tostring' "$CONFIG")"
 [[ "$PUBLISHED_FILE_ID" =~ ^[1-9][0-9]*$ ]] || die "publishedFileId must use decimal integer notation"
 readonly PUBLISHED_FILE_ID
+
+if [[ "$PRINT_PUBLISHED_VERSION" == true ]]; then
+    command -v curl >/dev/null 2>&1 || die "curl is required but was not found in PATH"
+    details="$(curl -fsS --max-time 30 -X POST \
+        https://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1/ \
+        -d itemcount=1 -d "publishedfileids[0]=$PUBLISHED_FILE_ID")" ||
+        die "could not reach the Steam Web API"
+    published_version="$(jq -r '[.response.publishedfiledetails[0].tags[]?.tag | select(startswith("version:"))][0] // empty | ltrimstr("version:")' <<<"$details")"
+    [[ -n "$published_version" ]] || die "Workshop item $PUBLISHED_FILE_ID has no version tag"
+    printf '%s\n' "$published_version"
+    exit 0
+fi
 
 [[ -z "$(git -C "$REPO_ROOT" status --porcelain)" ]] || die "working tree is not clean"
 
