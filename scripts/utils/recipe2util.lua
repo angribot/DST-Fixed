@@ -1,15 +1,10 @@
 -- Vanilla modutil.lua:getfenvminfield (763928): copy
 local function getfenvminfield(level, fieldname)
 	level = level + 1
-	while
-		debug.getinfo(level) ~= nil and (debug.getinfo(level).func == nil or rawget(getfenv(level), fieldname) == nil)
-	do
+	while debug.getinfo(level) ~= nil and (debug.getinfo(level).func == nil or rawget(getfenv(level), fieldname) == nil) do
 		level = level + 1
 	end
-	assert(
-		debug.getinfo(level) ~= nil,
-		"Field " .. tostring(fieldname) .. " not found in callstack's functions' environments"
-	)
+	assert(debug.getinfo(level) ~= nil, "Field " .. tostring(fieldname) .. " not found in callstack's functions' environments")
 	return getfenv(level)[fieldname]
 end
 

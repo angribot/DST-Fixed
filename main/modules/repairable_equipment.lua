@@ -11,12 +11,7 @@ local function MakeRepairable(inst)
 		return
 	end
 
-	if
-		inst.components.finiteuses
-		or inst.components.fueled
-		or inst.components.armor
-		or (inst.components.perishable and inst.components.equippable)
-	then
+	if inst.components.finiteuses or inst.components.fueled or inst.components.armor or (inst.components.perishable and inst.components.equippable) then
 		inst:AddComponent("sewingnew")
 		inst.components.sewingnew:AddRepairMap(inst.prefab)
 	end

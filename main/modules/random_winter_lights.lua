@@ -10,11 +10,5 @@ STRINGS.RECIPE_DESC.WINTER_LIGHT_BUILDER = STRINGS.CHARACTERS.GENERIC.DESCRIBE.W
 
 local image = table.concat({ "winter_ornament_light", math.random(1, 8), ".tex" })
 local atlas = GetInventoryItemAtlas(image)
-AddRecipe(
-	"winter_light_builder",
-	{ Ingredient("fireflies", 3) },
-	TECH.SCIENCE_TWO,
-	{ nomods = true, atlas = atlas, image = image },
-	{ "LIGHT", "REFINE" }
-)
+AddRecipe("winter_light_builder", { Ingredient("fireflies", 3) }, TECH.SCIENCE_TWO, { nomods = true, atlas = atlas, image = image }, { "LIGHT", "REFINE" })
 SortBefore("winter_light_builder", "mushroom_light", "LIGHT")

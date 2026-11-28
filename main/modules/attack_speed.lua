@@ -13,9 +13,7 @@ local function PatchBlowdartState(sg)
 
 	local function EndAttackAfterShot(inst)
 		local inst_sg = inst.sg
-		if inst_sg.currentstate == state
-			and inst_sg:HasStateTag("attack")
-			and not inst_sg:HasStateTag("abouttoattack") then
+		if inst_sg.currentstate == state and inst_sg:HasStateTag("attack") and not inst_sg:HasStateTag("abouttoattack") then
 			-- Vanilla stategraphs/SGwilson.lua:blowdart (763928): ontimeout makes the same change later
 			inst_sg:RemoveStateTag("attack")
 			inst_sg:AddStateTag("idle")

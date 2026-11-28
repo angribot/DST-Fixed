@@ -9,12 +9,7 @@ local StopTrackingDelayOwner = UpvalueUtil.GetUpvalue(Projectile.Hit, "StopTrack
 
 local function get_wielder(weapon)
 	local holder = weapon.components.inventoryitem.owner
-	while
-		holder ~= nil
-		and holder.components.combat == nil
-		and holder.components.inventoryitem ~= nil
-		and holder.components.inventoryitem.owner ~= nil
-	do
+	while holder ~= nil and holder.components.combat == nil and holder.components.inventoryitem ~= nil and holder.components.inventoryitem.owner ~= nil do
 		holder = holder.components.inventoryitem.owner
 	end
 	return holder
@@ -28,11 +23,7 @@ function Projectile:Hit(target)
 	self:Stop()
 	self.inst.Physics:Stop()
 
-	if
-		attacker.components.combat == nil
-		and attacker.components.weapon ~= nil
-		and attacker.components.inventoryitem ~= nil
-	then
+	if attacker.components.combat == nil and attacker.components.weapon ~= nil and attacker.components.inventoryitem ~= nil then
 		weapon = (self.has_damage_set and weapon.components.weapon ~= nil) and weapon or attacker
 		attacker = get_wielder(attacker)
 	end
@@ -60,12 +51,7 @@ end
 -- Vanilla components/projectile.lua:Projectile:Miss (763928): copied, taking the holder of the container the weapon is in as the attacker
 function Projectile:Miss(target)
 	local attacker = self.owner
-	if
-		attacker ~= nil
-		and attacker.components.combat == nil
-		and attacker.components.weapon ~= nil
-		and attacker.components.inventoryitem ~= nil
-	then
+	if attacker ~= nil and attacker.components.combat == nil and attacker.components.weapon ~= nil and attacker.components.inventoryitem ~= nil then
 		attacker = get_wielder(attacker)
 	end
 	StopTrackingDelayOwner(self)

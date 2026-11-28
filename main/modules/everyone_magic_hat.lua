@@ -8,12 +8,7 @@ end
 local USEMAGICTOOL_fn = ACTIONS.USEMAGICTOOL.fn
 ACTIONS.USEMAGICTOOL.fn = function(act)
 	if USEMAGICTOOL_fn(act) then
-		if
-			act.doer
-			and act.doer.components.sanity
-			and act.doer.prefab ~= "waxwell"
-			and not act.doer:HasTag("mio_boosted_task")
-		then
+		if act.doer and act.doer.components.sanity and act.doer.prefab ~= "waxwell" and not act.doer:HasTag("mio_boosted_task") then
 			act.doer.components.sanity:DoDelta(-15)
 		end
 		return IsStillUsingTool(act.doer)

@@ -212,11 +212,12 @@ function GetActionFailStringCode(inst, action, reason, strtype, params)
 	end
 	local character_speech = character and STRINGS.CHARACTERS[character]
 	local str = character_speech
-		and (
-			getcharacterstring("CHARACTERS." .. character .. ".ACTIONFAIL", character_speech.ACTIONFAIL, action, reason)
-			or getcharacterstring("CHARACTERS." .. character .. ".ACTIONFAIL", character_speech.ACTIONFAIL, "GENERIC", reason)
-			or (character_speech.ACTIONFAIL_GENERIC and "CHARACTERS." .. character .. ".ACTIONFAIL_GENERIC")
-		)
+			and (getcharacterstring("CHARACTERS." .. character .. ".ACTIONFAIL", character_speech.ACTIONFAIL, action, reason) or getcharacterstring(
+				"CHARACTERS." .. character .. ".ACTIONFAIL",
+				character_speech.ACTIONFAIL,
+				"GENERIC",
+				reason
+			) or (character_speech.ACTIONFAIL_GENERIC and "CHARACTERS." .. character .. ".ACTIONFAIL_GENERIC"))
 		or getcharacterstring("CHARACTERS.GENERIC.ACTIONFAIL", STRINGS.CHARACTERS.GENERIC.ACTIONFAIL, action, reason)
 		or getcharacterstring("CHARACTERS.GENERIC.ACTIONFAIL", STRINGS.CHARACTERS.GENERIC.ACTIONFAIL, "GENERIC", reason)
 		or "CHARACTERS.GENERIC.ACTIONFAIL_GENERIC"

@@ -9,17 +9,7 @@ SEWINGNEW.str = ACTIONS.REPAIR.str
 SEWINGNEW.fn = function(act)
 	local sewtool = act.invobject
 	local item = act.target
-	if
-		sewtool
-		and sewtool.components.sewingnew
-		and item
-		and (
-			item.components.perishable
-			or item.components.finiteuses
-			or item.components.fueled
-			or item.components.armor
-		)
-	then
+	if sewtool and sewtool.components.sewingnew and item and (item.components.perishable or item.components.finiteuses or item.components.fueled or item.components.armor) then
 		sewtool.components.sewingnew:DoSewing(item, act.doer)
 	end
 	return true

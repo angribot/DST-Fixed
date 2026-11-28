@@ -73,13 +73,7 @@ AddSimPostInit(function()
 	UpvalueUtil.SetUpvalue(Prefabs["beefaloherd"].fn, "OnSpawned.SpawnableParent", function(inst)
 		for member in pairs(inst.components.herd.members) do
 			if not member.no_periodicspawn then
-				if
-					member.components.domesticatable == nil
-					or (
-						member.components.domesticatable:IsDomesticated() == false
-						and member.components.rideable:GetRider() == nil
-					)
-				then
+				if member.components.domesticatable == nil or (member.components.domesticatable:IsDomesticated() == false and member.components.rideable:GetRider() == nil) then
 					return member
 				end
 			end

@@ -21,7 +21,8 @@ AddPrefabPostInit("eyeturret", function(inst)
 		local x, y, z = inst.Transform:GetWorldPosition()
 		local ents = TheSim:FindEntities(x, y, z, TUNING.EYETURRET_RANGE + 3, RETARGET_MUST_TAGS, RETARGET_CANT_TAGS)
 		for _, v in ipairs(ents) do
-			if v ~= inst
+			if
+				v ~= inst
 				and v ~= target
 				and v.entity:IsVisible()
 				and inst.components.combat:CanTarget(v)

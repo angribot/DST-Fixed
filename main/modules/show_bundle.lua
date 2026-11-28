@@ -119,23 +119,19 @@ local function handle_redpouch_data(target, data)
 			return
 		end
 	end
-	return nugget_count ~= 0
-		and {
-			{
-				prefab = "lucky_goldnugget",
-				image = "lucky_goldnugget.tex",
-				stack = nugget_count,
-			},
-		}
+	return nugget_count ~= 0 and {
+		{
+			prefab = "lucky_goldnugget",
+			image = "lucky_goldnugget.tex",
+			stack = nugget_count,
+		},
+	}
 end
 
 local function make_itemdata_for_unwrappable(unwrappable)
 	if unwrappable and unwrappable.itemdata then
 		local items = {}
-		local creator = unwrappable.origin
-				and TheWorld.meta.session_identifier ~= unwrappable.origin
-				and { sessionid = unwrappable.origin }
-			or nil
+		local creator = unwrappable.origin and TheWorld.meta.session_identifier ~= unwrappable.origin and { sessionid = unwrappable.origin } or nil
 		for i, v in ipairs(unwrappable.itemdata) do
 			local item = SpawnPrefab(v.prefab, v.skinname, v.skin_id, creator)
 			if item and item:IsValid() then
@@ -207,8 +203,7 @@ end
 
 local function should_show_tip(target)
 	local data = target and FunctionOrValue(SB.supported_items[target.prefab], target)
-	return data
-		and (not data.is_container or target.replica.container and not target.replica.container:IsOpenedBy(ThePlayer))
+	return data and (not data.is_container or target.replica.container and not target.replica.container:IsOpenedBy(ThePlayer))
 end
 
 local last_target
@@ -328,9 +323,7 @@ AddModRPCHandler(modname, "ShowBundle", function(player, target)
 		return
 	end
 	local itemdata = {}
-	local showbundle_itemdata = target.components.unwrappable
-		and target.components.unwrappable.itemdata
-		and target.components.unwrappable.itemdata.showbundle_itemdata
+	local showbundle_itemdata = target.components.unwrappable and target.components.unwrappable.itemdata and target.components.unwrappable.itemdata.showbundle_itemdata
 	if showbundle_itemdata then
 		itemdata = showbundle_itemdata
 	elseif target.components.container then

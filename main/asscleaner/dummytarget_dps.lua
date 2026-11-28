@@ -30,9 +30,7 @@ local function record_dps(t, amount)
 end
 
 local function do_digits(inst)
-	inst.Label:SetText(
-		"Hit:" .. inst.last_hit .. "\nFrame:" .. inst._digits_num .. "\nDPS: " .. count_dps(inst.dps_history)
-	)
+	inst.Label:SetText("Hit:" .. inst.last_hit .. "\nFrame:" .. inst._digits_num .. "\nDPS: " .. count_dps(inst.dps_history))
 	inst.Label:SetUIOffset(math.random() * 20 - 10, math.random() * 20 + 90, 0)
 	inst.AnimState:PlayAnimation("hit")
 	inst.AnimState:PushAnimation("idle")
@@ -96,7 +94,5 @@ local CHS_CODES = {
 }
 
 STRINGS.NAMES.DUMMYTARGET = CHS_CODES[LanguageTranslator.defaultlang] and "伤害测试木桩" or "Dummy Target"
-STRINGS.NAMES.DUMMYTARGET_LUNAR = CHS_CODES[LanguageTranslator.defaultlang] and "伤害测试木桩（月亮）"
-	or "Lunar Dummy Target"
-STRINGS.NAMES.DUMMYTARGET_SHADOW = CHS_CODES[LanguageTranslator.defaultlang] and "伤害测试木桩（暗影）"
-	or "Shadow Dummy Target"
+STRINGS.NAMES.DUMMYTARGET_LUNAR = CHS_CODES[LanguageTranslator.defaultlang] and "伤害测试木桩（月亮）" or "Lunar Dummy Target"
+STRINGS.NAMES.DUMMYTARGET_SHADOW = CHS_CODES[LanguageTranslator.defaultlang] and "伤害测试木桩（暗影）" or "Shadow Dummy Target"

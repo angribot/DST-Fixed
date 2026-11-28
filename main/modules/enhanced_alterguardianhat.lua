@@ -121,8 +121,7 @@ AddPrefabPostInit("alterguardianhat", function(inst)
 	inst.onunequip_prefns = inst.onunequip_prefns or {}
 	if inst.components.equippable then
 		inst.onequip_prefns["dst-fixed"] = inst.onequip_prefns["dst-fixed"] or inst.components.equippable.onequipfn
-		inst.onunequip_prefns["dst-fixed"] = inst.onunequip_prefns["dst-fixed"]
-			or inst.components.equippable.onunequipfn
+		inst.onunequip_prefns["dst-fixed"] = inst.onunequip_prefns["dst-fixed"] or inst.components.equippable.onunequipfn
 		inst.components.equippable:SetOnEquip(onequip)
 		inst.components.equippable:SetOnUnequip(onunequip)
 	end
@@ -142,9 +141,7 @@ if not rawget(_G, "NS_PLANARENTITY_HACKING") then
 	local AbsorbDamage = PlanarEntity.AbsorbDamage
 
 	function PlanarEntity:AbsorbDamage(damage, attacker, weapon, spdmg, ...)
-		if
-			(attacker and attacker:HasTag("ignore_planar_entity")) or (weapon and weapon:HasTag("ignore_planar_entity"))
-		then
+		if (attacker and attacker:HasTag("ignore_planar_entity")) or (weapon and weapon:HasTag("ignore_planar_entity")) then
 			return damage, spdmg
 		end
 		return AbsorbDamage(self, damage, attacker, weapon, spdmg, ...)

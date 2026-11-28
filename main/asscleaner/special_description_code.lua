@@ -6,12 +6,7 @@ GLOBAL.setfenv(1, GLOBAL)
 
 -- Vanilla prefabs/player_common.lua:TryDescribe (763928): copy that returns the string path
 local function TryDescribe(base_str, descstrings, modifier)
-	return descstrings
-		and (
-			type(descstrings) == "string" and base_str
-			or descstrings[modifier] and base_str .. "." .. modifier
-			or descstrings.GENERIC and base_str .. ".GENERIC"
-		)
+	return descstrings and (type(descstrings) == "string" and base_str or descstrings[modifier] and base_str .. "." .. modifier or descstrings.GENERIC and base_str .. ".GENERIC")
 end
 
 -- Vanilla prefabs/player_common.lua:TryCharStrings (763928): copy that returns the string path
@@ -19,8 +14,7 @@ local function TryCharStrings(inst, base_str, charstrings, modifier)
 	if charstrings then
 		base_str = base_str .. ".DESCRIBE."
 		local character = string.upper(inst.prefab)
-		return TryDescribe(base_str .. character, charstrings.DESCRIBE[character], modifier)
-			or TryDescribe(base_str .. "PLAYER", charstrings.DESCRIBE.PLAYER, modifier)
+		return TryDescribe(base_str .. character, charstrings.DESCRIBE[character], modifier) or TryDescribe(base_str .. "PLAYER", charstrings.DESCRIBE.PLAYER, modifier)
 	end
 end
 
@@ -249,8 +243,7 @@ STRCODE_REVIERS[STRINGS.NAMES.RESURRECTIONSTONE] = "NAMES.RESURRECTIONSTONE"
 STRCODE_REVIERS[STRINGS.NAMES.RESURRECTIONSTATUE] = "NAMES.RESURRECTIONSTATUE"
 STRCODE_REVIERS[STRINGS.NAMES.MULTIPLAYER_PORTAL] = "NAMES.MULTIPLAYER_PORTAL"
 STRCODE_REVIERS[STRINGS.NAMES.MULTIPLAYER_PORTAL_MOONROCK] = "NAMES.MULTIPLAYER_PORTAL_MOONROCK"
-STRCODE_REVIERS[STRINGS.NAMES.MULTIPLAYER_PORTAL_MOONROCK_CONSTR_PLANS] =
-	"NAMES.MULTIPLAYER_PORTAL_MOONROCK_CONSTR_PLANS"
+STRCODE_REVIERS[STRINGS.NAMES.MULTIPLAYER_PORTAL_MOONROCK_CONSTR_PLANS] = "NAMES.MULTIPLAYER_PORTAL_MOONROCK_CONSTR_PLANS"
 
 -- Vanilla widgets/eventannouncer.lua:GetNewRezAnnouncementString (763928): copy that returns a string code
 function GetNewRezAnnouncementString(theRezzed, source)
@@ -367,18 +360,12 @@ STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_ANALYSIS_OVER[2]] = "WAGSTAFF_NPC_ANALYSIS_O
 STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_ANALYSIS_OVER[3]] = "WAGSTAFF_NPC_ANALYSIS_OVER.3"
 STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_ANALYSIS_OVER[4]] = "WAGSTAFF_NPC_ANALYSIS_OVER.4"
 
-STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED1[1]] =
-	"WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED1.1"
-STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED1[2]] =
-	"WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED1.2"
-STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED2[1]] =
-	"WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED2.1"
-STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED2[2]] =
-	"WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED2.2"
-STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED3[1]] =
-	"WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED3.1"
-STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED3[2]] =
-	"WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED3.2"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED1[1]] = "WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED1.1"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED1[2]] = "WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED1.2"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED2[1]] = "WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED2.1"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED2[2]] = "WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED2.2"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED3[1]] = "WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED3.1"
+STRCODE_TALKER[STRINGS.WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED3[2]] = "WAGSTAFF_NPC_MUTATION_DEFEATED_AFTER_TASK_COMPLETED3.2"
 
 STRCODE_TALKER[STRINGS.WAGSTAFF_GOTTOHINT[1]] = "WAGSTAFF_GOTTOHINT.1"
 STRCODE_TALKER[STRINGS.WAGSTAFF_GOTTOHINT[2]] = "WAGSTAFF_GOTTOHINT.2"
@@ -473,8 +460,7 @@ STRCODE_TALKER[STRINGS.HERMITCRAB_INVESTIGATE.FILL_MEATRACKS.HIGH[1]] = "HERMITC
 
 STRCODE_TALKER[STRINGS.HERMITCRAB_INVESTIGATE.REMOVE_LUREPLANT.LOW[1]] = "HERMITCRAB_INVESTIGATE.REMOVE_LUREPLANT.LOW.1"
 STRCODE_TALKER[STRINGS.HERMITCRAB_INVESTIGATE.REMOVE_LUREPLANT.MED[1]] = "HERMITCRAB_INVESTIGATE.REMOVE_LUREPLANT.MED.1"
-STRCODE_TALKER[STRINGS.HERMITCRAB_INVESTIGATE.REMOVE_LUREPLANT.HIGH[1]] =
-	"HERMITCRAB_INVESTIGATE.REMOVE_LUREPLANT.HIGH.1"
+STRCODE_TALKER[STRINGS.HERMITCRAB_INVESTIGATE.REMOVE_LUREPLANT.HIGH[1]] = "HERMITCRAB_INVESTIGATE.REMOVE_LUREPLANT.HIGH.1"
 
 STRCODE_TALKER[STRINGS.HERMITCRAB_GREETING[0][1]] = "HERMITCRAB_GREETING.0.1"
 STRCODE_TALKER[STRINGS.HERMITCRAB_GREETING[0][2]] = "HERMITCRAB_GREETING.0.2"
@@ -675,20 +661,16 @@ STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_IDLE_QUOTE[3]] = "HERMIT
 STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_IDLE_QUOTE[4]] = "HERMITCRAB_ANNOUNCE_OCEANFISHING_IDLE_QUOTE.4"
 STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_IDLE_QUOTE[5]] = "HERMITCRAB_ANNOUNCE_OCEANFISHING_IDLE_QUOTE.5"
 
-STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_LINETOOLOOSE[1]] =
-	"HERMITCRAB_ANNOUNCE_OCEANFISHING_LINETOOLOOSE.1"
+STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_LINETOOLOOSE[1]] = "HERMITCRAB_ANNOUNCE_OCEANFISHING_LINETOOLOOSE.1"
 
 STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_BADCAST[1]] = "HERMITCRAB_ANNOUNCE_OCEANFISHING_BADCAST.1"
 
 STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_GOTAWAY[1]] = "HERMITCRAB_ANNOUNCE_OCEANFISHING_GOTAWAY.1"
 STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_GOTAWAY[2]] = "HERMITCRAB_ANNOUNCE_OCEANFISHING_GOTAWAY.2"
 
-STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.LOW[1]] =
-	"HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.LOW.1"
-STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.MED[1]] =
-	"HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.MED.1"
-STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.HIGH[1]] =
-	"HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.HIGH.1"
+STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.LOW[1]] = "HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.LOW.1"
+STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.MED[1]] = "HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.MED.1"
+STRCODE_TALKER[STRINGS.HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.HIGH[1]] = "HERMITCRAB_ANNOUNCE_OCEANFISHING_BOTHERED.HIGH.1"
 
 STRCODE_TALKER[STRINGS.HERMITCRAB_LEVEL10_PLAYERGOOD[1]] = "HERMITCRAB_LEVEL10_PLAYERGOOD.1"
 
@@ -752,24 +734,11 @@ local function trophyscale_fish_getdesc(inst, viewer)
 					or STRCODE_HEADER .. "UI.HUD.TROPHYSCALE_UNKNOWN_OWNER",
 			})
 		else
-			local name = data.owner_userid == nil and STRCODE_HEADER .. "UI.HUD.TROPHYSCALE_UNKNOWN_OWNER"
-				or data.owner_name
+			local name = data.owner_userid == nil and STRCODE_HEADER .. "UI.HUD.TROPHYSCALE_UNKNOWN_OWNER" or data.owner_name
 			return data.owner_userid ~= nil
 					and data.owner_userid == viewer.userid
-					and GetDescriptionCode(
-						viewer,
-						inst,
-						"OWNER" .. heavy_postfix,
-						"subfmt",
-						{ weight = data.weight or "", owner = name or "" }
-					)
-				or GetDescriptionCode(
-					viewer,
-					inst,
-					"HAS_ITEM" .. heavy_postfix,
-					"subfmt",
-					{ weight = data.weight or "", owner = name or "" }
-				)
+					and GetDescriptionCode(viewer, inst, "OWNER" .. heavy_postfix, "subfmt", { weight = data.weight or "", owner = name or "" })
+				or GetDescriptionCode(viewer, inst, "HAS_ITEM" .. heavy_postfix, "subfmt", { weight = data.weight or "", owner = name or "" })
 		end
 	end
 
@@ -797,13 +766,7 @@ local function trophyscale_oversizedveggies_getdesc(inst, viewer)
 		end
 
 		local heavy_postfix = (data.is_heavy and "_HEAVY" or "")
-		return GetDescriptionCode(
-			viewer,
-			inst,
-			"HAS_ITEM" .. heavy_postfix,
-			"subfmt",
-			{ weight = data.weight or "", day = data.day or "" }
-		)
+		return GetDescriptionCode(viewer, inst, "HAS_ITEM" .. heavy_postfix, "subfmt", { weight = data.weight or "", day = data.day or "" })
 	end
 
 	return GetDescriptionCode(viewer, inst) or nil
@@ -841,12 +804,9 @@ end)
 -- Vanilla stategraphs/SGwilson.lua:use_pocket_scale (763928): copy of the weighing TimeEvent that announces a string code
 AddStategraphPostInit("wilson", function(self)
 	self.states["use_pocket_scale"].timeline[1] = TimeEvent(30 * FRAMES, function(inst)
-		local weight = inst.sg.statemem.target ~= nil and inst.sg.statemem.target.components.weighable:GetWeight()
-			or nil
+		local weight = inst.sg.statemem.target ~= nil and inst.sg.statemem.target.components.weighable:GetWeight() or nil
 		if weight ~= nil and inst:PerformBufferedAction() then
-			local announce_str = inst.sg.statemem.target.components.weighable:GetWeightPercent()
-						>= TUNING.WEIGHABLE_HEAVY_WEIGHT_PERCENT
-					and "ANNOUNCE_WEIGHT_HEAVY"
+			local announce_str = inst.sg.statemem.target.components.weighable:GetWeightPercent() >= TUNING.WEIGHABLE_HEAVY_WEIGHT_PERCENT and "ANNOUNCE_WEIGHT_HEAVY"
 				or "ANNOUNCE_WEIGHT"
 			local str = GetStringCode(inst, announce_str, nil, "subfmt", { weight = string.format("%0.2f", weight) })
 			inst.components.talker:Say(str)
@@ -865,15 +825,12 @@ local function get_blueprint_string_ret(inst)
 				strtype = "subfmt",
 				content = "NAMES.BLUEPRINT_RARE",
 				params = {
-					item = STRINGS.NAMES[string.upper(inst.recipetouse)]
-							and STRCODE_HEADER .. "NAMES." .. string.upper(inst.recipetouse)
-						or STRCODE_HEADER .. "NAMES.UNKNOWN",
+					item = STRINGS.NAMES[string.upper(inst.recipetouse)] and STRCODE_HEADER .. "NAMES." .. string.upper(inst.recipetouse) or STRCODE_HEADER .. "NAMES.UNKNOWN",
 				},
 			}
 		or {
 			content = {
-				STRINGS.NAMES[string.upper(inst.recipetouse)] and "NAMES." .. string.upper(inst.recipetouse)
-					or "NAMES.UNKNOWN",
+				STRINGS.NAMES[string.upper(inst.recipetouse)] and "NAMES." .. string.upper(inst.recipetouse) or "NAMES.UNKNOWN",
 				"$ ",
 				"NAMES.BLUEPRINT",
 			},
@@ -912,8 +869,7 @@ AddPrefabPostInit("blueprint", blueprint_postinit)
 local function minisign_displaynamefn(inst)
 	return #inst._imagename:value() > 0
 			and subfmt(STRINGS.NAMES.MINISIGN_DRAWN, {
-				item = IsStrCode(inst._imagename:value()) and ResolveStrCode(SubStrCode(inst._imagename:value()))
-					or inst._imagename:value(),
+				item = IsStrCode(inst._imagename:value()) and ResolveStrCode(SubStrCode(inst._imagename:value())) or inst._imagename:value(),
 			})
 		or STRINGS.NAMES.MINISIGN
 end
@@ -938,9 +894,7 @@ ACTIONS.DRAW.stroverridefn = function(act)
 	local drawnameoverride = item and item.drawnameoverride
 	return item ~= nil
 			and subfmt(STRINGS.ACTIONS.DRAWITEM, {
-				item = drawnameoverride and (IsStrCode(drawnameoverride) and ResolveStrCode(
-					SubStrCode(drawnameoverride)
-				) or drawnameoverride) or item:GetBasicDisplayName(),
+				item = drawnameoverride and (IsStrCode(drawnameoverride) and ResolveStrCode(SubStrCode(drawnameoverride)) or drawnameoverride) or item:GetBasicDisplayName(),
 			})
 		or nil
 end
@@ -968,12 +922,7 @@ local function add_drawname_override(inst)
 		return
 	end
 
-	if
-		inst:HasTag("_inventoryitem")
-		and not (inst:HasTag("INLIMBO") or inst:HasTag("notdrawable"))
-		and inst.displaynamefn == nil
-		and inst.name_author_netid == nil
-	then
+	if inst:HasTag("_inventoryitem") and not (inst:HasTag("INLIMBO") or inst:HasTag("notdrawable")) and inst.displaynamefn == nil and inst.name_author_netid == nil then
 		inst:DoTaskInTime(0, common_drawnameoverride_fn)
 	end
 

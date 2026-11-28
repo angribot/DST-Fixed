@@ -74,13 +74,7 @@ end
 
 -- Vanilla prefabs/houndstooth_blowpipe.lua:Projectile_OnPreHit (763928): copy
 local function Projectile_OnPreHit(inst, attacker, target)
-	if
-		target ~= nil
-		and target:IsValid()
-		and attacker ~= nil
-		and attacker:IsValid()
-		and (target.components.health == nil or not target.components.health:IsDead())
-	then
+	if target ~= nil and target:IsValid() and attacker ~= nil and attacker:IsValid() and (target.components.health == nil or not target.components.health:IsDead()) then
 		inst:SpawnImpactFx(attacker, target)
 	end
 end

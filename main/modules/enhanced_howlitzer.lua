@@ -11,9 +11,7 @@ AddComponentAction("INVENTORY", "reloaditem", function(inst, doer, actions)
 	local inventory = doer.replica.inventory
 	local equipped = inventory and inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
 	local container = equipped and equipped.replica.container
-	if equipped and equipped.prefab == "houndstooth_blowpipe"
-		and container and container:IsInfiniteStackSize()
-		and not container:IsHolding(inst) then
+	if equipped and equipped.prefab == "houndstooth_blowpipe" and container and container:IsInfiniteStackSize() and not container:IsHolding(inst) then
 		for i = #actions, 1, -1 do
 			if actions[i] == ACTIONS.CHANGE_TACKLE then
 				table.remove(actions, i)
@@ -88,8 +86,7 @@ local function set_upgradeable(inst)
 end
 
 local function displaynamefn(inst)
-	return inst:HasTag("chest_upgradeable") and STRINGS.NAMES.HOUNDSTOOTH_BLOWPIPE
-		or (STRINGS.NAMES.HOUNDSTOOTH_BLOWPIPE .. " +")
+	return inst:HasTag("chest_upgradeable") and STRINGS.NAMES.HOUNDSTOOTH_BLOWPIPE or (STRINGS.NAMES.HOUNDSTOOTH_BLOWPIPE .. " +")
 end
 
 AddPrefabPostInit("houndstooth_blowpipe", function(inst)

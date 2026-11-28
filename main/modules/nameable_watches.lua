@@ -45,13 +45,7 @@ local RecallMark = require("components/recallmark")
 
 local Copy = RecallMark.Copy
 function RecallMark:Copy(rhs, ...)
-	if
-		rhs
-		and SUPPORTED_WATCHES[self.inst.prefab]
-		and SUPPORTED_WATCHES[rhs.prefab]
-		and self.inst.watch_record_name
-		and rhs.watch_record_name
-	then
+	if rhs and SUPPORTED_WATCHES[self.inst.prefab] and SUPPORTED_WATCHES[rhs.prefab] and self.inst.watch_record_name and rhs.watch_record_name then
 		self.inst.watch_record_name:set(rhs.watch_record_name:value())
 	end
 	return Copy(self, rhs, ...)
@@ -102,11 +96,7 @@ local states = {
 			inst.AnimState:PushAnimation("reading_loop", true)
 			local buffaction = inst:GetBufferedAction()
 			local target = buffaction and buffaction.target
-			inst.AnimState:OverrideSymbol(
-				"book_cook",
-				target and target.AnimState:GetBuild() or "pocketwatch_recall",
-				"watchprop"
-			)
+			inst.AnimState:OverrideSymbol("book_cook", target and target.AnimState:GetBuild() or "pocketwatch_recall", "watchprop")
 		end,
 
 		timeline = {
@@ -136,11 +126,7 @@ local states = {
 			if not inst.sg.statemem.chain_end then
 				inst.AnimState:PlayAnimation("reading_pst")
 				if inst.sg.statemem.tool_prefab then
-					inst.components.inventory:GiveItem(
-						SpawnPrefab(inst.sg.statemem.tool_prefab),
-						nil,
-						inst:GetPosition()
-					)
+					inst.components.inventory:GiveItem(SpawnPrefab(inst.sg.statemem.tool_prefab), nil, inst:GetPosition())
 				end
 				local target = inst.sg.statemem.target
 				if target and target:IsValid() and target.components.writeable then
@@ -260,13 +246,7 @@ local function WatchPostInit(inst)
 	inst.components.writeable:SetAutomaticDescriptionEnabled(false)
 	local Write = inst.components.writeable.Write
 	inst.components.writeable.Write = function(self, doer, text, ...)
-		if
-			self.writer == doer
-			and doer
-			and doer.sg
-			and doer.sg.currentstate.name == "rename_watch"
-			and (text == nil or text:utf8len() <= MAX_WRITEABLE_LENGTH)
-		then
+		if self.writer == doer and doer and doer.sg and doer.sg.currentstate.name == "rename_watch" and (text == nil or text:utf8len() <= MAX_WRITEABLE_LENGTH) then
 			if text == nil then
 				doer.sg:GoToState("idle", true)
 			else
@@ -302,8 +282,7 @@ local function WatchPostInit(inst)
 	end
 
 	inst:DoTaskInTime(0, function(inst)
-		inst.drawnameoverride = rawget(_G, "EncodeStrCode")
-			and EncodeStrCode({ content = "NAMES." .. string.upper(inst.prefab) })
+		inst.drawnameoverride = rawget(_G, "EncodeStrCode") and EncodeStrCode({ content = "NAMES." .. string.upper(inst.prefab) })
 	end)
 end
 

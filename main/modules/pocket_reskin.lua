@@ -29,11 +29,7 @@ local CANT_PREFABS = {
 }
 
 AddComponentAction("INVENTORY", "inventoryitem", function(inst, doer, actions)
-	if
-		CANT_PREFABS[inst.prefab]
-		or (inst.replica.equippable and inst.replica.equippable:IsEquipped())
-		or not PREFAB_SKINS[inst.prefab]
-	then
+	if CANT_PREFABS[inst.prefab] or (inst.replica.equippable and inst.replica.equippable:IsEquipped()) or not PREFAB_SKINS[inst.prefab] then
 		return
 	end
 	local tool = doer.replica.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
