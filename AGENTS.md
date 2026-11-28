@@ -47,7 +47,7 @@ Target DST's Lua 5.1 runtime plus `bit`, not LuaJIT extensions.
 
 ## Testing
 
-Verify changed behavior with a simulation in a temporary directory outside the repository (e.g. `mktemp -d`); the repository keeps no test files. Simulations run on LuaJIT and only approximate DST, so list the runtime-sensitive behavior left to check in-game.
+Verify changed behavior with a simulation in a temporary directory outside the repository (e.g. `mktemp -d`); the repository keeps no test files. Simulate on the game's Lua 5.1 runtime (`uv run --with lupa`, `lupa.lua51`) and load mod files the way `mods.lua` does. Simulations still only approximate DST, so list the engine-dependent behavior left to check in-game.
 
 ## Release notes
 
