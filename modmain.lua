@@ -35,6 +35,7 @@ local config_table = {
 	MHATS = "glowing_mushroom_hats",
 	DOUBLE_VBOOMERANG_PROJECTILES = "enhanced_vboomerang",
 	HORSESHOE_STACKS = "horseshoe_stacks",
+	REPAIR_KIT_STACKS = "repair_kit_stacks",
 
 	SHADOW_STORAGE = "expanded_shadow_storage",
 	ICKER_PRESERVE = "enhanced_icker_preserve",

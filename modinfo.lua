@@ -12,6 +12,7 @@ author = zheng("鸭子乐园", "Ducklantis")
 
 local new_modules = {
 	TRAPFUMAROLEOFFSCREEN = true,
+	REPAIR_KIT_STACKS = true,
 }
 
 changelog = zheng(
@@ -275,6 +276,16 @@ configuration_options = {
 		name = "HORSESHOE_STACKS",
 		label = zheng("幸运马蹄铁更大堆叠", "Horseshoe More Stacks"),
 		hover = zheng("幸运马蹄铁的堆叠上限提高至40", "Increase the Horseshoe stack limit to 40."),
+		options = boolean,
+		default = false,
+	},
+	{
+		name = "REPAIR_KIT_STACKS",
+		label = zheng("修补套件更大堆叠", "Repair Kit More Stacks"),
+		hover = zheng(
+			"亮茄修补套件、虚空修补套件和自动修理机的堆叠上限提高至40",
+			"Increase the Brightshade Repair Kit, Void Repair Kit, and Auto-Mat-O-Chanic stack limit to 40."
+		),
 		options = boolean,
 		default = false,
 	},
