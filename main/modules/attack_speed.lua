@@ -3,7 +3,7 @@ GLOBAL.setfenv(1, GLOBAL)
 
 TUNING.WILSON_ATTACK_PERIOD = 0.1
 
--- Vanilla stategraphs/SGwilson.lua:blowdart (763928): keeps the "attack" tag until a 14-frame (chained) or 18-frame timeout, though the dart leaves at frame 9 or 14
+-- Vanilla stategraphs/SGwilson.lua:blowdart (763928): keeps the "attack" tag until a 14-frame (chained) or 18-frame timeout; the dart leaves at frame 9 or 14
 -- Vanilla components/playercontroller.lua:PlayerController:OnRemoteAttackButton (763928): checks "abouttoattack" instead only for remote predicting authorities
 local function PatchBlowdartState(sg)
 	local state = sg.states.blowdart
@@ -20,7 +20,7 @@ local function PatchBlowdartState(sg)
 		end
 	end
 
-	-- Vanilla stategraphs/SGwilson.lua:blowdart (763928): times the timeout apart from the timeline, so a timeout on the firing frame can expire a frame before the shot
+	-- Vanilla stategraphs/SGwilson.lua:blowdart (763928): runs the timeout apart from the timeline, so one on the firing frame can expire a frame before the shot
 	for _, event in ipairs(state.timeline or {}) do
 		local fn = event.fn
 		event.fn = function(inst, ...)

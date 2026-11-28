@@ -7,8 +7,8 @@ GLOBAL.setfenv(1, GLOBAL)
 local ASLEEP_PERIOD = 2.5
 local AWAKE_PERIOD = 0.5
 
--- Vanilla components/trapfumaroleburning.lua:TrapFumaroleBurning:OnUpdate (763928): adds a fixed TRAP_FUMAROLE_PROPAGATOR_RATE of heat per call once ignitetime passes TRAP_FUMAROLE_IGNITE_TIME
--- Vanilla components/propagator.lua:Propagator:AddHeat (763928): caps the heat per propagator update and adds none during a delay, to fireimmune targets, or at zero heat resistance
+-- Vanilla components/trapfumaroleburning.lua:TrapFumaroleBurning:OnUpdate (763928): adds TRAP_FUMAROLE_PROPAGATOR_RATE heat per call past the ignite time
+-- Vanilla components/propagator.lua:Propagator:AddHeat (763928): caps heat per update; adds none during a delay, to fireimmune targets, or at 0 heat resistance
 local function IsHeatingToIgnite(self)
 	local inst = self.inst
 	local propagator = inst.components.propagator
@@ -42,7 +42,7 @@ AsleepUpdate = function(inst, self)
 	self._asleepupdatetime = time
 	self:OnUpdate(dt)
 
-	-- Vanilla components/trapfumaroleburning.lua:TrapFumaroleBurning:OnUpdate (763928): removes this component off Coals, and the entity when it cooks a single item
+	-- Vanilla components/trapfumaroleburning.lua:TrapFumaroleBurning:OnUpdate (763928): removes itself off Coals, and the entity when it cooks a single item
 	if inst:IsValid() and inst.components.trapfumaroleburning == self then
 		local period = GetAsleepPeriod(self)
 		if period ~= self._asleeptask.period then

@@ -98,7 +98,7 @@ local function GetStatus(inst)
 	return (inst.components.channelable:IsChanneling() or inst.components.teleporter:IsActive()) and "ACTIVE" or nil
 end
 
--- Vanilla prefabs/townportal.lua:fn (763928): unclickable copy without the art, collision, placement radius, hammering, haunting, weather buildup and inspection, removed unless channeled within 1 second
+-- Vanilla prefabs/townportal.lua:fn (763928): copy that no player can click or see, removed unless channeled within 1 second
 local function fn()
 	local inst = CreateEntity()
 

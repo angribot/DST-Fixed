@@ -23,7 +23,7 @@ local function OnUpgrade(inst, doer, item)
 	end
 end
 
--- Vanilla components/inventoryitemholder.lua:InventoryItemHolder:TakeItem (763928): reworked to take at most one normal stack and to run onitemtakenfn before GiveItem, which can merge the item away
+-- Vanilla components/inventoryitemholder.lua:InventoryItemHolder:TakeItem (763928): reworked to take at most one stack and call onitemtakenfn before GiveItem
 local function TakeItem(holder, taker, wholestack)
 	if not holder:CanTake(taker) then
 		return false
@@ -102,7 +102,7 @@ local function Destroy(inst, deconstruct)
 				return
 			end
 		else
-			-- Vanilla prefabs/treasurechest.lua:regular_Upgrade_OnHammered (763928): drops up to COLLAPSED_CHEST_EXCESS_STACKS_THRESHOLD stacks when sunk and loses the rest
+			-- Vanilla prefabs/treasurechest.lua:regular_Upgrade_OnHammered (763928): drops up to COLLAPSED_CHEST_EXCESS_STACKS_THRESHOLD stacks when sunk, losing the rest
 			M.DropStacks(inst, TUNING.COLLAPSED_CHEST_EXCESS_STACKS_THRESHOLD)
 		end
 	else

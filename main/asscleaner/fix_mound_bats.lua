@@ -22,7 +22,6 @@ AddPrefabPostInit("mound", function(inst)
 		return
 	end
 
-	-- Delayed tasks inherit this environment. Patch the shared vanilla callback
-	-- once, including honor_mound's saved reference, without changing the global finder.
+	-- Vanilla prefabs/mound.lua:onfinishcallback (763928): reads FindNearbyLand in a DoTaskInTime closure, which takes this function's environment
 	setfenv(onfinish, setmetatable({ FindNearbyLand = FindLandOrStayOverWater }, { __index = env }))
 end)

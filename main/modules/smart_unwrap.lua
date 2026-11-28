@@ -12,7 +12,7 @@ local function DoUnwrap(inst, self, doer)
 end
 
 local Unwrap = Unwrappable.Unwrap
--- Vanilla components/unwrappable.lua:Unwrappable:Unwrap (763928): copy for held bundles that gives the items to the holder's container or the doer, returns the bundle to its slot, and passes should_give and grandowner_container to onunwrappedfn
+-- Vanilla components/unwrappable.lua:Unwrappable:Unwrap (763928): copy for held bundles that gives the items to the holder's container or the doer
 function Unwrappable:Unwrap(doer, nodelay, ...)
 	local doer_container = doer and (doer.components.container or doer.components.inventory)
 	local owner = self.inst.components.inventoryitem and self.inst.components.inventoryitem:GetGrandOwner()

@@ -23,7 +23,8 @@ Allowed comments:
   <path> is relative to the source's root, e.g. prefabs/mound.lua for Vanilla.
   <symbol> names a function, or a stategraph state by its name field.
 
-Write one line per comment. Reshape our own code instead of explaining it.
+Write one line of at most 160 characters per comment. Reshape our own code
+instead of explaining it.
 EOF
 }
 

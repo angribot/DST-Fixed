@@ -43,7 +43,7 @@ end
 
 local function OnSink(inst)
 	if inst.storage then
-		-- Vanilla prefabs/collapsedchest.lua:OnSink (763928): drops one stack per slot, then up to COLLAPSED_CHEST_MAX_EXCESS_STACKS_DROPS excess stacks, and loses the rest
+		-- Vanilla prefabs/collapsedchest.lua:OnSink (763928): drops a stack per slot, then up to COLLAPSED_CHEST_MAX_EXCESS_STACKS_DROPS excess stacks, losing the rest
 		preserve.DropStacks(inst.storage, 1 + TUNING.COLLAPSED_CHEST_MAX_EXCESS_STACKS_DROPS)
 	end
 	Finish(inst)

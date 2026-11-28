@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+usage() {
+    cat <<'EOF'
+Usage:
+  .lint/check-lua [--all]
+
+Reports Lua that DST's Lua 5.1 runtime rejects or misreads, and Lua that
+stylua would reformat. By default it checks the staged Lua files; --all checks
+every tracked Lua file.
+
+  stylua --syntax Lua51  goto, labels, floor division, bitwise operators
+  grep                   \x and \z escapes, table.unpack
+  stylua --check         formatting from .editorconfig; fix with stylua <file>
+EOF
+}
+
+die() {
+    printf 'Error: %s\n' "$*" >&2
+    exit 2
+}
+
+ALL=false
+while (($#)); do
+    case "$1" in
+        --all) ALL=true ;;
+        -h | --help)
+            usage
+            exit 0
+            ;;
+        *)
+            usage >&2
+            exit 2
+            ;;
+    esac
+    shift
+done
+
+command -v stylua >/dev/null || die "stylua is required"
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+FILES=()
+if [[ "$ALL" == true ]]; then
+    while IFS= read -r -d '' file; do
+        FILES+=("$file")
+    done < <(git ls-files -z -- '*.lua')
+else
+    while IFS= read -r -d '' file; do
+        FILES+=("$file")
+    done < <(git diff --cached -z --name-only --diff-filter=ACMR -- '*.lua')
+fi
+((${#FILES[@]} > 0)) || exit 0
+
+content() {
+    if [[ "$ALL" == true ]]; then
+        cat -- "$1"
+    else
+        git show ":$1"
+    fi
+}
+
+FINDINGS=()
+for file in "${FILES[@]}"; do
+    if ! error="$(content "$file" | stylua --syntax Lua51 - 2>&1 >/dev/null)"; then
+        FINDINGS+=("$file: not Lua 5.1: $(printf '%s\n' "$error" | sed -n 's/^ - //p' | head -n 1)")
+    elif ! content "$file" | stylua --syntax Lua51 --check --stdin-filepath "$file" - >/dev/null 2>&1; then
+        FINDINGS+=("$file: not formatted")
+    fi
+    while IFS= read -r match; do
+        FINDINGS+=("$file:$match")
+    done < <(content "$file" | grep -n -E '\\[xz]|table\.unpack' || true)
+done
+
+((${#FINDINGS[@]} == 0)) && exit 0
+
+printf 'Lua problems:\n' >&2
+printf '%s\n' "${FINDINGS[@]}" >&2
+printf '\n' >&2
+usage >&2
+exit 1

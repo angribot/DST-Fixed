@@ -2,7 +2,7 @@ GLOBAL.setfenv(1, GLOBAL)
 local UpvalueUtil = require("upvalueutil")
 
 -- Vanilla components/weapon.lua:Weapon:LaunchProjectile (763928): throws the projectile with the weapon as its owner
--- Vanilla components/projectile.lua:Projectile:Hit (763928): takes the weapon's direct holder as the attacker, which is the container once the weapon is moved into one mid-flight
+-- Vanilla components/projectile.lua:Projectile:Hit (763928): uses the weapon's direct holder as attacker, a container if the weapon moved into one mid-flight
 -- Vanilla components/projectile.lua:Projectile:Miss (763928): takes the weapon's direct holder as the attacker
 local Projectile = require("components/projectile")
 local StopTrackingDelayOwner = UpvalueUtil.GetUpvalue(Projectile.Hit, "StopTrackingDelayOwner")
