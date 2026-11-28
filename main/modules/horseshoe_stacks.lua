@@ -4,6 +4,6 @@ AddPrefabPostInit("horseshoe", function(inst)
 	end
 
 	if inst.components.stackable ~= nil then
-		inst.components.stackable.maxsize = 40
+		inst.components.stackable.maxsize = TUNING.STACK_SIZE_SMALLITEM
 	end
 end)
