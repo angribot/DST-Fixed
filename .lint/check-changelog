@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+usage() {
+    cat <<'EOF'
+Usage:
+  .lint/check-changelog [--all]
+
+Reports a modinfo.lua changelog whose Chinese and English blocks disagree. By
+default it checks the staged modinfo.lua and passes when it is not staged;
+--all checks the working tree file.
+
+The changelog is the two [[ ]] blocks of `changelog = zheng(`, Chinese first.
+Lines starting with "- " are entries; blank lines and headings such as
+`Recent Changes:` split them into sections.
+
+  Both blocks have the same number of sections and of entries per section.
+  Every Chinese entry contains a Chinese character.
+  No English entry contains a Chinese character or full-width punctuation.
+EOF
+}
+
+ALL=false
+while (($#)); do
+    case "$1" in
+        --all) ALL=true ;;
+        -h | --help)
+            usage
+            exit 0
+            ;;
+        *)
+            usage >&2
+            exit 2
+            ;;
+    esac
+    shift
+done
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+if [[ "$ALL" == true ]]; then
+    MODINFO="$(cat modinfo.lua)"
+else
+    git diff --cached --quiet -- modinfo.lua && exit 0
+    MODINFO="$(git show :modinfo.lua)"
+fi
+
+ENTRIES="$(awk '
+    !started && /^changelog = zheng\($/ { started = 1; next }
+    started && !inblock && /^[ \t]*\[\[$/ { inblock = 1; block++; section = 1; count = 0; next }
+    inblock && /^\]\],?$/ { inblock = 0; if (block == 2) { done = 1; exit } next }
+    inblock && /^- / { print block "\t" section "\t" substr($0, 3); count++; next }
+    inblock && count > 0 { section++; count = 0 }
+    END { if (!done) exit 1 }
+' <<<"$MODINFO")" || {
+    printf 'modinfo.lua: no "changelog = zheng(" with two [[ ]] blocks\n' >&2
+    exit 1
+}
+
+FINDINGS=()
+
+layout() {
+    awk -F '\t' -v b="$1" '$1 == b { n[$2]++; if ($2 > max) max = $2 } END { for (s = 1; s <= max; s++) printf "%d ", n[s] }' <<<"$ENTRIES"
+}
+ZH_LAYOUT="$(layout 1)"
+EN_LAYOUT="$(layout 2)"
+if [[ "$ZH_LAYOUT" != "$EN_LAYOUT" ]]; then
+    FINDINGS+=("entries per section differ: Chinese ${ZH_LAYOUT% }, English ${EN_LAYOUT% }")
+fi
+
+readonly CJK='[一-鿿]'
+readonly NOT_ENGLISH='[　-〿一-鿿＀-￯]'
+while IFS= read -r entry; do
+    FINDINGS+=("Chinese entry without Chinese: $entry")
+done < <(awk -F '\t' '$1 == 1 { print $3 }' <<<"$ENTRIES" | LC_ALL=en_US.UTF-8 grep -v "$CJK" || true)
+while IFS= read -r entry; do
+    FINDINGS+=("English entry with Chinese or full-width punctuation: $entry")
+done < <(awk -F '\t' '$1 == 2 { print $3 }' <<<"$ENTRIES" | LC_ALL=en_US.UTF-8 grep "$NOT_ENGLISH" || true)
+
+((${#FINDINGS[@]} == 0)) && exit 0
+
+printf 'Changelog problems in modinfo.lua:\n' >&2
+printf '%s\n' "${FINDINGS[@]}" >&2
+printf '\n' >&2
+usage >&2
+exit 1

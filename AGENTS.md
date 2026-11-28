@@ -43,7 +43,7 @@ Target DST's Lua 5.1 runtime plus `bit`, not LuaJIT extensions.
 - Keep coroutine yields outside C-call boundaries, including `pcall`/`xpcall`, metamethods, `table.sort` comparators, and `gsub` callbacks.
 - Avoid relying on cross-runtime `math.random` sequences or out-of-range `%d` formatting.
 
-`.lint/check-lua` checks the first rule, `table.unpack`, and stylua formatting (fix with `stylua <file>`). The pre-commit hook runs it and `.lint/check-comments`; enable the hook once per clone with `git config core.hooksPath .githooks`.
+`.lint/check-lua` checks the first rule, `table.unpack`, and stylua formatting (fix with `stylua <file>`). The pre-commit hook runs it, `.lint/check-changelog`, and `.lint/check-comments`; enable the hook once per clone with `git config core.hooksPath .githooks`.
 
 ## Testing
 
