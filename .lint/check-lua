@@ -63,10 +63,18 @@ content() {
     fi
 }
 
+parse_reason() {
+    local reason
+    reason="$(sed -n 's/^ - //p' <<<"$1" | head -n 1)"
+    [[ -n "$reason" ]] || reason="$(sed -n 's/.*error parsing: //p' <<<"$1" | head -n 1)"
+    [[ -n "$reason" ]] || reason="$(sed '/^[[:space:]]*$/d' <<<"$1" | tail -n 1)"
+    printf '%s' "$reason"
+}
+
 FINDINGS=()
 for file in "${FILES[@]}"; do
     if ! error="$(content "$file" | stylua --syntax Lua51 - 2>&1 >/dev/null)"; then
-        FINDINGS+=("$file: not Lua 5.1: $(printf '%s\n' "$error" | sed -n 's/^ - //p' | head -n 1)")
+        FINDINGS+=("$file: not Lua 5.1: $(parse_reason "$error")")
     elif ! content "$file" | stylua --syntax Lua51 --check --stdin-filepath "$file" - >/dev/null 2>&1; then
         FINDINGS+=("$file: not formatted")
     fi
